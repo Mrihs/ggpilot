@@ -227,7 +227,6 @@ ui <- fluidPage(
                    </div>'
         ),
         bsCollapsePanel(
-          # Use HTML with an Icon 
           title = HTML(text = "Title"
           ),
           # Text-Input for the X-Axis-Title
@@ -238,7 +237,6 @@ ui <- fluidPage(
           selectInput(inputId = "Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
           ),
         bsCollapsePanel(
-          # Use HTML with an Icon 
           title = HTML(text = "Untertitel"
           ),
           # Text-Input for the X-Axis-Title
@@ -249,7 +247,6 @@ ui <- fluidPage(
           selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
         ),
         bsCollapsePanel(
-          # Use HTML with an Icon 
           title = HTML(text = "X-Achsen Titel"
           ),
           # Text-Input for the X-Axis-Title
@@ -260,7 +257,6 @@ ui <- fluidPage(
           selectInput(inputId = "X_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
         ),
         bsCollapsePanel(
-          # Use HTML with an Icon 
           title = HTML(text = "Y-Achsen Titel"
           ),
           # Text-Input for the Y-Axis-Title
@@ -269,7 +265,28 @@ ui <- fluidPage(
           textInput(inputId = "Y_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
           numericInput(inputId = "Y_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
           selectInput(inputId = "Y_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+        ),
+        bsCollapsePanel(
+          title = HTML(text = "Legenden-Titel"
+          ),
+          # Text-Input for the Legend-Title
+          selectInput(inputId = "Legend_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+          selectInput(inputId = "Legend_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+          textInput(inputId = "Legend_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+          numericInput(inputId = "Legend_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+          selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+        ),
+        bsCollapsePanel(
+          title = HTML(text = "Legenden-Text"
+          ),
+          # Text-Input for the X-Axis-Title
+          selectInput(inputId = "Legend_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+          selectInput(inputId = "Legend_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+          textInput(inputId = "Legend_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+          numericInput(inputId = "Legend_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+          selectInput(inputId = "Legend_Text_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
         )
+        
       ),
       
       
@@ -753,6 +770,78 @@ server <- function(input, output, session) {
                                                                                               "Linksbündig" = 0,
                                                                                               "Mittig" = 0.5,
                                                                                               "Rechtsbündig" = 1)) else "")
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+    
+    
+    
+    
+    
+    ########## 3.4.1 Legend-Title ##########
+    if (input$Legend_Title_Font != "Gemäss Theme" || input$Legend_Title_Face != "Gemäss Theme" ||
+        input$Legend_Title_Color != "" || !is.na(input$Legend_Title_Size) || input$Legend_Title_Alignment != "Gemäss Theme") {
+      
+      theme_code <- paste0(theme_code, "legend.title = element_text(")
+      
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Legend_Title_Font != "Gemäss Theme") sprintf("family = '%s', ", 
+                                                                           switch(input$Legend_Title_Font,
+                                                                                  "Sans Serife" = "sans",
+                                                                                  "Serife" = "serif",
+                                                                                  "Monospace" = "mono")) else "",
+                           if (input$Legend_Title_Face != "Gemäss Theme") sprintf("face = '%s', ", 
+                                                                           switch(input$Legend_Title_Face,
+                                                                                  "Normal" = "plain",
+                                                                                  "Fett" = "bold",
+                                                                                  "Kursiv" = "italic",
+                                                                                  "Fett & Kursiv" = "bold.italic")) else "",
+                           if (!is.na(input$Legend_Title_Size)) sprintf("size = %.1f, ", input$Legend_Title_Size) else "",
+                           if (input$Legend_Title_Color != "") sprintf("colour = '%s', ", input$Legend_Title_Color) else "",
+                           if (input$Legend_Title_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
+                                                                                switch(input$Legend_Title_Alignment,
+                                                                                       "Linksbündig" = 0,
+                                                                                       "Mittig" = 0.5,
+                                                                                       "Rechtsbündig" = 1)) else "")
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+    
+    
+    
+    
+    
+    ########## 3.4.1 Title ##########
+    if (input$Legend_Text_Font != "Gemäss Theme" || input$Legend_Text_Face != "Gemäss Theme" ||
+        input$Legend_Text_Color != "" || !is.na(input$Legend_Text_Size) || input$Legend_Text_Alignment != "Gemäss Theme") {
+      
+      theme_code <- paste0(theme_code, "legend.text = element_text(")
+      
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Legend_Text_Font != "Gemäss Theme") sprintf("family = '%s', ", 
+                                                                           switch(input$Legend_Text_Font,
+                                                                                  "Sans Serife" = "sans",
+                                                                                  "Serife" = "serif",
+                                                                                  "Monospace" = "mono")) else "",
+                           if (input$Legend_Text_Face != "Gemäss Theme") sprintf("face = '%s', ", 
+                                                                           switch(input$Legend_Text_Face,
+                                                                                  "Normal" = "plain",
+                                                                                  "Fett" = "bold",
+                                                                                  "Kursiv" = "italic",
+                                                                                  "Fett & Kursiv" = "bold.italic")) else "",
+                           if (!is.na(input$Legend_Text_Size)) sprintf("size = %.1f, ", input$Legend_Text_Size) else "",
+                           if (input$Legend_Text_Color != "") sprintf("colour = '%s', ", input$Legend_Text_Color) else "",
+                           if (input$Legend_Text_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
+                                                                                switch(input$Legend_Text_Alignment,
+                                                                                       "Linksbündig" = 0,
+                                                                                       "Mittig" = 0.5,
+                                                                                       "Rechtsbündig" = 1)) else "")
       
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
