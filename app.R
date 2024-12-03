@@ -40,6 +40,39 @@ library(Hmisc)
 
 
 
+############### 1.3 Define Panel-Function ###############
+BSCollapseArrow <- function(text, icon_class = "glyphicon-menu-down") {
+  HTML(sprintf(
+    '<div class="panel-title-container">
+       <i class="glyphicon %s"></i>
+       <span>%s</span>
+     </div>', 
+    icon_class, text
+  ))
+}
+tags$head(
+  tags$style(HTML("
+.panel-heading {
+    background-color: red;
+    color: white;
+}
+
+.panel-body {
+    background-color: blue;
+    color: white;
+}
+  "))
+)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -55,9 +88,69 @@ ui <- fluidPage(
   ############### 2.1 General Settings ###############
   # Define Theme
   theme = shinytheme("cerulean"),
-
-  titlePanel(title = span(img(src = "logo.png", height = 45), "ggpilot")),
   
+  tags$head(
+    tags$style(HTML("
+    
+    .panel{
+        border: 2px solid #dddddd;
+    }
+
+    .panel-body {
+        background-color: #f5f5f5 !important;
+    }
+
+  "))
+  ),
+  
+  
+
+  fluidRow(
+    column(3, titlePanel(title = span(img(src = "logo.png", height = 80), HTML('<span style="font-size: 2.5em;">ggpilot</span>')))),
+    column(9, align = "center", 
+           style = "margin-top: 15px;",
+           tags$head(
+             tags$style(HTML("
+            .custom-btn {
+              font-size: 20px;
+              padding: 5px 30px;
+              margin: 20px 10px;
+              color: black;
+              border: 5px solid #bbb;
+              border-radius: 5px;
+              outline: none;
+              border-style: double;
+            }
+            .custom-btn:hover {
+              background-color: #f0f0f0;
+            }
+            .active-btn {
+              background-color: #e0e0e0;
+              color: black;
+              background-image: none;
+            }
+          "))
+           ),
+           tags$script(HTML("
+            Shiny.addCustomMessageHandler('setActiveButton', function(btnId) {
+              $('.custom-btn').removeClass('active-btn');
+              $('#' + btnId).addClass('active-btn');
+            });
+         ")),
+           actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i> Daten'), class = "custom-btn"),
+           actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i> Variablen'), class = "custom-btn"),
+           actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i> Plot Optionen'), class = "custom-btn"),
+           actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i> Text'), class = "custom-btn"),
+           actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i> Layout'), class = "custom-btn"),
+    )
+  ),
+  
+  
+  # Verstecktes Input für activeTab
+  tags$div(
+    textInput("activeTab", label = NULL, value = "data"),
+    style = "display: none;"
+  ),  
   # Set Title
   # titlePanel("ggpilot"),
   
@@ -80,211 +173,196 @@ ui <- fluidPage(
       
       
       ############### 2.2 Input Fields ###############
-      bsCollapse(id = "collapsePanels", open = NULL, 
-                 ########## 2.2.1 Select Data ########## 
-                 # Define a collapsable pannel
-                 bsCollapsePanel(
-                   # Use HTML with an Icon 
-                   title = HTML(
-                   '<div style="display: flex; align-items: center;">
-                   <i class="glyphicon glyphicon-folder-open" style="margin-right: 8px;"></i>
-                   <span>Datensatz laden</span>
-                   </div>'
-                   ),
-                   
-                   # Add Button for File Input
-                   fileInput("file", "Datensatz auswählen", 
-                             buttonLabel = "Durchsuchen", placeholder = "Keine Datei ausgewählt", 
-                             accept = c(".csv", ".xlsx", ".rds"))),
+      conditionalPanel(
+        condition = "input.activeTab == 'data'",
+        ########## 2.2.1 Select Data ########## 
+        # Add Button for File Input
+        fileInput("file", "Datensatz auswählen",
+                  buttonLabel = "Durchsuchen", placeholder = "Keine Datei ausgewählt", 
+                  accept = c(".csv", ".xlsx", ".rds"))),
                  
                  
                  
                  
                  
-                 ########## 2.2.2 Select Variables ########## 
-                 # Define a collapsable pannel
-                 bsCollapsePanel(
-                   # Use HTM with an Icon 
-                   title = HTML( ## <i class="glyphicon glyphicon-menu-down" style="margin-right: 8px;"></i>
-                   '<div style="display: flex; align-items: center;">
-                   <i class="glyphicon glyphicon-tasks" style="margin-right: 8px;"></i>
-                   <span>Variablen definieren</span>
-                   </div>'
-                   ),
-                   
-                   # X-Axis Variable
-                   selectInput("x_var", "X-Achsen Variable", choices = c(""), selected = ""),
-                   # Y-Axis Variable
-                   selectInput("y_var", "Y-Achsen Variable", choices = c(""), selected = ""),
-                   # Grouping Variable
-                   selectInput("group_var", "Gruppierungs-Variable", choices = c(""), selected = ""),
-                   # Facet Grid - Columns
-                   selectInput("grid_col_var", "Variable für Spalten-Facettierung", choices = c(""), selected = ""),
-                   # Facet Grid - Rows
-                   selectInput("grid_row_var", "Variable für Zeilen-Facettierung", choices = c(""), selected = "")),
+      ########## 2.2.2 Select Variables ##########
+      conditionalPanel(
+        condition = "input.activeTab == 'variables'",
+        # Define a collapsable pannel
+        # bsCollapsePanel(
+        #   # Use HTM with an Icon 
+        #   title = HTML( ## <i class="glyphicon glyphicon-menu-down" style="margin-right: 8px;"></i>
+        #   '<div style="display: flex; align-items: center;">
+        #   <i class="glyphicon glyphicon-tasks" style="margin-right: 8px;"></i>
+        #   <span>Variablen definieren</span>
+        #   </div>'
+        #   ),
+        # X-Axis Variable
+        selectInput("x_var", "X-Achsen Variable", choices = c(""), selected = ""),
+        # Y-Axis Variable
+        selectInput("y_var", "Y-Achsen Variable", choices = c(""), selected = ""),
+        # Grouping Variable
+        selectInput("group_var", "Gruppierungs-Variable", choices = c(""), selected = ""),
+        # Facet Grid - Columns
+        selectInput("grid_col_var", "Variable für Spalten-Facettierung", choices = c(""), selected = ""),
+        # Facet Grid - Rows
+        selectInput("grid_row_var", "Variable für Zeilen-Facettierung", choices = c(""), selected = "")),
+             
+                 
+                 
+                 
+                 
+        ########## 2.2.3 Plot Options ##########
+        conditionalPanel(
+          condition = "input.activeTab == 'plot_options'",
+          # Define a collapsable pannel
+          # bsCollapsePanel(
+          #   # Use HTML with an Icon 
+          #   title = HTML( #<i class="glyphicon glyphicon-cog" style="margin-right: 8px;"></i>
+          #   '<div style="display: flex; align-items: center;">
+          #   <i class="glyphicon glyphicon-wrench" style="margin-right: 8px;"></i>
+          #   <span>Plot Einstellungen</span>
+          #   </div>'
+          #   ),
+           
+          # Theme
+          selectInput(inputId = "plot_theme", label = "Theme", choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", "Minimal", "Void"), selected = "Gray"),
                        
+          # Set a HTML header for the Y-Axis Range Text
+          HTML('<label class="control-label">Range X-Achse</label>'),
+           
+          # Define the min and max value next to each other
+          div(
+            # Define styla
+            style = "display: flex; justify-content: space-between; gap: 10px;",
+            div(
+             style = "flex: 1;",
+             # Numeric Input field for the minimal X-Axis value
+             numericInput(inputId = "x_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
+             ),
+            div(
+             style = "flex: 1;",
+             # Numeric Input field for the max X-Axis value
+             numericInput(inputId = "x_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
+           )
+           ),
+           
+         # Set a HTML header for the X-Axis Range Text
+         HTML('<label class="control-label">Range Y-Achse</label>'),
+         
+         # Define the min and max value next to each other
+         div(
+            # Define styla
+           style = "display: flex; justify-content: space-between; gap: 10px;",
+           div(
+             style = "flex: 1;",
+             # Numeric Input field for the minimal Y-Axis value
+             numericInput(inputId = "y_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
+           ),
+            div(
+             style = "flex: 1;",
+             # Numeric Input field for the max Y-Axis value
+             numericInput(inputId = "y_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
+           )
+         ),
+         # Dropbdown to select the type of errorbar
+         selectInput(inputId = "error_type", label = "Fehlerbalken", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
+         # Numeric Input for the width of the errorbar
+         numericInput(inputId = "error_width", label = "Grösse Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5),
+         # Numeric Input for the position-dodge value
+         numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = 0.9)),
+           
                  
                  
                  
                  
-                 ########## 2.2.3 Plot Options ##########
-                 # Define a collapsable pannel
-                 bsCollapsePanel(
-                   # Use HTML with an Icon 
-                   title = HTML( #<i class="glyphicon glyphicon-cog" style="margin-right: 8px;"></i>
-                   '<div style="display: flex; align-items: center;">
-                   <i class="glyphicon glyphicon-wrench" style="margin-right: 8px;"></i>
-                   <span>Plot Einstellungen</span>
-                   </div>'
-                 ),
-                 
-                 # Theme
-                 selectInput(inputId = "plot_theme", label = "Theme", choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", "Minimal", "Void"), selected = "Gray"),
-                             
-                 # Set a HTML header for the Y-Axis Range Text
-                 HTML('<label class="control-label">Range X-Achse</label>'),
-                 
-                 # Define the min and max value next to each other
-                 div(
-                   # Define styla
-                   style = "display: flex; justify-content: space-between; gap: 10px;",
-                   div(
-                     style = "flex: 1;",
-                     # Numeric Input field for the minimal X-Axis value
-                     numericInput(inputId = "x_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
-                   ),
-                   div(
-                     style = "flex: 1;",
-                     # Numeric Input field for the max X-Axis value
-                     numericInput(inputId = "x_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
-                   )
-                 ),
-                 
-                 # Set a HTML header for the X-Axis Range Text
-                 HTML('<label class="control-label">Range Y-Achse</label>'),
-                 
-                 # Define the min and max value next to each other
-                 div(
-                   # Define styla
-                   style = "display: flex; justify-content: space-between; gap: 10px;",
-                   div(
-                     style = "flex: 1;",
-                     # Numeric Input field for the minimal Y-Axis value
-                     numericInput(inputId = "y_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
-                   ),
-                   div(
-                     style = "flex: 1;",
-                     # Numeric Input field for the max Y-Axis value
-                     numericInput(inputId = "y_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
-                   )
-                 ),
-                 
-                # Dropbdown to select the type of errorbar
-                 selectInput(inputId = "error_type", label = "Fehlerbalken", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
-                # Numeric Input for the width of the errorbar
-                 numericInput(inputId = "error_width", label = "Grösse Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5),
-                # Numeric Input for the position-dodge value
-                 numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = 0.9)),
-                 
-                 
-                 
-                 
-                 
-                 ########## 2.2.4 Text ##########
-                # Define a collapsable pannel
-                bsCollapsePanel(
-                  # Use HTML with an Icon 
-                  title = HTML(
-                   '<div style="display: flex; align-items: center;">
-                   <i class="glyphicon glyphicon-font" style="margin-right: 8px;"></i>
-                   <span>Text</span>
-                   </div>'
-                 ),
-                 # Text-Input for the Title
-                 textInput(inputId = "plot_title", label = "Titel", value = "", placeholder = "Titel eingeben"),
-                 # Text-Input for the Sub-Title
-                 textInput(inputId = "plot_subtitle", label = "Untertitel", value = "", placeholder = "Untertitel eingeben"),
-                 # Text-Input for the X-Axis-Title
-                 textInput(inputId = "x_axis_title", label = "X-Achsen-Beschriftung", value = "", placeholder = "Eigene X-Achsen Beschriftung eingeben"),
-                 # Text-Input for the Y-Axis-Title
-                 textInput(inputId = "y_axis_title", label = "Y-Achsen-Beschriftung", value = "", placeholder = "Eigene Y-Achsen Beschriftung eingeben"),
-                 # Text-Input for the Legend-Title
-                 textInput(inputId = "legend_title", label = "Legenden-Beschriftung", value = "", placeholder = "Eigene Legenden Beschriftung eingeben")
-                 )),
+         ########## 2.2.4 Text ##########
+         conditionalPanel(
+           condition = "input.activeTab == 'text'",
+           # Define a collapsable pannel
+           
+           # bsCollapsePanel(
+           #   # Use HTML with an Icon 
+           #   title = HTML(
+           #     '<div style="display: flex; align-items: center;">
+           #     <i class="glyphicon glyphicon-font" style="margin-right: 8px;"></i>
+           #     <span>Text</span>
+           #     </div>'
+           #     ),
+           # Text-Input for the Title
+           textInput(inputId = "plot_title", label = "Titel", value = "", placeholder = "Titel eingeben"),
+           # Text-Input for the Sub-Title
+           textInput(inputId = "plot_subtitle", label = "Untertitel", value = "", placeholder = "Untertitel eingeben"),
+           # Text-Input for the X-Axis-Title
+           textInput(inputId = "x_axis_title", label = "X-Achsen-Beschriftung", value = "", placeholder = "Eigene X-Achsen Beschriftung eingeben"),
+           # Text-Input for the Y-Axis-Title
+           textInput(inputId = "y_axis_title", label = "Y-Achsen-Beschriftung", value = "", placeholder = "Eigene Y-Achsen Beschriftung eingeben"),
+           # Text-Input for the Legend-Title
+           textInput(inputId = "legend_title", label = "Legenden-Beschriftung", value = "", placeholder = "Eigene Legenden Beschriftung eingeben")
+           ),
       
       
       
       
       
       ########## 2.2.5 Layout ##########
-      # Define a collapsable pannel
-      bsCollapsePanel(
-        # Use HTML with an Icon 
-        title = HTML(
-          '<div style="display: flex; align-items: center;">
-                   <i class="glyphicon glyphicon-font" style="margin-right: 8px;"></i>
-                   <span>Layout</span>
-                   </div>'
-        ),
-        bsCollapsePanel(
-          title = HTML(text = "Title"
+      conditionalPanel(
+        condition = "input.activeTab == 'layout'",
+        bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+          bsCollapsePanel(title = BSCollapseArrow("Titel"),
+                          div(style = "background-color = red;"),
+            # Text-Input for the Title
+            selectInput(inputId = "Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+            selectInput(inputId = "Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+            textInput(inputId = "Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+            numericInput(inputId = "Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+            selectInput(inputId = "Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+            ),
+          bsCollapsePanel(
+            title = BSCollapseArrow("Untertitel"),
+            # Text-Input for the X-Axis-Title
+            selectInput(inputId = "Subtitle_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+            selectInput(inputId = "Subtitle_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+            textInput(inputId = "Subtitle_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+            numericInput(inputId = "Subtitle_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+            selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
           ),
-          # Text-Input for the X-Axis-Title
-          selectInput(inputId = "Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-          selectInput(inputId = "Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-          textInput(inputId = "Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-          numericInput(inputId = "Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-          selectInput(inputId = "Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+          bsCollapsePanel(
+            title = BSCollapseArrow("X-Achsen Titel"),
+            # Text-Input for the X-Axis-Title
+            selectInput(inputId = "X_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+            selectInput(inputId = "X_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+            textInput(inputId = "X_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+            numericInput(inputId = "X_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+            selectInput(inputId = "X_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
           ),
-        bsCollapsePanel(
-          title = HTML(text = "Untertitel"
+          bsCollapsePanel(
+            title = BSCollapseArrow("Y-Achsen Titel"),
+            # Text-Input for the Y-Axis-Title
+            selectInput(inputId = "Y_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+            selectInput(inputId = "Y_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+            textInput(inputId = "Y_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+            numericInput(inputId = "Y_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+            selectInput(inputId = "Y_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
           ),
-          # Text-Input for the X-Axis-Title
-          selectInput(inputId = "Subtitle_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-          selectInput(inputId = "Subtitle_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-          textInput(inputId = "Subtitle_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-          numericInput(inputId = "Subtitle_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-          selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-        ),
-        bsCollapsePanel(
-          title = HTML(text = "X-Achsen Titel"
+          bsCollapsePanel(
+            title = BSCollapseArrow("Legenden-Titel"),
+            # Text-Input for the Legend-Title
+            selectInput(inputId = "Legend_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+            selectInput(inputId = "Legend_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+            textInput(inputId = "Legend_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+            numericInput(inputId = "Legend_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+            selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
           ),
-          # Text-Input for the X-Axis-Title
-          selectInput(inputId = "X_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-          selectInput(inputId = "X_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-          textInput(inputId = "X_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-          numericInput(inputId = "X_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-          selectInput(inputId = "X_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-        ),
-        bsCollapsePanel(
-          title = HTML(text = "Y-Achsen Titel"
-          ),
-          # Text-Input for the Y-Axis-Title
-          selectInput(inputId = "Y_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-          selectInput(inputId = "Y_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-          textInput(inputId = "Y_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-          numericInput(inputId = "Y_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-          selectInput(inputId = "Y_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-        ),
-        bsCollapsePanel(
-          title = HTML(text = "Legenden-Titel"
-          ),
-          # Text-Input for the Legend-Title
-          selectInput(inputId = "Legend_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-          selectInput(inputId = "Legend_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-          textInput(inputId = "Legend_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-          numericInput(inputId = "Legend_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-          selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-        ),
-        bsCollapsePanel(
-          title = HTML(text = "Legenden-Text"
-          ),
-          # Text-Input for the X-Axis-Title
-          selectInput(inputId = "Legend_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-          selectInput(inputId = "Legend_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-          textInput(inputId = "Legend_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-          numericInput(inputId = "Legend_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-          selectInput(inputId = "Legend_Text_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+          bsCollapsePanel(
+            title = BSCollapseArrow("Titel"),
+            # Text-Input for the X-Axis-Title
+            selectInput(inputId = "Legend_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+            selectInput(inputId = "Legend_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+            textInput(inputId = "Legend_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+            numericInput(inputId = "Legend_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+            selectInput(inputId = "Legend_Text_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+          )
         )
         
       ),
@@ -381,6 +459,44 @@ server <- function(input, output, session) {
         stop("Unbekanntes Dateiformat. Bitte laden Sie eine CSV-, XLSX- oder RDS-Datei hoch.")
       }
     }})
+  
+  
+  # Reactiver Wert für aktiven Tab
+  activeTab <- reactiveVal("data")
+  
+  # Button Events
+  observeEvent(input$btn_data, {
+    activeTab("data")
+    session$sendCustomMessage("setActiveButton", "btn_data")
+  })
+  observeEvent(input$btn_variables, {
+    activeTab("variables")
+    session$sendCustomMessage("setActiveButton", "btn_variables")
+  })
+  observeEvent(input$btn_plot_options, {
+    activeTab("plot_options")
+    session$sendCustomMessage("setActiveButton", "btn_plot_options")
+  })
+  observeEvent(input$btn_text, {
+    activeTab("text")
+    session$sendCustomMessage("setActiveButton", "btn_text")
+  })
+  observeEvent(input$btn_layout, {
+    activeTab("layout")
+    session$sendCustomMessage("setActiveButton", "btn_layout")
+  })
+  
+  # Buttons zum Steuern des aktiven Tabs
+  observeEvent(input$btn_data, { activeTab("data") })
+  observeEvent(input$btn_variables, { activeTab("variables") })
+  observeEvent(input$btn_plot_options, { activeTab("plot_options") })
+  observeEvent(input$btn_text, { activeTab("text") })
+  observeEvent(input$btn_layout, { activeTab("layout") })
+  
+  # Aktiven Tab als Input verfügbar machen
+  observe({
+    updateTextInput(session, "activeTab", value = activeTab())
+  })
   
   
   
