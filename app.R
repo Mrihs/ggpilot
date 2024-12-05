@@ -144,6 +144,22 @@ ui <- fluidPage(
               color: black;
               background-image: none;
             }
+            .plot-btn {
+              font-size: 30px;
+              padding: 5px 30px;
+              margin: 20px 10px;
+              color: black;
+              border: 5px solid #bbb;
+              border-radius: 5px;
+              outline: none;
+              border-style: double;
+            }
+            .active-plot {
+              background-color: #e0e0e0;
+              color: black;
+              background-image: none;
+            }
+
           "))
            ),
            tags$script(HTML("
@@ -153,6 +169,7 @@ ui <- fluidPage(
             });
          ")),
            actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i> Daten'), class = "custom-btn"),
+           actionButton("btn_plottype", label = HTML('<i class="glyphicon glyphicon-stats"></i> Plot-Typ'), class = "custom-btn"),
            actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i> Variablen'), class = "custom-btn"),
            actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i> Plot Optionen'), class = "custom-btn"),
            actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i> Text'), class = "custom-btn"),
@@ -200,18 +217,29 @@ ui <- fluidPage(
                  
                  
                  
+                 ########## 2.2.2 Select Plot-Type ##########
+                 tags$script(HTML("
+            Shiny.addCustomMessageHandler('setActivePlot', function(btnId) {
+$('.plot-btn').removeClass('active-plot');
+$('#' + btnId).addClass('active-plot');
+            });
+         ")),                 
+                 
+                 conditionalPanel(
+                   condition = "input.activeTab == 'plottype'",
+                          actionButton("plot_bar", label = HTML('<img src="Icon_Bar.png" height="100px" style="horizontal-align: middle;"> <br> Balken'), class = "plot-btn"),
+                          actionButton("plot_line", label = HTML('<img src="Icon_Line.png" height="100px" style="horizontal-align: middle;"> <br> Linien'), class = "plot-btn"),
+                          actionButton("plot_box", label = HTML('<img src="Icon_Box.png" height="100px" style="horizontal-align: middle;"> <br> Boxplot'), class = "plot-btn"),
+                          actionButton("plot_scatter", label = HTML('<img src="Icon_Scatter.png" height="100px" style="horizontal-align: middle;"> <br> Scatter'), class = "plot-btn")
+                   ),
+                 
+                 
+                 
+                 
+                 
                  ########## 2.2.2 Select Variables ##########
                  conditionalPanel(
                    condition = "input.activeTab == 'variables'",
-                   # Define a collapsable pannel
-                   # bsCollapsePanel(
-                   #   # Use HTM with an Icon 
-                   #   title = HTML( ## <i class="glyphicon glyphicon-menu-down" style="margin-right: 8px;"></i>
-                   #   '<div style="display: flex; align-items: center;">
-                   #   <i class="glyphicon glyphicon-tasks" style="margin-right: 8px;"></i>
-                   #   <span>Variablen definieren</span>
-                   #   </div>'
-                   #   ),
                    # X-Axis Variable
                    selectInput("x_var", "X-Achsen Variable", choices = c(""), selected = ""),
                    # Y-Axis Variable
@@ -230,15 +258,6 @@ ui <- fluidPage(
                  ########## 2.2.3 Plot Options ##########
                  conditionalPanel(
                    condition = "input.activeTab == 'plot_options'",
-                   # Define a collapsable pannel
-                   # bsCollapsePanel(
-                   #   # Use HTML with an Icon 
-                   #   title = HTML( #<i class="glyphicon glyphicon-cog" style="margin-right: 8px;"></i>
-                   #   '<div style="display: flex; align-items: center;">
-                   #   <i class="glyphicon glyphicon-wrench" style="margin-right: 8px;"></i>
-                   #   <span>Plot Einstellungen</span>
-                   #   </div>'
-                   #   ),
                    
                    # Theme
                    selectInput(inputId = "plot_theme", label = "Theme", choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", "Minimal", "Void"), selected = "Gray"),
@@ -294,16 +313,6 @@ ui <- fluidPage(
                  ########## 2.2.4 Text ##########
                  conditionalPanel(
                    condition = "input.activeTab == 'text'",
-                   # Define a collapsable pannel
-                   
-                   # bsCollapsePanel(
-                   #   # Use HTML with an Icon 
-                   #   title = HTML(
-                   #     '<div style="display: flex; align-items: center;">
-                   #     <i class="glyphicon glyphicon-font" style="margin-right: 8px;"></i>
-                   #     <span>Text</span>
-                   #     </div>'
-                   #     ),
                    # Text-Input for the Title
                    textInput(inputId = "plot_title", label = "Titel", value = "", placeholder = "Titel eingeben"),
                    # Text-Input for the Sub-Title
@@ -690,11 +699,16 @@ server <- function(input, output, session) {
   
   # Reactiver Wert für aktiven Tab
   activeTab <- reactiveVal("data")
+  activePlot <- reactiveVal("data")
   
   # Button Events
   observeEvent(input$btn_data, {
     activeTab("data")
     session$sendCustomMessage("setActiveButton", "btn_data")
+  })
+  observeEvent(input$btn_plottype, {
+    activeTab("plottype")
+    session$sendCustomMessage("setActiveButton", "btn_plottype")
   })
   observeEvent(input$btn_variables, {
     activeTab("variables")
@@ -713,8 +727,28 @@ server <- function(input, output, session) {
     session$sendCustomMessage("setActiveButton", "btn_layout")
   })
   
+  observeEvent(input$plot_bar, {
+    activePlot("Bar")
+    session$sendCustomMessage("setActivePlot", "plot_bar")
+  })
+  observeEvent(input$plot_box, {
+    activePlot("Box")
+    session$sendCustomMessage("setActivePlot", "plot_box")
+  })
+  observeEvent(input$plot_line, {
+    activePlot("Line")
+    session$sendCustomMessage("setActivePlot", "plot_line")
+  })
+  observeEvent(input$plot_scatter, {
+    activePlot("Scatter")
+    session$sendCustomMessage("setActivePlot", "plot_scatter")
+  })
+  
+  
+  
   # Buttons zum Steuern des aktiven Tabs
   observeEvent(input$btn_data, { activeTab("data") })
+  observeEvent(input$btn_plottype, { activeTab("plottype") })
   observeEvent(input$btn_variables, { activeTab("variables") })
   observeEvent(input$btn_plot_options, { activeTab("plot_options") })
   observeEvent(input$btn_text, { activeTab("text") })
