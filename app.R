@@ -161,7 +161,7 @@ ui <- fluidPage(
   sidebarLayout(
     
     #Define Panel in Sidebar with width of 3
-    sidebarPanel(width = 3,
+    sidebarPanel(width = 4,
                  
                  
                  
@@ -355,7 +355,7 @@ ui <- fluidPage(
                                 selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                               ),
                               bsCollapsePanel(
-                                title = BSCollapseArrow("Titel"),
+                                title = BSCollapseArrow("Legenden-Text"),
                                 # Text-Input for the X-Axis-Title
                                 selectInput(inputId = "Legend_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                 selectInput(inputId = "Legend_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
@@ -384,6 +384,81 @@ ui <- fluidPage(
                                 numericInput(inputId = "Axis_Y_Text_Rotation", label = "Rotation", min = 0, max = 360, step = 1, value = NA),
                                 selectInput(inputId = "Axis_Y_Text_H_Alignment", label = "Vertikale Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme"),
                                 selectInput(inputId = "Axis_Y_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
+                              ),
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Achsen-Linien"),
+                                selectInput(inputId = "Axis_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Axis_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Axis_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Axis_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Axis_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Axis_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Axis_Y_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                selectInput(inputId = "Axis_Y_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                textInput(inputId = "Axis_Y_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                numericInput(inputId = "Axis_Y_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                selectInput(inputId = "Axis_Y_Text_H_Alignment", label = "Vertikale Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme"),
+                                selectInput(inputId = "Axis_Y_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
+                              ),
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Achsen-Ticks"),
+                                numericInput(inputId = "Axis_X_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA),
+                                numericInput(inputId = "Axis_X_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                selectInput(inputId = "Axis_X_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                textInput(inputId = "Axis_X_Ticks_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                numericInput(inputId = "Axis_Y_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA),
+                                numericInput(inputId = "Axis_Y_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                selectInput(inputId = "Axis_Y_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                textInput(inputId = "Axis_Y_Ticks_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                              ),
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Haupt-Linien"),
+                                selectInput(inputId = "Major_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Major_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Major_Grid_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Major_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Major_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Major_Grid_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Major_Grid_Y_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                selectInput(inputId = "Major_Grid_Y_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                textInput(inputId = "Major_Grid_Y_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                numericInput(inputId = "Major_Grid_Y_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                selectInput(inputId = "Major_Grid_Y_Text_H_Alignment", label = "Vertikale Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme"),
+                                selectInput(inputId = "Major_Grid_Y_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
+                              ),
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Minor-Linien"),
+                                selectInput(inputId = "Minor_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Minor_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Minor_Grid_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Minor_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Minor_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Minor_Grid_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Minor_Grid_Y_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                selectInput(inputId = "Minor_Grid_Y_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                textInput(inputId = "Minor_Grid_Y_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                numericInput(inputId = "Minor_Grid_Y_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                selectInput(inputId = "Minor_Grid_Y_Text_H_Alignment", label = "Vertikale Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme"),
+                                selectInput(inputId = "Minor_Grid_Y_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
+                              ),
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Hintergrund"),
+                                textInput(inputId = "Plot_Background_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Plot_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Plot_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Plot_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                textInput(inputId = "Panel_Background_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Panel_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Panel_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Panel_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                              ),
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Legenden-Box"),
+                                textInput(inputId = "Legend_Background_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Legend_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                numericInput(inputId = "Legend_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                textInput(inputId = "Legend_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                selectInput(inputId = "Legend_Position", label = "Position", choices = c("Gemäss Theme", "Keine", "Rechts", "Links", "Unten", "Oben"), selected = "Gemäss Theme")
                               )
                    )
                    
