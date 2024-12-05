@@ -64,6 +64,16 @@ tags$head(
   "))
 )
 
+tags$head(
+  tags$style(HTML("
+    .axis-settings .col-sm-6 {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  "))
+)
+
 
 
 
@@ -328,22 +338,28 @@ ui <- fluidPage(
                                 selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                               ),
                               bsCollapsePanel(
-                                title = BSCollapseArrow("X-Achsen Titel"),
-                                # Text-Input for the X-Axis-Title
-                                selectInput(inputId = "X_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                selectInput(inputId = "X_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                textInput(inputId = "X_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                numericInput(inputId = "X_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                selectInput(inputId = "X_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-                              ),
-                              bsCollapsePanel(
-                                title = BSCollapseArrow("Y-Achsen Titel"),
-                                # Text-Input for the Y-Axis-Title
-                                selectInput(inputId = "Y_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                selectInput(inputId = "Y_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                textInput(inputId = "Y_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                numericInput(inputId = "Y_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                selectInput(inputId = "Y_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                title = BSCollapseArrow("Achsen Titel"),
+                                div(class = "axis-settings", 
+                                    column(6,
+                                           h3("X-Achse"),
+                                           # Text-Input for the X-Axis-Title
+                                           selectInput(inputId = "X_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "X_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           textInput(inputId = "X_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                           numericInput(inputId = "X_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                           selectInput(inputId = "X_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                    ),
+                                    column(6, 
+                                           h3("Y-Achse"),
+                                           # Text-Input for the Y-Axis-Title
+                                           selectInput(inputId = "Y_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Y_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           textInput(inputId = "Y_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                           numericInput(inputId = "Y_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                           selectInput(inputId = "Y_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                    )
+                                    )
+                                
                               ),
                               bsCollapsePanel(
                                 title = BSCollapseArrow("Legenden-Titel"),
