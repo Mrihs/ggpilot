@@ -904,6 +904,34 @@ server <- function(input, output, session) {
     
     
     
+    if (x_var != "1" && y_var != "1") {
+      if (activePlot() == "Box"){
+        r_code <- paste0(r_code, " +\n  geom_boxplot(")
+        
+        if (!is.na(dodge_value)) {
+          r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
+        }
+        r_code <- paste0(r_code, ")")
+        
+        
+      }
+      }
+    
+    
+    
+    if (x_var != "1" && y_var != "1") {
+      if (activePlot() == "Scatter"){
+        r_code <- paste0(r_code, " +\n  geom_point(")
+        
+        if (!is.na(dodge_value)) {
+          r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
+        }
+        r_code <- paste0(r_code, ")")
+        
+        
+      }
+    }
+    
     
     
     ########## 3.3.6 Define Facets ##########  
