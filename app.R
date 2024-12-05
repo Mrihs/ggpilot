@@ -856,12 +856,27 @@ server <- function(input, output, session) {
     
     ########## 3.3.4 Define Bar-Geoms ########## 
     if (x_var != "1" && y_var != "1") {
-      r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'bar'")
-      if (!is.na(dodge_value)) {
-        r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
-      }
-      r_code <- paste0(r_code, ")")
-      
+      if (activePlot() == "Bar"|activePlot() == "Line"){
+        if (activePlot() == "Bar"){
+        r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'bar'")
+        }
+        if (activePlot() == "Line"){
+          # r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'line'")
+          if (!is.null(group_var)) {
+            r_code <- paste0(r_code, sprintf(" +\n  stat_summary(aes_string(group = '%s', color = '%s'), fun = mean, geom = 'line'", group_var, group_var))
+            # Close first line of Plot-relevant Code if no Grouping Variable is selected
+          }
+          if (is.null(group_var)) {
+            r_code <- paste0(r_code, sprintf(" +\n  stat_summary(fun = mean, geom = 'line', group = 1"))
+            # Close first line of Plot-relevant Code if no Grouping Variable is selected
+          }
+          
+        }
+        
+        if (!is.na(dodge_value)) {
+          r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
+        }
+        r_code <- paste0(r_code, ")")
       
       
       
@@ -884,6 +899,7 @@ server <- function(input, output, session) {
         }
         r_code <- paste0(r_code, ")")
       }
+        }
     }
     
     
