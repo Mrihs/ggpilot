@@ -259,68 +259,90 @@ $('#' + btnId).addClass('active-plot');
                  conditionalPanel(
                    condition = "input.activeTab == 'plot_options'",
                    
-                   # Theme
-                   selectInput(inputId = "plot_theme", label = "Theme", choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", "Minimal", "Void"), selected = "Gray"),
-                   
-                   # Set a HTML header for the Y-Axis Range Text
-                   HTML('<label class="control-label">Range X-Achse</label>'),
-                   
-                   # Define the min and max value next to each other
-                   div(
-                     # Define styla
-                     style = "display: flex; justify-content: space-between; gap: 10px;",
-                     div(
-                       style = "flex: 1;",
-                       # Numeric Input field for the minimal X-Axis value
-                       numericInput(inputId = "x_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
-                     ),
-                     div(
-                       style = "flex: 1;",
-                       # Numeric Input field for the max X-Axis value
-                       numericInput(inputId = "x_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
-                     )
+                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Theme"),
+                                div(class = "axis-settings",
+                                    # Theme
+                                    selectInput(inputId = "plot_theme", label = "", choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", "Minimal", "Void"), selected = "Gray")
+                                )
+                              ),
+                              
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Achsen-Range definieren"),
+                                div(class = "axis-settings",
+                                    # Set a HTML header for the Y-Axis Range Text
+                                    HTML('<label class="control-label">X-Achse</label>'),
+                                    
+                                    # Define the min and max value next to each other
+                                    div(
+                                      # Define styla
+                                      style = "display: flex; justify-content: space-between; gap: 10px;",
+                                      div(
+                                        style = "flex: 1;",
+                                        # Numeric Input field for the minimal X-Axis value
+                                        numericInput(inputId = "x_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
+                                      ),
+                                      div(
+                                        style = "flex: 1;",
+                                        # Numeric Input field for the max X-Axis value
+                                        numericInput(inputId = "x_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
+                                      )
+                                    ),
+                                    
+                                    # Set a HTML header for the X-Axis Range Text
+                                    HTML('<label class="control-label">Y-Achse</label>'),
+                                    
+                                    # Define the min and max value next to each other
+                                    div(
+                                      # Define style
+                                      style = "display: flex; justify-content: space-between; gap: 10px;",
+                                      div(
+                                        style = "flex: 1;",
+                                        # Numeric Input field for the minimal Y-Axis value
+                                        numericInput(inputId = "y_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
+                                      ),
+                                      div(
+                                        style = "flex: 1;",
+                                        # Numeric Input field for the max Y-Axis value
+                                        numericInput(inputId = "y_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
+                                        )
+                                      )                                
+                                    )
+                              ),
+                              
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Fehlerbalken"),
+                                div(class = "axis-settings",
+                                    # Dropbdown to select the type of errorbar
+                                    selectInput(inputId = "error_type", label = "Einheit", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
+                                    # Numeric Input for the width of the errorbar
+                                    numericInput(inputId = "error_width", label = "Grösse Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5)
+                                    )
+                                ),
+
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Gruppen-Abstände"),
+                                div(class = "axis-settings",
+                                    # Numeric Input for the position-dodge value
+                                    numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = 0.9)
+                                    )
+                                ),
+                              bsCollapsePanel(
+                                title = BSCollapseArrow("Farbpalletten"),
+                                div(class = "axis-settings",
+                                    # Action-Buttons for Adding Colors from Palette
+                                    actionButton("add_row", "+"),
+                                    # Action-Buttons for Removing Colors from Palette
+                                    actionButton("remove_row", "-"),
+                                    
+                                    # Dynamic UI for color-Inputs
+                                    uiOutput("color_inputs")
+                                    )
+                                )
+                              )
                    ),
-                   
-                   # Set a HTML header for the X-Axis Range Text
-                   HTML('<label class="control-label">Range Y-Achse</label>'),
-                   
-                   # Define the min and max value next to each other
-                   div(
-                     # Define style
-                     style = "display: flex; justify-content: space-between; gap: 10px;",
-                     div(
-                       style = "flex: 1;",
-                       # Numeric Input field for the minimal Y-Axis value
-                       numericInput(inputId = "y_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
-                     ),
-                     div(
-                       style = "flex: 1;",
-                       # Numeric Input field for the max Y-Axis value
-                       numericInput(inputId = "y_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
-                     )
-                   ),
-                   # Dropbdown to select the type of errorbar
-                   selectInput(inputId = "error_type", label = "Fehlerbalken", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
-                   # Numeric Input for the width of the errorbar
-                   numericInput(inputId = "error_width", label = "Grösse Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5),
-                   # Numeric Input for the position-dodge value
-                   numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = 0.9),
-                   
-                   
-                   # Color Palette
-                   div(
-                     h5("Farb-Palette definieren"),
-                     style = "margin-bottom: 20px;"
-                   ),
-                   # Action-Buttons for Adding Colors from Palette
-                   actionButton("add_row", "+"),
-                   # Action-Buttons for Removing Colors from Palette
-                   actionButton("remove_row", "-"),
-                   
-                   # Dynamic UI for color-Inputs
-                   uiOutput("color_inputs")
-                   ),
-                 
+
                  
                  
                  
