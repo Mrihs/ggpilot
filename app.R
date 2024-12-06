@@ -452,19 +452,13 @@ $('#' + btnId).addClass('active-plot');
                                            h3("X-Achse"),
                                            selectInput(inputId = "Axis_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                            numericInput(inputId = "Axis_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                           textInput(inputId = "Axis_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                           selectInput(inputId = "Axis_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                           numericInput(inputId = "Axis_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                            textInput(inputId = "Axis_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                     ),
                                     column(6,
                                            h3("Y-Achse"),
-                                           selectInput(inputId = "Axis_Y_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Axis_Y_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                           textInput(inputId = "Axis_Y_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                           numericInput(inputId = "Axis_Y_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                           selectInput(inputId = "Axis_Y_Text_H_Alignment", label = "Vertikale Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Axis_Y_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
+                                           selectInput(inputId = "Axis_Y_Linetype", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           numericInput(inputId = "Axis_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                           textInput(inputId = "Axis_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                     )
                                 )
                               ),
@@ -525,14 +519,14 @@ $('#' + btnId).addClass('active-plot');
                                 title = BSCollapseArrow("Hintergrund"),
                                 div(class = "axis-settings",
                                     column(6,
-                                           h3("X-Achse"),
+                                           h3("Plot"),
                                            textInput(inputId = "Plot_Background_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            selectInput(inputId = "Plot_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                            numericInput(inputId = "Plot_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                            textInput(inputId = "Plot_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                     ),
                                     column(6,
-                                           h3("Y-Achse"),
+                                           h3("Panel"),
                                            textInput(inputId = "Panel_Background_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            selectInput(inputId = "Panel_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                            numericInput(inputId = "Panel_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
@@ -581,9 +575,9 @@ $('#' + btnId).addClass('active-plot');
                               div(class = "axis-settings",
                                   column(6,
                                          h3("Anordnung"),
-                                         selectInput(inputId = "Legend_Position", label = "Position der Legende", choices = c("Gemäss Theme", "Keine", "Rechts", "Links", "Unten", "Oben"), selected = "Gemäss Theme"),
-                                         selectInput(inputId = "Legend_Title_Position", label = "Position des Legenden-Titel", choices = c("Gemäss Theme", "Rechts", "Links", "Unten", "Oben"), selected = "Gemäss Theme"),
-                                         selectInput(inputId = "Legend_Text_Position", label = "Position der Legenden-Items", choices = c("Gemäss Theme", "Rechts", "Links", "Unten", "Oben"), selected = "Gemäss Theme"),
+                                         selectInput(inputId = "Legend_Position", label = "Position der Legende", choices = c("Gemäss Theme", "Keine", "Rechts", "Links", "Unten", "Oben", "Im Plot"), selected = "Gemäss Theme"),
+                                         selectInput(inputId = "Legend_Title_Position", label = "Position des Legenden-Titel", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
+                                         selectInput(inputId = "Legend_Text_Position", label = "Position der Legenden-Items", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
                                          selectInput(inputId = "Legend_Text_Direktion", label = "Ausrichtung der Legenden-Items", choices = c("Gemäss Theme", "Vertikal", "Horizontal"), selected = "Gemäss Theme")
                                   ),
                                   column(6,
@@ -1398,61 +1392,357 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.7 ! X Axis Lines ##########
+    ########## 3.4.7 X Axis Lines ##########
+    if (input$Axis_X_Linetype != "Gemäss Theme" || !is.na(input$Axis_X_Size) || input$Axis_X_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      if (input$Axis_X_Linetype == "Keine"){
+        theme_code <- paste0(theme_code, "axis.line.x = element_blank(")
+      } else {
+      theme_code <- paste0(theme_code, "axis.line.x = element_line(")
+
+      theme_code <- paste0(theme_code,
+                           if (input$Axis_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                switch(input$Axis_X_Linetype,
+                                                                                       "Solide" = "solid",
+                                                                                       "Gestrichelt" = "dashed",
+                                                                                       "Gepunkted" = "dotted",
+                                                                                       "Punktgestrichelt" = "dotdash",
+                                                                                       "Langgestrichen" = "longdash",
+                                                                                       "Doppelt gestrichelt" = "twodash"
+                                                                                       )) else "",
+                           if (!is.na(input$Axis_X_Size)) sprintf("size = %.1f, ", input$Axis_X_Size) else "",
+                           if (input$Axis_X_Color != "") sprintf("colour = '%s', ", input$Axis_X_Color) else ""
+                           )
+      }
+
+
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+
+
+
+
+    ########## 3.4.8 Y Axis Lines ##########
+    if (input$Axis_Y_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Size) || input$Axis_Y_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      if (input$Axis_Y_Linetype == "Keine"){
+        theme_code <- paste0(theme_code, "axis.line.y = element_blank(")
+      } else {
+        theme_code <- paste0(theme_code, "axis.line.y = element_line(")
+
+        theme_code <- paste0(theme_code,
+                             if (input$Axis_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                  switch(input$Axis_Y_Linetype,
+                                                                                         "Solide" = "solid",
+                                                                                         "Gestrichelt" = "dashed",
+                                                                                         "Gepunkted" = "dotted",
+                                                                                         "Punktgestrichelt" = "dotdash",
+                                                                                         "Langgestrichen" = "longdash",
+                                                                                         "Doppelt gestrichelt" = "twodash"
+                                                                                  )) else "",
+                             if (!is.na(input$Axis_Y_Size)) sprintf("size = %.1f, ", input$Axis_Y_Size) else "",
+                             if (input$Axis_Y_Color != "") sprintf("colour = '%s', ", input$Axis_Y_Color) else ""
+        )
+      }
+
+
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+    
+    
+    
+    
+    ########## 3.4.9 X Axis Ticks ##########
+    if (!is.na(input$Axis_X_Ticks_Length)) {
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("axis.ticks.length.x = unit('%.1f', 'pt')", input$Axis_X_Ticks_Length))
+    }
+
+    if (input$Axis_X_Ticks_Linetype != "Gemäss Theme" || !is.na(input$Axis_X_Ticks_Size) || input$Axis_X_Ticks_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, "axis.ticks.x = element_line(")
+
+      theme_code <- paste0(theme_code,
+                           if (input$Axis_X_Ticks_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                switch(input$Axis_X_Ticks_Linetype,
+                                                                                       "Solide" = "solid",
+                                                                                       "Gestrichelt" = "dashed",
+                                                                                       "Gepunkted" = "dotted",
+                                                                                       "Punktgestrichelt" = "dotdash",
+                                                                                       "Langgestrichen" = "longdash",
+                                                                                       "Doppelt gestrichelt" = "twodash"
+                                                                                )) else "",
+                           if (!is.na(input$Axis_X_Ticks_Size)) sprintf("size = %.1f, ", input$Axis_X_Ticks_Size) else "",
+                           if (input$Axis_X_Ticks_Color != "") sprintf("colour = '%s', ", input$Axis_X_Ticks_Color) else ""
+      )
+
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+
+
+
+
+    ########## 3.4.10 Y Axis Ticks ##########
+    if (!is.na(input$Axis_Y_Ticks_Length)) {
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("axis.ticks.length.y = unit('%.1f', 'pt')", input$Axis_Y_Ticks_Length))
+    }
+
+
+    if (input$Axis_Y_Ticks_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Ticks_Size) || input$Axis_Y_Ticks_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, "axis.ticks.y = element_line(")
+
+      theme_code <- paste0(theme_code,
+                           if (input$Axis_Y_Ticks_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                      switch(input$Axis_Y_Ticks_Linetype,
+                                                                                             "Solide" = "solid",
+                                                                                             "Gestrichelt" = "dashed",
+                                                                                             "Gepunkted" = "dotted",
+                                                                                             "Punktgestrichelt" = "dotdash",
+                                                                                             "Langgestrichen" = "longdash",
+                                                                                             "Doppelt gestrichelt" = "twodash"
+                                                                                      )) else "",
+                           if (!is.na(input$Axis_Y_Ticks_Size)) sprintf("size = %.1f, ", input$Axis_Y_Ticks_Size) else "",
+                           if (input$Axis_Y_Ticks_Color != "") sprintf("colour = '%s', ", input$Axis_Y_Ticks_Color) else ""
+      )
+
+
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
     
     
-    ########## 3.4.8 ! Y Axis Lines ##########
+    ########## 3.4.11 Major Gridlines X ##########
+    if (input$Major_Grid_X_Linetype != "Gemäss Theme" || !is.na(input$Major_Grid_X_Size) || input$Major_Grid_X_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      if (input$Major_Grid_X_Linetype == "Keine"){
+        theme_code <- paste0(theme_code, "panel.grid.major.x = element_blank(")
+      } else {
+        theme_code <- paste0(theme_code, "panel.grid.major.x = element_line(")
+        
+        theme_code <- paste0(theme_code,
+                             if (input$Major_Grid_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                  switch(input$Major_Grid_X_Linetype,
+                                                                                         "Solide" = "solid", 
+                                                                                         "Gestrichelt" = "dashed", 
+                                                                                         "Gepunkted" = "dotted", 
+                                                                                         "Punktgestrichelt" = "dotdash", 
+                                                                                         "Langgestrichen" = "longdash", 
+                                                                                         "Doppelt gestrichelt" = "twodash"
+                                                                                  )) else "",
+                             if (!is.na(input$Major_Grid_X_Size)) sprintf("size = %.1f, ", input$Major_Grid_X_Size) else "",
+                             if (input$Major_Grid_X_Color != "") sprintf("colour = '%s', ", input$Major_Grid_X_Color) else ""
+        )
+      }
+      
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
     
     
-    ########## 3.4.9 ! X Axis Ticks ##########
+    ########## 3.4.12 Major Gridlines Y ##########
+    if (input$Major_Grid_Y_Linetype != "Gemäss Theme" || !is.na(input$Major_Grid_Y_Size) || input$Major_Grid_Y_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      if (input$Major_Grid_Y_Linetype == "Keine"){
+        theme_code <- paste0(theme_code, "panel.grid.major.y = element_blank(")
+      } else {
+        theme_code <- paste0(theme_code, "panel.grid.major.y = element_line(")
+        
+        theme_code <- paste0(theme_code,
+                             if (input$Major_Grid_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                        switch(input$Major_Grid_Y_Linetype,
+                                                                                               "Solide" = "solid", 
+                                                                                               "Gestrichelt" = "dashed", 
+                                                                                               "Gepunkted" = "dotted", 
+                                                                                               "Punktgestrichelt" = "dotdash", 
+                                                                                               "Langgestrichen" = "longdash", 
+                                                                                               "Doppelt gestrichelt" = "twodash"
+                                                                                        )) else "",
+                             if (!is.na(input$Major_Grid_Y_Size)) sprintf("size = %.1f, ", input$Major_Grid_Y_Size) else "",
+                             if (input$Major_Grid_Y_Color != "") sprintf("colour = '%s', ", input$Major_Grid_Y_Color) else ""
+        )
+      }
+      
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
     
     
-    ########## 3.4.10 ! Y Axis Ticks ##########
+    ########## 3.4.13 Minor Gridlines X ##########
+    if (input$Minor_Grid_X_Linetype != "Gemäss Theme" || !is.na(input$Minor_Grid_X_Size) || input$Minor_Grid_X_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      if (input$Minor_Grid_X_Linetype == "Keine"){
+        theme_code <- paste0(theme_code, "panel.grid.minor.x = element_blank(")
+      } else {
+        theme_code <- paste0(theme_code, "panel.grid.minor.x = element_line(")
+        
+        theme_code <- paste0(theme_code,
+                             if (input$Minor_Grid_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                        switch(input$Minor_Grid_X_Linetype,
+                                                                                               "Solide" = "solid", 
+                                                                                               "Gestrichelt" = "dashed", 
+                                                                                               "Gepunkted" = "dotted", 
+                                                                                               "Punktgestrichelt" = "dotdash", 
+                                                                                               "Langgestrichen" = "longdash", 
+                                                                                               "Doppelt gestrichelt" = "twodash"
+                                                                                        )) else "",
+                             if (!is.na(input$Minor_Grid_X_Size)) sprintf("size = %.1f, ", input$Minor_Grid_X_Size) else "",
+                             if (input$Minor_Grid_X_Color != "") sprintf("colour = '%s', ", input$Minor_Grid_X_Color) else ""
+        )
+      }
+      
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+    
+    
+    
+    
+    ########## 3.4.14 Minor Gridlines Y ##########
+    if (input$Minor_Grid_Y_Linetype != "Gemäss Theme" || !is.na(input$Minor_Grid_Y_Size) || input$Minor_Grid_Y_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      if (input$Minor_Grid_Y_Linetype == "Keine"){
+        theme_code <- paste0(theme_code, "panel.grid.minor.y = element_blank(")
+      } else {
+        theme_code <- paste0(theme_code, "panel.grid.minor.y = element_line(")
+        
+        theme_code <- paste0(theme_code,
+                             if (input$Minor_Grid_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                        switch(input$Minor_Grid_Y_Linetype,
+                                                                                               "Solide" = "solid", 
+                                                                                               "Gestrichelt" = "dashed", 
+                                                                                               "Gepunkted" = "dotted", 
+                                                                                               "Punktgestrichelt" = "dotdash", 
+                                                                                               "Langgestrichen" = "longdash", 
+                                                                                               "Doppelt gestrichelt" = "twodash"
+                                                                                        )) else "",
+                             if (!is.na(input$Minor_Grid_Y_Size)) sprintf("size = %.1f, ", input$Minor_Grid_Y_Size) else "",
+                             if (input$Minor_Grid_Y_Color != "") sprintf("colour = '%s', ", input$Minor_Grid_Y_Color) else ""
+        )
+      }
+      
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
     
     
-    ########## 3.4.11 ! Major Gridlines X ##########
+    ########## 3.4.15 Plot Background ##########
+    if (input$Plot_Background_Color != "" || input$Plot_Background_Linetype != "Gemäss Theme" 
+        || !is.na(input$Plot_Background_Size) || input$Plot_Background_Line_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, "plot.background = element_rect(")
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Plot_Background_Color != "") sprintf("fill = '%s', ", input$Plot_Background_Color) else "",
+                           if (input$Plot_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                      switch(input$Plot_Background_Linetype,
+                                                                                             "Solide" = "solid", 
+                                                                                             "Gestrichelt" = "dashed", 
+                                                                                             "Gepunkted" = "dotted", 
+                                                                                             "Punktgestrichelt" = "dotdash", 
+                                                                                             "Langgestrichen" = "longdash", 
+                                                                                             "Doppelt gestrichelt" = "twodash"
+                                                                                      )) else "",
+                           if (!is.na(input$Plot_Background_Size)) sprintf("linewidth = %.1f, ", input$Plot_Background_Size) else "",
+                           if (input$Plot_Background_Line_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Line_Color) else ""
+      )
+      
+      # Remove trailing comma and close the element-function
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
     
     
-    ########## 3.4.12 ! Major Gridlines Y ##########
-    
-    
-    
-    
-    
-    ########## 3.4.13 ! Minor Gridlines X ##########
-    
-    
-    
-    
-    
-    ########## 3.4.14 ! Minor Gridlines Y ##########
-    
-    
-    
-    
-    
-    ########## 3.4.15 ! Plot Background ##########
-    
-    
-    
-    
-    
-    ########## 3.4.16 ! Plot Background ##########
+    ########## 3.4.16 Plot Background ##########
+    if (input$Panel_Background_Color != "" || input$Panel_Background_Linetype != "Gemäss Theme" 
+        || !is.na(input$Panel_Background_Size) || input$Panel_Background_Line_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, "panel.background = element_rect(")
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Panel_Background_Color != "") sprintf("fill = '%s', ", input$Panel_Background_Color) else "",
+                           if (input$Panel_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                         switch(input$Panel_Background_Linetype,
+                                                                                                "Solide" = "solid", 
+                                                                                                "Gestrichelt" = "dashed", 
+                                                                                                "Gepunkted" = "dotted", 
+                                                                                                "Punktgestrichelt" = "dotdash", 
+                                                                                                "Langgestrichen" = "longdash", 
+                                                                                                "Doppelt gestrichelt" = "twodash"
+                                                                                         )) else "",
+                           if (!is.na(input$Panel_Background_Size)) sprintf("linewidth = %.1f, ", input$Panel_Background_Size) else "",
+                           if (input$Panel_Background_Line_Color != "") sprintf("colour = '%s', ", input$Panel_Background_Line_Color) else ""
+      )
+      
+      # Remove trailing comma and close the element-function
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
@@ -1542,37 +1832,262 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.19 ! Legend Background ##########
+    ########## 3.4.19 Legend Background ##########
+    if (input$Plot_Background_Color != "" || input$Plot_Background_Linetype != "Gemäss Theme" 
+        || !is.na(input$Plot_Background_Size) || input$Plot_Background_Line_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, "legend.background = element_rect(")
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Plot_Background_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Color) else "",
+                           if (input$Plot_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                         switch(input$Plot_Background_Linetype,
+                                                                                                "Solide" = "solid", 
+                                                                                                "Gestrichelt" = "dashed", 
+                                                                                                "Gepunkted" = "dotted", 
+                                                                                                "Punktgestrichelt" = "dotdash", 
+                                                                                                "Langgestrichen" = "longdash", 
+                                                                                                "Doppelt gestrichelt" = "twodash"
+                                                                                         )) else "",
+                           if (!is.na(input$Plot_Background_Size)) sprintf("linewidth = %.1f, ", input$Plot_Background_Size) else "",
+                           if (input$Plot_Background_Line_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Line_Color) else ""
+      )
+      
+      # Remove trailing comma and close the element-function
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
     
     
-    ########## 3.4.20 ! Legend Options ##########
+    ########## 3.4.20 Legend Options ##########
+    if (input$Legend_Position != "Gemäss Theme"){
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("legend.position = '%s', ",
+                                                                     switch(input$Legend_Position,
+                                                                            "Keine" = "none", 
+                                                                            "Rechts" = "right", 
+                                                                            "Unten" = "bottom", 
+                                                                            "Links" = "left", 
+                                                                            "Oben" = "top", 
+                                                                            "Im Plot" = "inside", ")"
+                                                                     )))
+    }
+    
+    if (input$Legend_Title_Position != "Gemäss Theme"){
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("legend.title.position = '%s', ",
+                                               switch(input$Legend_Title_Position,
+                                                      "Oben" = "top", 
+                                                      "Rechts" = "right", 
+                                                      "Unten" = "bottom", 
+                                                      "Links" = "left", ")"
+                                               )))
+    }
+    
+    if (input$Legend_Text_Position != "Gemäss Theme"){
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("legend.text.position = '%s', ",
+                                               switch(input$Legend_Text_Position,
+                                                      "Oben" = "top", 
+                                                      "Rechts" = "right", 
+                                                      "Unten" = "bottom", 
+                                                      "Links" = "left", ")"
+                                               )))
+    }
+    
+    if (input$Legend_Text_Direktion != "Gemäss Theme"){
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("legend.direction = '%s', ",
+                                               switch(input$Legend_Text_Direktion,
+                                                      "Vertikal" = "vertical",
+                                                      "Horizontal" = "horizontal", ")"
+                                               )))
+    }
+    
+    if (!is.na(input$Legend_Key_Width)){
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("legend.key.width = unit(%.1f, 'pt'", input$Stripe_X_Size))
+    }
+    
+    if (!is.na(input$Legend_Key_Height)){
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("legend.key.height = unit(%.1f, 'pt'", input$Stripe_X_Size))
+    }
+    
+    if (!is.na(input$Legend_Key_Spacing)){
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("legend.key.spacing = unit(%.1f, 'pt'", input$Legend_Key_Spacing))
+    }
+    
+    if (!is.na(input$Legend_Box_Spacing)){
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, sprintf("legend.box.spacing = unit(%.1f, 'pt'", input$Legend_Box_Spacing))
+    }
+    
+    
+    ########## 3.4.21 Facet-Row Background ##########
+    if (input$Stripe_X_Color != "" || input$Stripe_X_Linetype != "Gemäss Theme" 
+        || !is.na(input$Stripe_X_Size) || input$Stripe_X_Line_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, "strip.background.x = element_rect(")
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Stripe_X_Color != "") sprintf("fill = '%s', ", input$Stripe_X_Color) else "",
+                           if (input$Stripe_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                         switch(input$Stripe_X_Linetype,
+                                                                                                "Solide" = "solid", 
+                                                                                                "Gestrichelt" = "dashed", 
+                                                                                                "Gepunkted" = "dotted", 
+                                                                                                "Punktgestrichelt" = "dotdash", 
+                                                                                                "Langgestrichen" = "longdash", 
+                                                                                                "Doppelt gestrichelt" = "twodash"
+                                                                                         )) else "",
+                           if (!is.na(input$Stripe_X_Size)) sprintf("linewidth = %.1f, ", input$Stripe_X_Size) else "",
+                           if (input$Stripe_X_Line_Color != "") sprintf("colour = '%s', ", input$Stripe_X_Line_Color) else ""
+      )
+      
+      # Remove trailing comma and close the element-function
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+    
+    
+    
+    
+    ########## 3.4.22 Facet-Column Background ##########
+    if (input$Stripe_Y_Color != "" || input$Stripe_Y_Linetype != "Gemäss Theme" 
+        || !is.na(input$Stripe_Y_Size) || input$Stripe_Y_Line_Color != "") {
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      theme_code <- paste0(theme_code, "strip.background.y = element_rect(")
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Stripe_Y_Color != "") sprintf("fill = '%s', ", input$Stripe_Y_Color) else "",
+                           if (input$Stripe_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                  switch(input$Stripe_Y_Linetype,
+                                                                                         "Solide" = "solid", 
+                                                                                         "Gestrichelt" = "dashed", 
+                                                                                         "Gepunkted" = "dotted", 
+                                                                                         "Punktgestrichelt" = "dotdash", 
+                                                                                         "Langgestrichen" = "longdash", 
+                                                                                         "Doppelt gestrichelt" = "twodash"
+                                                                                  )) else "",
+                           if (!is.na(input$Stripe_Y_Size)) sprintf("linewidth = %.1f, ", input$Stripe_Y_Size) else "",
+                           if (input$Stripe_Y_Line_Color != "") sprintf("colour = '%s', ", input$Stripe_Y_Line_Color) else ""
+      )
+      
+      # Remove trailing comma and close the element-function
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }    
+    
+    
+    
+    
+    ########## 3.4.23 Facet-Row Text ##########
+    if (input$Stripe_X_Font != "Gemäss Theme" || input$Stripe_X_Face != "Gemäss Theme" ||
+        input$Stripe_X_Color != "" || !is.na(input$Stripe_X_Size) || input$Stripe_X_Alignment != "Gemäss Theme") {
+      
+      
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      
+      theme_code <- paste0(theme_code, "strip.text.x = element_text(")
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Stripe_X_Font != "Gemäss Theme") sprintf("family = '%s', ", 
+                                                                                  switch(input$Stripe_X_Font,
+                                                                                         "Sans Serife" = "sans",
+                                                                                         "Serife" = "serif",
+                                                                                         "Monospace" = "mono")) else "",
+                           if (input$Stripe_X_Face != "Gemäss Theme") sprintf("face = '%s', ", 
+                                                                                  switch(input$Stripe_X_Face,
+                                                                                         "Normal" = "plain",
+                                                                                         "Fett" = "bold",
+                                                                                         "Kursiv" = "italic",
+                                                                                         "Fett & Kursiv" = "bold.italic")) else "",
+                           if (!is.na(input$Stripe_X_Size)) sprintf("size = %.1f, ", input$Stripe_X_Size) else "",
+                           if (input$Stripe_X_Color != "") sprintf("colour = '%s', ", input$Stripe_X_Color) else "",
+                           if (input$Stripe_X_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
+                                                                                       switch(input$Stripe_X_Alignment,
+                                                                                              "Linksbündig" = 0,
+                                                                                              "Mittig" = 0.5,
+                                                                                              "Rechtsbündig" = 1)) else "")
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
     
     
-    ########## 3.4.21 ! Facet-Row Background ##########
-    
-    
-    
-    
-    
-    ########## 3.4.22 ! Facet-Column Background ##########
-    
-    
-    
-    
-    
-    ########## 3.4.23 ! Facet-Row Text ##########
-    
-    
-    
-    
-    
-    ########## 3.4.24 ! Facet-Column Text ##########
+    ########## 3.4.24 Facet-Column Text ##########
+    if (input$Stripe_Y_Font != "Gemäss Theme" || input$Stripe_Y_Face != "Gemäss Theme" ||
+        input$Stripe_Y_Color != "" || !is.na(input$Stripe_Y_Size) || input$Stripe_Y_Alignment != "Gemäss Theme") {
+      
+      
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      
+      theme_code <- paste0(theme_code, "strip.text.y = element_text(")
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Stripe_Y_Font != "Gemäss Theme") sprintf("family = '%s', ", 
+                                                                              switch(input$Stripe_Y_Font,
+                                                                                     "Sans Serife" = "sans",
+                                                                                     "Serife" = "serif",
+                                                                                     "Monospace" = "mono")) else "",
+                           if (input$Stripe_Y_Face != "Gemäss Theme") sprintf("face = '%s', ", 
+                                                                              switch(input$Stripe_Y_Face,
+                                                                                     "Normal" = "plain",
+                                                                                     "Fett" = "bold",
+                                                                                     "Kursiv" = "italic",
+                                                                                     "Fett & Kursiv" = "bold.italic")) else "",
+                           if (!is.na(input$Stripe_Y_Size)) sprintf("size = %.1f, ", input$Stripe_Y_Size) else "",
+                           if (input$Stripe_Y_Color != "") sprintf("colour = '%s', ", input$Stripe_Y_Color) else "",
+                           if (input$Stripe_Y_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
+                                                                                   switch(input$Stripe_Y_Alignment,
+                                                                                          "Linksbündig" = 0,
+                                                                                          "Mittig" = 0.5,
+                                                                                          "Rechtsbündig" = 1)) else "")
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
     
     
     
