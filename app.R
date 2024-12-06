@@ -286,7 +286,7 @@ $('#' + btnId).addClass('active-plot');
                    
                    # Define the min and max value next to each other
                    div(
-                     # Define styla
+                     # Define style
                      style = "display: flex; justify-content: space-between; gap: 10px;",
                      div(
                        style = "flex: 1;",
@@ -304,7 +304,23 @@ $('#' + btnId).addClass('active-plot');
                    # Numeric Input for the width of the errorbar
                    numericInput(inputId = "error_width", label = "Grösse Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5),
                    # Numeric Input for the position-dodge value
-                   numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = 0.9)),
+                   numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = 0.9),
+                   
+                   
+                   # Color Palette
+                   div(
+                     h5("Farb-Palette definieren"),
+                     style = "margin-bottom: 20px;"
+                   ),
+                   # Action-Buttons for Adding Colors from Palette
+                   actionButton("add_row", "+"),
+                   # Action-Buttons for Removing Colors from Palette
+                   actionButton("remove_row", "-"),
+                   
+                   # Dynamic UI for color-Inputs
+                   uiOutput("color_inputs")
+                   ),
+                 
                  
                  
                  
@@ -1033,6 +1049,55 @@ server <- function(input, output, session) {
     
     
     
+    ########## 3.3.11 ! Color-Palette ##########
+    # Create a reactive-value for the color-palette
+    palette <- reactiveValues(colors = c())
+    
+    # Create a dynamic UI for the color-fields
+    output$color_inputs <- renderUI({
+      lapply(seq_along(palette$colors), function(i) {
+        div(
+          style = "display: flex; align-items: center; margin-bottom: 10px;",
+          tags$label(
+            paste(i, ". Farbe"),
+            `for` = paste0("color_", i),
+            style = "margin-right: 10px; align-self: center;"
+          ),
+          textInput(
+            inputId = paste0("color_", i),
+            label = NULL,
+            value = "",
+            placeholder = "z.B. 'red', oder '#FF5733'"
+          )
+        )
+      })
+    })
+    
+    # Beobachten von Hinzufügen und Entfernen von Zeilen
+    observeEvent(input$add_row, {
+      palette$colors <- c(palette$colors, "#FFFFFF")  # Standardfarbe hinzufügen
+    })
+    
+    observeEvent(input$remove_row, {
+      if (length(palette$colors) > 1) {
+        palette$colors <- palette$colors[-length(palette$colors)]  # Letzte Zeile entfernen
+      }
+    })
+    
+    # Beobachten von Änderungen der Eingabefelder
+    observe({
+      lapply(seq_along(palette$colors), function(i) {
+        observeEvent(input[[paste0("color_", i)]], {
+          palette$colors[i] <- input[[paste0("color_", i)]]
+        }, ignoreInit = TRUE)
+      })
+    })
+    
+    # Ausgabe der erstellten Farbpalette
+    output$palette_output <- renderPrint({
+      palette$colors
+    })
+
     
     
     
@@ -1086,7 +1151,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.1 Subtitle ##########
+    ########## 3.4.2 Subtitle ##########
     if (input$Subtitle_Font != "Gemäss Theme" || input$Subtitle_Face != "Gemäss Theme" ||
         input$Subtitle_Color != "" || !is.na(input$Subtitle_Size) || input$Subtitle_Alignment != "Gemäss Theme") {
       
@@ -1207,90 +1272,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.1 Legend-Title ##########
-    if (input$Legend_Title_Font != "Gemäss Theme" || input$Legend_Title_Face != "Gemäss Theme" ||
-        input$Legend_Title_Color != "" || !is.na(input$Legend_Title_Size) || input$Legend_Title_Alignment != "Gemäss Theme") {
-      
-      
-      # Create new Line in Theme-Code if needed
-      if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
-      }
-      
-      theme_code <- paste0(theme_code, "legend.title = element_text(")
-      
-      
-      theme_code <- paste0(theme_code,
-                           if (input$Legend_Title_Font != "Gemäss Theme") sprintf("family = '%s', ", 
-                                                                                  switch(input$Legend_Title_Font,
-                                                                                         "Sans Serife" = "sans",
-                                                                                         "Serife" = "serif",
-                                                                                         "Monospace" = "mono")) else "",
-                           if (input$Legend_Title_Face != "Gemäss Theme") sprintf("face = '%s', ", 
-                                                                                  switch(input$Legend_Title_Face,
-                                                                                         "Normal" = "plain",
-                                                                                         "Fett" = "bold",
-                                                                                         "Kursiv" = "italic",
-                                                                                         "Fett & Kursiv" = "bold.italic")) else "",
-                           if (!is.na(input$Legend_Title_Size)) sprintf("size = %.1f, ", input$Legend_Title_Size) else "",
-                           if (input$Legend_Title_Color != "") sprintf("colour = '%s', ", input$Legend_Title_Color) else "",
-                           if (input$Legend_Title_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
-                                                                                       switch(input$Legend_Title_Alignment,
-                                                                                              "Linksbündig" = 0,
-                                                                                              "Mittig" = 0.5,
-                                                                                              "Rechtsbündig" = 1)) else "")
-      
-      # Remove trailing comma and close `element_text()`
-      theme_code <- sub(", $", "", theme_code)
-      theme_code <- paste0(theme_code, ")")
-    }
-    
-    
-    
-    
-    
-    ########## 3.4.6 Legend-Text ##########
-    if (input$Legend_Text_Font != "Gemäss Theme" || input$Legend_Text_Face != "Gemäss Theme" ||
-        input$Legend_Text_Color != "" || !is.na(input$Legend_Text_Size) || input$Legend_Text_Alignment != "Gemäss Theme") {
-      
-      # Create new Line in Theme-Code if needed
-      if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
-      }
-      
-      theme_code <- paste0(theme_code, "legend.text = element_text(")
-      
-      
-      theme_code <- paste0(theme_code,
-                           if (input$Legend_Text_Font != "Gemäss Theme") sprintf("family = '%s', ", 
-                                                                                 switch(input$Legend_Text_Font,
-                                                                                        "Sans Serife" = "sans",
-                                                                                        "Serife" = "serif",
-                                                                                        "Monospace" = "mono")) else "",
-                           if (input$Legend_Text_Face != "Gemäss Theme") sprintf("face = '%s', ", 
-                                                                                 switch(input$Legend_Text_Face,
-                                                                                        "Normal" = "plain",
-                                                                                        "Fett" = "bold",
-                                                                                        "Kursiv" = "italic",
-                                                                                        "Fett & Kursiv" = "bold.italic")) else "",
-                           if (!is.na(input$Legend_Text_Size)) sprintf("size = %.1f, ", input$Legend_Text_Size) else "",
-                           if (input$Legend_Text_Color != "") sprintf("colour = '%s', ", input$Legend_Text_Color) else "",
-                           if (input$Legend_Text_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
-                                                                                      switch(input$Legend_Text_Alignment,
-                                                                                             "Linksbündig" = 0,
-                                                                                             "Mittig" = 0.5,
-                                                                                             "Rechtsbündig" = 1)) else "")
-      
-      # Remove trailing comma and close `element_text()`
-      theme_code <- sub(", $", "", theme_code)
-      theme_code <- paste0(theme_code, ")")
-    }
-    
-    
-    
-
-    
-    ########## 3.4.7 X-Axis-Labels ##########
+    ########## 3.4.5 X-Axis-Labels ##########
     if (input$Axis_X_Text_Font != "Gemäss Theme" || input$Axis_X_Text_Face != "Gemäss Theme" ||
         input$Axis_X_Text_Color != "" || !is.na(input$Axis_X_Text_Size) || input$Axis_X_Text_H_Alignment != "Gemäss Theme"
         || input$Axis_X_Text_V_Alignment != "Gemäss Theme" || !is.na(input$Axis_X_Text_Rotation)) {
@@ -1299,7 +1281,7 @@ server <- function(input, output, session) {
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-
+      
       
       
       theme_code <- paste0(theme_code, "axis.text.x = element_text(")
@@ -1342,7 +1324,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.7 Y-Axis-Labels ##########
+    ########## 3.4.6 Y-Axis-Labels ##########
     if (input$Axis_Y_Text_Font != "Gemäss Theme" || input$Axis_Y_Text_Face != "Gemäss Theme" ||
         input$Axis_Y_Text_Color != "" || !is.na(input$Axis_Y_Text_Size) || input$Axis_Y_Text_H_Alignment != "Gemäss Theme"
         || input$Axis_Y_Text_V_Alignment != "Gemäss Theme" || !is.na(input$Axis_Y_Text_Rotation)) {
@@ -1389,6 +1371,187 @@ server <- function(input, output, session) {
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
     }
+    
+    
+    
+    
+    
+    ########## 3.4.7 ! X Axis Lines ##########
+    
+    
+    
+    
+    
+    ########## 3.4.8 ! Y Axis Lines ##########
+    
+    
+    
+    
+    
+    ########## 3.4.9 ! X Axis Ticks ##########
+    
+    
+    
+    
+    
+    ########## 3.4.10 ! Y Axis Ticks ##########
+    
+    
+    
+    
+    
+    ########## 3.4.11 ! Major Gridlines X ##########
+    
+    
+    
+    
+    
+    ########## 3.4.12 ! Major Gridlines Y ##########
+    
+    
+    
+    
+    
+    ########## 3.4.13 ! Minor Gridlines X ##########
+    
+    
+    
+    
+    
+    ########## 3.4.14 ! Minor Gridlines Y ##########
+    
+    
+    
+    
+    
+    ########## 3.4.15 ! Plot Background ##########
+    
+    
+    
+    
+    
+    ########## 3.4.16 ! Plot Background ##########
+    
+    
+    
+    
+    
+    
+    ########## 3.4.17 Legend-Title ##########
+    if (input$Legend_Title_Font != "Gemäss Theme" || input$Legend_Title_Face != "Gemäss Theme" ||
+        input$Legend_Title_Color != "" || !is.na(input$Legend_Title_Size) || input$Legend_Title_Alignment != "Gemäss Theme") {
+      
+      
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      
+      theme_code <- paste0(theme_code, "legend.title = element_text(")
+      
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Legend_Title_Font != "Gemäss Theme") sprintf("family = '%s', ", 
+                                                                                  switch(input$Legend_Title_Font,
+                                                                                         "Sans Serife" = "sans",
+                                                                                         "Serife" = "serif",
+                                                                                         "Monospace" = "mono")) else "",
+                           if (input$Legend_Title_Face != "Gemäss Theme") sprintf("face = '%s', ", 
+                                                                                  switch(input$Legend_Title_Face,
+                                                                                         "Normal" = "plain",
+                                                                                         "Fett" = "bold",
+                                                                                         "Kursiv" = "italic",
+                                                                                         "Fett & Kursiv" = "bold.italic")) else "",
+                           if (!is.na(input$Legend_Title_Size)) sprintf("size = %.1f, ", input$Legend_Title_Size) else "",
+                           if (input$Legend_Title_Color != "") sprintf("colour = '%s', ", input$Legend_Title_Color) else "",
+                           if (input$Legend_Title_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
+                                                                                       switch(input$Legend_Title_Alignment,
+                                                                                              "Linksbündig" = 0,
+                                                                                              "Mittig" = 0.5,
+                                                                                              "Rechtsbündig" = 1)) else "")
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+    
+    
+    
+    
+    
+    ########## 3.4.18 Legend-Text ##########
+    if (input$Legend_Text_Font != "Gemäss Theme" || input$Legend_Text_Face != "Gemäss Theme" ||
+        input$Legend_Text_Color != "" || !is.na(input$Legend_Text_Size) || input$Legend_Text_Alignment != "Gemäss Theme") {
+      
+      # Create new Line in Theme-Code if needed
+      if (theme_code!=""){
+        theme_code <- paste0(theme_code, ",\n  ")
+      }
+      
+      theme_code <- paste0(theme_code, "legend.text = element_text(")
+      
+      
+      theme_code <- paste0(theme_code,
+                           if (input$Legend_Text_Font != "Gemäss Theme") sprintf("family = '%s', ", 
+                                                                                 switch(input$Legend_Text_Font,
+                                                                                        "Sans Serife" = "sans",
+                                                                                        "Serife" = "serif",
+                                                                                        "Monospace" = "mono")) else "",
+                           if (input$Legend_Text_Face != "Gemäss Theme") sprintf("face = '%s', ", 
+                                                                                 switch(input$Legend_Text_Face,
+                                                                                        "Normal" = "plain",
+                                                                                        "Fett" = "bold",
+                                                                                        "Kursiv" = "italic",
+                                                                                        "Fett & Kursiv" = "bold.italic")) else "",
+                           if (!is.na(input$Legend_Text_Size)) sprintf("size = %.1f, ", input$Legend_Text_Size) else "",
+                           if (input$Legend_Text_Color != "") sprintf("colour = '%s', ", input$Legend_Text_Color) else "",
+                           if (input$Legend_Text_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
+                                                                                      switch(input$Legend_Text_Alignment,
+                                                                                             "Linksbündig" = 0,
+                                                                                             "Mittig" = 0.5,
+                                                                                             "Rechtsbündig" = 1)) else "")
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
+    }
+    
+    
+    
+    
+    
+    ########## 3.4.19 ! Legend Background ##########
+    
+    
+    
+    
+    
+    ########## 3.4.20 ! Legend Options ##########
+    
+    
+    
+    
+    
+    ########## 3.4.21 ! Facet-Row Background ##########
+    
+    
+    
+    
+    
+    ########## 3.4.22 ! Facet-Column Background ##########
+    
+    
+    
+    
+    
+    ########## 3.4.23 ! Facet-Row Text ##########
+    
+    
+    
+    
+    
+    ########## 3.4.24 ! Facet-Column Text ##########
+    
     
     
     
