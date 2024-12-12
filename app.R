@@ -330,6 +330,10 @@ $('#' + btnId).addClass('active-plot');
                                 ),
                               bsCollapsePanel(
                                 title = BSCollapseArrow("Farbpalletten"),
+                                selectInput(inputId = "Color_Palette", label = "Farbpalette", choices = c("Gemäss Theme", "Set1", "Set2", "Set3", "Pastelfarben 1", "Pastelfarben 2", "Paare", "Dunkel", "Akzent", "Spektral", "Blaue Farben", "Rote Farben", "Grüne Farben", "Orange Farben", "Violette Farben", "Graue Farben", "Eigene"), selected = "Gemäss Theme"),
+                                
+                                div(h4("Eigene Farbpalette definieren")),
+                                
                                 div(class = "axis-settings",
                                     # Action-Buttons for Adding Colors from Palette
                                     actionButton("add_row", "+"),
@@ -567,7 +571,7 @@ $('#' + btnId).addClass('active-plot');
                                          selectInput(inputId = "Legend_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                          numericInput(inputId = "Legend_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                          textInput(inputId = "Legend_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
-                                  ),
+                                  )
                               )
                             ),
                             bsCollapsePanel(
@@ -1066,53 +1070,90 @@ server <- function(input, output, session) {
     
     
     ########## 3.3.11 ! Color-Palette ##########
-    # Create a reactive-value for the color-palette
-    palette <- reactiveValues(colors = c())
-    
-    # Create a dynamic UI for the color-fields
-    output$color_inputs <- renderUI({
-      lapply(seq_along(palette$colors), function(i) {
-        div(
-          style = "display: flex; align-items: center; margin-bottom: 10px;",
-          tags$label(
-            paste(i, ". Farbe"),
-            `for` = paste0("color_", i),
-            style = "margin-right: 10px; align-self: center;"
-          ),
-          textInput(
-            inputId = paste0("color_", i),
-            label = NULL,
-            value = "",
-            placeholder = "z.B. 'red', oder '#FF5733'"
-          )
-        )
-      })
-    })
-    
-    # Beobachten von Hinzufügen und Entfernen von Zeilen
-    observeEvent(input$add_row, {
-      palette$colors <- c(palette$colors, "#FFFFFF")  # Standardfarbe hinzufügen
-    })
-    
-    observeEvent(input$remove_row, {
-      if (length(palette$colors) > 1) {
-        palette$colors <- palette$colors[-length(palette$colors)]  # Letzte Zeile entfernen
-      }
-    })
-    
-    # Beobachten von Änderungen der Eingabefelder
-    observe({
-      lapply(seq_along(palette$colors), function(i) {
-        observeEvent(input[[paste0("color_", i)]], {
-          palette$colors[i] <- input[[paste0("color_", i)]]
-        }, ignoreInit = TRUE)
-      })
-    })
-    
-    # Ausgabe der erstellten Farbpalette
-    output$palette_output <- renderPrint({
-      palette$colors
-    })
+# Create a reactive-value for the color-palette
+palette <- reactiveValues(colors = character(0))  # Start mit leerem Vektor
+
+# Create a dynamic UI for the color-fields
+output$color_inputs <- renderUI({
+  lapply(seq_along(palette$colors), function(i) {
+    div(
+      style = "display: flex; align-items: center; margin-bottom: 10px;",
+      tags$label(
+        paste(i, ". Farbe"),
+        `for` = paste0("color_", i),
+        style = "margin-right: 10px; align-self: center;"
+      ),
+      textInput(
+        inputId = paste0("color_", i),
+        label = NULL,
+        value = palette$colors[i],  # Bestehender Wert wird angezeigt
+        placeholder = "z.B. 'red', oder '#FF5733'"
+      )
+    )
+  })
+})
+
+# Beobachten von Hinzufügen und Entfernen von Zeilen
+observeEvent(input$add_row, {
+  palette$colors <- c(palette$colors, "")  # Leeres Feld hinzufügen
+})
+
+observeEvent(input$remove_row, {
+  if (length(palette$colors) > 0) {
+    palette$colors <- palette$colors[-length(palette$colors)]  # Letzte Zeile entfernen
+  }
+})
+
+# Beobachten von Änderungen der Eingabefelder und Aktualisierung der Palette
+observe({
+  lapply(seq_along(palette$colors), function(i) {
+    observeEvent(input[[paste0("color_", i)]], {
+      palette$colors[i] <- input[[paste0("color_", i)]]
+    }, ignoreInit = FALSE)  # Reaktion auch auf Initialwerte
+  })
+})
+
+# Ausgabe der erstellten Farbpalette
+output$palette_output <- renderPrint({
+  palette$colors[palette$colors != ""]  # Nur nicht-leere Werte ausgeben
+})
+
+# Integration der Farbpalette in den ggplot-Code
+if (input$Color_Palette != "Gemäss Theme") {
+  if (input$Color_Palette != "Eigene") {
+    r_code <- paste0(r_code, sprintf(
+      " +\n  scale_fill_brewer(palette = '%s')",
+      switch(
+        input$Color_Palette,
+        "Set1" = "Set1",
+        "Set2" = "Set2",
+        "Set3" = "Set3",
+        "Pastelfarben 1" = "Pastel1",
+        "Pastelfarben 2" = "Pastel2",
+        "Paare" = "Paired",
+        "Dunkel" = "Dark",
+        "Akzent" = "Accent",
+        "Spektral" = "Spectral",
+        "Blaue Farben" = "Blues",
+        "Rote Farben" = "Reds",
+        "Grüne Farben" = "Greens",
+        "Orange Farben" = "Oranges",
+        "Violette Farben" = "Purples",
+        "Graue Farben" = "Greys"
+      )
+    ))
+  } else {
+    # Benutzerspezifische Palette verwenden, nur nicht-leere Werte berücksichtigen
+    valid_colors <- palette$colors[palette$colors != ""]  # Nur nicht-leere Farben
+    if (length(valid_colors) > 0) {
+      defined_colors <- paste0("c(", paste(shQuote(valid_colors), collapse = ", "), ")")
+      r_code <- paste0(
+        r_code,
+        sprintf(" +\n  scale_fill_manual(values = %s)", defined_colors)
+      )
+    }
+  }
+}
 
     
     
