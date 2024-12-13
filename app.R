@@ -187,12 +187,7 @@ ui <- fluidPage(
     textInput("activeTab", label = NULL, value = "data"),
     style = "display: none;"
   ),  
-  # Set Title
-  # titlePanel("ggpilot"),
-  
-  # Set to use Shinyjs
-  # useShinyjs(),
-  
+
   # Define Sidebar
   sidebarLayout(
     
@@ -342,7 +337,7 @@ $('#' + btnId).addClass('active-plot');
                                                         "grey", "hue", "ordinal", "aas", "bmj", "cosmic", "d3", "flatui", 
                                                         "frontiers", "futurama", "igv", "jama", "lancet", "locuszoom", 
                                                         "material", "nejm", "npg", "observable", "rickandmorty", "simpsons", "startrek", 
-                                                        "tron", "uchicago", "ucscgb", "jco", "cal", "canva", "colorblind", 
+                                                        "tron", "uchicago", "ucscgb", "jco", "calc", "canva", "colorblind", 
                                                         "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
                                                         "hc", "pander", "ptol", "solarized", 
                                                         "stata", "tableau", "wsj"), selected = "Gemäss Theme")
@@ -1154,6 +1149,7 @@ server <- function(input, output, session) {
                                              "uchicago" = "scale_fill_uchicago()",
                                              "ucscgb" = "scale_fill_ucscgb()",
                                              "jco" = "scale_fill_jco()",
+                                             "calc" = "scale_fill_calc()",
                                              "canva" = "scale_fill_canva()",
                                              "colorblind" = "scale_fill_colorblind()",
                                              "economist" = "scale_fill_economist()",
@@ -2204,11 +2200,20 @@ server <- function(input, output, session) {
     
     full_code <- "library(ggplot2)"
     
-    if(input$plot_theme %in% c("Calc", "the Economist", "the Economist White", "Excel", "Few", "FiveThirtyEight", "Google Docs", "Highcharts JS", "Inversed Gray", "Solarized", "Solarized 2", "Solid", "Stata", "Tufte", "Wall Street Journal")) {
+    if(input$plot_theme %in% c("Calc", "the Economist", "the Economist White", "Excel", "Few", "FiveThirtyEight", 
+                               "Google Docs", "Highcharts JS", "Inversed Gray", "Solarized", "Solarized 2", "Solid", 
+                               "Stata", "Tufte", "Wall Street Journal") |
+       input$Color_Palette %in% c("calc", "canva", "colorblind", 
+                                  "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
+                                  "hc", "pander", "ptol", "solarized", 
+                                  "stata", "tableau", "wsj")) {
       full_code <- paste0(full_code, "\nlibrary(ggthemes)")
     }
     
-    if(input$Color_Palette %in% c("NPG", "AAAS", "NEJM", "Lancet", "JAMA", "BMJ", "JCO", "UCSCGB", "D3", "Observable", "LocusZoom", "IGV", "COSMIC", "UChicago", "Star Trek", "Tron Legacy", "Futurama", "Rick and Morty", "the Simpsons", "Flat UI", "Frontiers")) {
+    if(input$Color_Palette %in% c("aas", "bmj", "cosmic", "d3", "flatui", 
+                                  "frontiers", "futurama", "igv", "jama", "lancet", "locuszoom", 
+                                  "material", "nejm", "npg", "observable", "rickandmorty", "simpsons", "startrek", 
+                                  "tron", "uchicago", "ucscgb", "jco")) {
       full_code <- paste0(full_code, "\nlibrary(ggsci)")
     }
     
