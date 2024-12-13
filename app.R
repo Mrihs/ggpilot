@@ -2217,13 +2217,18 @@ server <- function(input, output, session) {
       full_code <- paste0(full_code, "\nlibrary(ggsci)")
     }
     
+    # Add empty lines in code
     full_code <- paste0(full_code, "\n\n", r_code())
-
-
     
+    # Replace data() with data
+    full_code <- gsub("data\\(\\)", "data", full_code)
+    
+    # Replace aes_string with aes
+    full_code <- gsub("aes_string", "aes", full_code)
+    
+    # Print code
     full_code
   })
-  
 }
 
 
