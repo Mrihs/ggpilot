@@ -369,8 +369,8 @@ $('#' + btnId).addClass('active-plot');
                                     column(6,
                                            h3("Titel"),
                                            # Text-Input for the Title
-                                           selectInput(inputId = "Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                            textInput(inputId = "Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            numericInput(inputId = "Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                            selectInput(inputId = "Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
@@ -379,8 +379,8 @@ $('#' + btnId).addClass('active-plot');
                                            h3("Untertitel"),
                                            title = BSCollapseArrow("Untertitel"),
                                            # Text-Input for the X-Axis-Title
-                                           selectInput(inputId = "Subtitle_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Subtitle_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Subtitle_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Subtitle_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                            textInput(inputId = "Subtitle_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            numericInput(inputId = "Subtitle_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                            selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
@@ -393,8 +393,8 @@ $('#' + btnId).addClass('active-plot');
                                     column(6,
                                            h3("X-Achse"),
                                            # Text-Input for the X-Axis-Title
-                                           selectInput(inputId = "X_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "X_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "X_Axis_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "X_Axis_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                            textInput(inputId = "X_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            numericInput(inputId = "X_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                            selectInput(inputId = "X_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
@@ -402,8 +402,8 @@ $('#' + btnId).addClass('active-plot');
                                     column(6, 
                                            h3("Y-Achse"),
                                            # Text-Input for the Y-Axis-Title
-                                           selectInput(inputId = "Y_Axis_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Y_Axis_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Y_Axis_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Y_Axis_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                            textInput(inputId = "Y_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            numericInput(inputId = "Y_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                            selectInput(inputId = "Y_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
@@ -416,8 +416,8 @@ $('#' + btnId).addClass('active-plot');
                                     column(6,
                                            h3("X Achse"),
                                            # Text-Input for the X-Axis Label
-                                           selectInput(inputId = "Axis_X_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Axis_X_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Axis_X_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Axis_X_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                            textInput(inputId = "Axis_X_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            numericInput(inputId = "Axis_X_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                            numericInput(inputId = "Axis_X_Text_Rotation", label = "Rotation", min = 0, max = 360, step = 1, value = NA),
@@ -427,8 +427,8 @@ $('#' + btnId).addClass('active-plot');
                                     column(6,
                                            h3("Y Achse"),
                                            # Text-Input for the Y-Axis Label
-                                           selectInput(inputId = "Axis_Y_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Axis_Y_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Axis_Y_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Axis_Y_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                            textInput(inputId = "Axis_Y_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            numericInput(inputId = "Axis_Y_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                            numericInput(inputId = "Axis_Y_Text_Rotation", label = "Rotation", min = 0, max = 360, step = 1, value = NA),
@@ -448,7 +448,7 @@ $('#' + btnId).addClass('active-plot');
                                     ),
                                     column(6,
                                            h3("Y-Achse"),
-                                           selectInput(inputId = "Axis_Y_Linetype", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Axis_Y_Linetype", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                            numericInput(inputId = "Axis_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                            textInput(inputId = "Axis_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                     )
@@ -532,8 +532,8 @@ $('#' + btnId).addClass('active-plot');
                                     column(6,
                                            h3("Titel"),
                                            # Text-Input for the Legend-Title
-                                           selectInput(inputId = "Legend_Title_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Legend_Title_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Legend_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Legend_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                            textInput(inputId = "Legend_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            numericInput(inputId = "Legend_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                            selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
@@ -541,8 +541,8 @@ $('#' + btnId).addClass('active-plot');
                                     column(6,
                                            h3("Items"),
                                            # Text-Input for the X-Axis-Title
-                                           selectInput(inputId = "Legend_Text_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                           selectInput(inputId = "Legend_Text_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Legend_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                           selectInput(inputId = "Legend_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                            textInput(inputId = "Legend_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                            numericInput(inputId = "Legend_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                            selectInput(inputId = "Legend_Text_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
@@ -605,16 +605,16 @@ $('#' + btnId).addClass('active-plot');
                               div(class = "axis-settings",
                                   column(6,
                                          h3("Zeilen"),
-                                         selectInput(inputId = "Stripe_X_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                         selectInput(inputId = "Stripe_X_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                         selectInput(inputId = "Stripe_X_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                         selectInput(inputId = "Stripe_X_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                          textInput(inputId = "Stripe_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                          numericInput(inputId = "Stripe_X_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                          selectInput(inputId = "Stripe_X_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                                   ),
                                   column(6,
                                          h3("Spalten"),
-                                         selectInput(inputId = "Stripe_Y_Font", label = "Schirftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                         selectInput(inputId = "Stripe_Y_Face", label = "Formattierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                         selectInput(inputId = "Stripe_Y_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                         selectInput(inputId = "Stripe_Y_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                          textInput(inputId = "Stripe_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                          numericInput(inputId = "Stripe_Y_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                          selectInput(inputId = "Stripe_Y_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
