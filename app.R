@@ -640,15 +640,7 @@ $('#' + btnId).addClass('active-plot');
                  
                  
                  
-                 ########## 2.2.10 Execute R-Code ##########
-                 # Define a Checkbox for R-Code execution
-                 checkboxInput("show_code", "R-Code ausgeben", value = FALSE),
-                 
-                 
-                 
-                 
-                 
-                 ########## 2.2.11 Download Plot ##########
+                 ########## 2.2.10 Download Plot ##########
                  # Define Plot-Width
                  numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
                  # Define Plot-Height
@@ -656,8 +648,10 @@ $('#' + btnId).addClass('active-plot');
                  # Define File-format
                  selectInput("file_format", "Dateiformat:", 
                              choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
-                 # create a Download-Button
-                 downloadButton("downloadPlot", "Plot herunterladen")
+                 # create a Download-Button for Plot
+                 downloadButton("downloadPlot", "Plot herunterladen"),
+                 # create a Download-Button for RCode
+                 downloadButton("downloadCode", "Code herunterladen")
     ),
     
     
@@ -678,13 +672,11 @@ $('#' + btnId).addClass('active-plot');
       
       
       ########## 2.3.2 Conditional-Panel ##########
-      # Conditional-Panel which depends on rcode-button
-      conditionalPanel(
-        # If input.show_code is true
-        condition = "input.show_code",
-        # Add TextOutput for rcode
-        verbatimTextOutput("rcode")
-      )
+      # If input.show_code is true
+      condition = "input.show_code",
+      # Add TextOutput for rcode
+      verbatimTextOutput("rcode")
+
     )
   )
 )
@@ -710,7 +702,6 @@ $('#' + btnId).addClass('active-plot');
 
 #################### 3. Server ####################
 server <- function(input, output, session) {
-  
   ############### 3.1 Read Data ###############
   # Create a reactive data with the loaded data
   data <- reactive({
@@ -2219,7 +2210,7 @@ server <- function(input, output, session) {
   
   
   ############### 3.7 Execute Code ###############
-  output$rcode <- renderText({
+  reactive_full_code <- reactive({
     req(r_code())
     
     full_code <- "library(ggplot2)"
@@ -2255,6 +2246,12 @@ server <- function(input, output, session) {
   })
   
   
+  # Für die Anzeige des Codes
+  output$rcode <- renderText({
+    reactive_full_code()
+  })
+  
+  
   
   
   
@@ -2265,7 +2262,7 @@ server <- function(input, output, session) {
   # Funktion zum Herunterladen
   output$downloadPlot <- downloadHandler(
     filename = function() {
-      paste("ggplot-", Sys.Date(), ".", input$file_format, sep = "")
+      paste("ggpilot-", Sys.Date(), ".", input$file_format, sep = "")
     },
     content = function(file) {
       req(r_code())  # Code sicherstellen
@@ -2287,6 +2284,24 @@ server <- function(input, output, session) {
       )
     }
   )
+  
+  
+  
+  
+  
+  
+  
+  ############### 3.9 Download Code ###############
+  # Funktion zum Herunterladen
+  output$downloadCode <- downloadHandler(
+    filename = function() {
+      paste("ggpilot_code-", Sys.Date(), ".r", sep = "")
+    },
+    content = function(file) {
+      code <- reactive_full_code()
+      writeLines(code, file)
+    }
+  )    
 }
 
 
