@@ -8,6 +8,8 @@ if (!require("dplyr")) install.packages("dplyr")
 if (!require("shinythemes")) install.packages("shinythemes")
 if (!require("shinyBS")) install.packages("shinyBS")
 if (!require("Hmisc")) install.packages("Hmisc")
+if (!require("ggsci")) install.packages("ggsci")
+if (!require("ggthemes")) install.packages("ggthemes")
 
 
 
@@ -28,6 +30,8 @@ library(dplyr)
 library(shinythemes)
 library(shinyBS)
 library(Hmisc)
+library(ggsci)
+library(ggthemes)
 
 
 
@@ -264,7 +268,7 @@ $('#' + btnId).addClass('active-plot');
                                 title = BSCollapseArrow("Theme"),
                                 div(class = "axis-settings",
                                     # Theme
-                                    selectInput(inputId = "plot_theme", label = "", choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", "Minimal", "Void"), selected = "Gray")
+                                    selectInput(inputId = "plot_theme", label = "", choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", "Minimal", "Void", "Calc", "the Economist", "the Economist White", "Excel", "Few", "FiveThirtyEight", "Google Docs", "Highcharts JS", "Inversed Gray", "Solarized", "Solarized 2", "Solid", "Stata", "Tufte", "Wall Street Journal"), selected = "Gray")
                                 )
                               ),
                               
@@ -330,7 +334,7 @@ $('#' + btnId).addClass('active-plot');
                                 ),
                               bsCollapsePanel(
                                 title = BSCollapseArrow("Farbpalletten"),
-                                selectInput(inputId = "Color_Palette", label = "Farbpalette", choices = c("Gemäss Theme", "Set1", "Set2", "Set3", "Pastelfarben 1", "Pastelfarben 2", "Paare", "Dunkel", "Akzent", "Spektral", "Blaue Farben", "Rote Farben", "Grüne Farben", "Orange Farben", "Violette Farben", "Graue Farben"), selected = "Gemäss Theme")
+                                selectInput(inputId = "Color_Palette", label = "Farbpalette", choices = c("Gemäss Theme", "Set1", "Set2", "Set3", "Pastelfarben 1", "Pastelfarben 2", "Paare", "Dunkel", "Akzent", "Spektral", "Blaue Farben", "Rote Farben", "Grüne Farben", "Orange Farben", "Violette Farben", "Graue Farben", "NPG", "AAAS", "NEJM", "Lancet", "JAMA", "BMJ", "JCO", "UCSCGB", "D3", "Observable", "LocusZoom", "IGV", "COSMIC", "UChicago", "Star Trek", "Tron Legacy", "Futurama", "Rick and Morty", "the Simpsons", "Flat UI", "Frontiers"), selected = "Gemäss Theme")
                                 )
                               )
                    ),
@@ -975,7 +979,36 @@ server <- function(input, output, session) {
     ########## 3.3.7 Set Themes ##########  
     # Theme hinzufügen, wenn nicht "Gray"
     if (theme_selected != "Gray") {
-      r_code <- paste0(r_code, sprintf(" +\n  %s", paste0("theme_", tolower(theme_selected), "()")))
+      # r_code <- paste0(r_code, sprintf(" +\n  %s", paste0("theme_", tolower(theme_selected), "()")))
+      r_code <- paste0(r_code, sprintf(" +\n  %s",
+                                       switch(theme_selected,
+                                              "Bw" = "theme_bw()",
+                                              "Classic" = "theme_classic()",
+                                              "Gray" = "theme_gray()",
+                                              "Linedraw" = "theme_linedraw()",
+                                              "Light" = "theme_light()",
+                                              "Dark" = "theme_dark()",
+                                              "Minimal" = "theme_minimal()",
+                                              "Void" = "theme_void()",
+                                              "Calc" = "theme_calc()",
+                                              "the Economist" = "theme_economist()",
+                                              "the Economist White" = "theme_economist_white()",
+                                              "Excel" = "theme_excel()",
+                                              "Few" = "theme_few()",
+                                              "FiveThirtyEight" = "theme_fivethirtyeight()",
+                                              "Google Docs" = "theme_gdocs()",
+                                              "Highcharts JS" = "theme_hc()",
+                                              "Inversed Gray" = "theme_igray()",
+                                              "Solarized" = "theme_solarized()",
+                                              "Solarized 2" = "theme_solarized_2()",
+                                              "Solid" = "theme_solid()",
+                                              "Stata" = "theme_stata()",
+                                              "Tufte" = "theme_tufte()",
+                                              "Wall Street Journal" = "theme_wsj()",
+                                              paste0("theme_", tolower(theme_selected), "()") # Fallback
+          )
+        )
+      )
     }
     
     
@@ -1057,7 +1090,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.11 ! Color-Palette ##########
+    ########## 3.3.11 Color-Palette ##########
     # 
     if (input$Color_Palette != "Gemäss Theme") {
       r_code <- paste0(r_code, sprintf(
@@ -2110,8 +2143,19 @@ server <- function(input, output, session) {
   output$rcode <- renderText({
     req(r_code())
     
-    full_code <- paste0("library(ggplot2)\n\n", r_code())
+    full_code <- "library(ggplot2)"
     
+    if(input$plot_theme %in% c("Calc", "the Economist", "the Economist White", "Excel", "Few", "FiveThirtyEight", "Google Docs", "Highcharts JS", "Inversed Gray", "Solarized", "Solarized 2", "Solid", "Stata", "Tufte", "Wall Street Journal")) {
+      full_code <- paste0(full_code, "\nlibrary(ggthemes)")
+    }
+    
+    if(input$Color_Palette %in% c("NPG", "AAAS", "NEJM", "Lancet", "JAMA", "BMJ", "JCO", "UCSCGB", "D3", "Observable", "LocusZoom", "IGV", "COSMIC", "UChicago", "Star Trek", "Tron Legacy", "Futurama", "Rick and Morty", "the Simpsons", "Flat UI", "Frontiers")) {
+      full_code <- paste0(full_code, "\nlibrary(ggsci)")
+    }
+    
+    full_code <- paste0(full_code, "\n\n", r_code())
+
+
     
     full_code
   })
