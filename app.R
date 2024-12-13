@@ -642,7 +642,24 @@ $('#' + btnId).addClass('active-plot');
                  
                  ########## 2.2.10 Execute R-Code ##########
                  # Define a Checkbox for R-Code execution
-                 checkboxInput("show_code", "R-Code ausgeben", value = FALSE)
+                 checkboxInput("show_code", "R-Code ausgeben", value = FALSE),
+                 
+                 
+                 
+                 
+                 
+                 ########## 2.2.11 Download Plot ##########
+                 # Define Plot-Width
+                 numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
+                 # Define Plot-Height
+                 numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
+                 # Define Plot dpi
+                 numericInput("dpi", "Auflösung (DPI):", value = 300, min = 72),
+                 # Define File-format
+                 selectInput("file_format", "Dateiformat:", 
+                             choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
+                 # create a Download-Button
+                 downloadButton("downloadPlot", "Plot herunterladen")
     ),
     
     
@@ -2229,6 +2246,40 @@ server <- function(input, output, session) {
     # Print code
     full_code
   })
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 3.8 Download Plot ###############
+  # Funktion zum Herunterladen
+    output$downloadPlot <- downloadHandler(
+      filename = function() {
+        paste("ggplot-", Sys.Date(), ".", input$file_format, sep = "")
+      },
+      content = function(file) {
+        req(r_code())
+        eval(parse(text = r_code()))  # Den Code erneut ausführen, um 'q' zu erstellen
+        req(exists("q"))              # Sicherstellen, dass 'q' existiert
+        
+        # Pixel in Zoll umrechnen
+        width_inch <- input$plot_width_px / input$dpi
+        height_inch <- input$plot_height_px / input$dpi
+        
+        # Plot speichern
+        ggsave(
+          filename = file, 
+          plot = q, 
+          width = width_inch, 
+          height = height_inch, 
+          dpi = input$dpi, 
+          device = input$file_format
+        )
+      }
+  )
 }
 
 
