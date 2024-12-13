@@ -334,7 +334,18 @@ $('#' + btnId).addClass('active-plot');
                                 ),
                               bsCollapsePanel(
                                 title = BSCollapseArrow("Farbpalletten"),
-                                selectInput(inputId = "Color_Palette", label = "Farbpalette", choices = c("Gemäss Theme", "Set1", "Set2", "Set3", "Pastelfarben 1", "Pastelfarben 2", "Paare", "Dunkel", "Akzent", "Spektral", "Blaue Farben", "Rote Farben", "Grüne Farben", "Orange Farben", "Violette Farben", "Graue Farben", "NPG", "AAAS", "NEJM", "Lancet", "JAMA", "BMJ", "JCO", "UCSCGB", "D3", "Observable", "LocusZoom", "IGV", "COSMIC", "UChicago", "Star Trek", "Tron Legacy", "Futurama", "Rick and Morty", "the Simpsons", "Flat UI", "Frontiers"), selected = "Gemäss Theme")
+                                selectInput(inputId = "Color_Palette", label = "Farbpalette", 
+                                            choices = c("Gemäss Theme", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
+                                                        "viridis - cividis", "viridis - mako", "viridis - rocket", "viridis - turbo",
+                                                        "Accent", "Blues", "Greens", "Greys", "Oranges", "Paired", "Pastel1", 
+                                                        "Pastel2", "Purples", "Reds", "Set1", "Set2", "Set3", "Spectral", 
+                                                        "grey", "hue", "ordinal", "aas", "bmj", "cosmic", "d3", "flatui", 
+                                                        "frontiers", "futurama", "igv", "jama", "lancet", "locuszoom", 
+                                                        "material", "nejm", "npg", "observable", "rickandmorty", "simpsons", "startrek", 
+                                                        "tron", "uchicago", "ucscgb", "jco", "cal", "canva", "colorblind", 
+                                                        "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
+                                                        "hc", "pander", "ptol", "solarized", 
+                                                        "stata", "tableau", "wsj"), selected = "Gemäss Theme")
                                 )
                               )
                    ),
@@ -857,7 +868,9 @@ server <- function(input, output, session) {
     dodge_value <- if (is.na(input$dodge_value)==TRUE) NA else input$dodge_value
     # Selected Theme
     theme_selected <- input$plot_theme
-    
+    # Selected Color-Palette
+    palette_selected <- input$Color_Palette
+
     
     
     
@@ -1093,28 +1106,74 @@ server <- function(input, output, session) {
     ########## 3.3.11 Color-Palette ##########
     # 
     if (input$Color_Palette != "Gemäss Theme") {
-      r_code <- paste0(r_code, sprintf(
-        " +\n  scale_fill_brewer(palette = '%s')",
-        switch(
-          input$Color_Palette,
-          "Set1" = "Set1",
-          "Set2" = "Set2",
-          "Set3" = "Set3",
-          "Pastelfarben 1" = "Pastel1",
-          "Pastelfarben 2" = "Pastel2",
-          "Paare" = "Paired",
-          "Dunkel" = "Dark",
-          "Akzent" = "Accent",
-          "Spektral" = "Spectral",
-          "Blaue Farben" = "Blues",
-          "Rote Farben" = "Reds",
-          "Grüne Farben" = "Greens",
-          "Orange Farben" = "Oranges",
-          "Violette Farben" = "Purples",
-          "Graue Farben" = "Greys"
-        )
-      ))
-    }
+      r_code <- paste0(r_code, sprintf(" +\n  %s",
+                                      switch(palette_selected,
+                                             "Accent" = "scale_fill_brewer(palette = 'Accent')",
+                                             "Blues" = "scale_fill_brewer(palette = 'Blues')",
+                                             "Greens" = "scale_fill_brewer(palette = 'Greens')",
+                                             "Greys" = "scale_fill_brewer(palette = 'Greys')",
+                                             "Oranges" = "scale_fill_brewer(palette = 'Oranges')",
+                                             "Paired" = "scale_fill_brewer(palette = 'Paired')",
+                                             "Pastel1" = "scale_fill_brewer(palette = 'Pastel1')",
+                                             "Pastel2" = "scale_fill_brewer(palette = 'Pastel2')",
+                                             "Purples" = "scale_fill_brewer(palette = 'Purples')",
+                                             "Reds" = "scale_fill_brewer(palette = 'Reds')",
+                                             "Set1" = "scale_fill_brewer(palette = 'Set1')",
+                                             "Set2" = "scale_fill_brewer(palette = 'Set2')",
+                                             "Set3" = "scale_fill_brewer(palette = 'Set3')",
+                                             "Spectral" = "scale_fill_brewer(palette = 'Spectral')",
+                                             "grey" = "scale_fill_grey()",
+                                             "hue" = "scale_fill_hue()",
+                                             "ordinal" = "scale_fill_ordinal()",
+                                             "viridis" = "scale_fill_viridis_d(option = 'viridis')",
+                                             "viridis - magma" = "scale_fill_viridis_d(option = 'magma')",
+                                             "viridis - plasma" = "scale_fill_viridis_d(option = 'plasma')",
+                                             "viridis - inferno" = "scale_fill_viridis_d(option = 'inferno')",
+                                             "viridis - cividis" = "scale_fill_viridis_d(option = 'cividis')",
+                                             "viridis - mako" = "scale_fill_viridis_d(option = 'mako')",
+                                             "viridis - rocket" = "scale_fill_viridis_d(option = 'rocket')",
+                                             "viridis - turbo" = "scale_fill_viridis_d(option = 'turbo')",
+                                             "aas" = "scale_fill_aaas()",
+                                             "bmj" = "scale_fill_bmj()",
+                                             "cosmic" = "scale_fill_cosmic()",
+                                             "d3" = "scale_fill_d3()",
+                                             "flatui" = "scale_fill_flatui()",
+                                             "frontiers" = "scale_fill_frontiers()",
+                                             "futurama" = "scale_fill_futurama()",
+                                             "igv" = "scale_fill_igv()",
+                                             "jama" = "scale_fill_jama()",
+                                             "lancet" = "scale_fill_lancet()",
+                                             "locuszoom" = "scale_fill_locuszoom()",
+                                             "nejm" = "scale_fill_nejm()",
+                                             "npg" = "scale_fill_npg()",
+                                             "observable" = "scale_fill_observable()",
+                                             "rickandmorty" = "scale_fill_rickandmorty()",
+                                             "simpsons" = "scale_fill_simpsons()",
+                                             "startrek" = "scale_fill_startrek()",
+                                             "tron" = "scale_fill_tron()",
+                                             "uchicago" = "scale_fill_uchicago()",
+                                             "ucscgb" = "scale_fill_ucscgb()",
+                                             "jco" = "scale_fill_jco()",
+                                             "canva" = "scale_fill_canva()",
+                                             "colorblind" = "scale_fill_colorblind()",
+                                             "economist" = "scale_fill_economist()",
+                                             "excel" = "scale_fill_excel()",
+                                             "excel_new" = "scale_fill_excel_new()",
+                                             "few" = "scale_fill_few()",
+                                             "fivethirtyeight" = "scale_fill_fivethirtyeight()",
+                                             "gdocs" = "scale_fill_gdocs()",
+                                             "hc" = "scale_fill_hc()",
+                                             "pander" = "scale_fill_pander()",
+                                             "ptol" = "scale_fill_ptol()",
+                                             "solarized" = "scale_fill_solarized()",
+                                             "stata" = "scale_fill_stata()",
+                                             "tableau" = "scale_fill_tableau()",
+                                             "wsj" = "scale_fill_wsj()"
+                                             )
+                                      )
+                      )
+      }
+
 
     
     
