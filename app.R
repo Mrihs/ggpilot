@@ -653,8 +653,6 @@ $('#' + btnId).addClass('active-plot');
                  numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
                  # Define Plot-Height
                  numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
-                 # Define Plot dpi
-                 numericInput("dpi", "Auflösung (DPI):", value = 300, min = 72),
                  # Define File-format
                  selectInput("file_format", "Dateiformat:", 
                              choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
@@ -674,9 +672,8 @@ $('#' + btnId).addClass('active-plot');
     # Define the Main-Panel
     mainPanel(
       # Set the plot as output
-      plotOutput("plot"),
-      
-      
+      uiOutput("dynamic_plot"),
+
       
       
       
@@ -2192,17 +2189,27 @@ server <- function(input, output, session) {
   
   
   ############### 3.6 Generate Plot ###############
+  output$dynamic_plot <- renderUI({
+    scaled_width <- input$plot_width_px * (72 / 96) #dpi is 96
+    scaled_height <- input$plot_height_px * (72 / 96) #dpi is 96
+    
+    plotOutput(
+      "plot",
+      width = paste0(input$plot_width_px, "px"),
+      height = paste0(input$plot_height_px, "px")
+    )
+  })
+  
   output$plot <- renderPlot({
     req(data())
     req(r_code())
-    
+
     # Code ausführen und 'q' erstellen
     eval(parse(text = r_code()))
     
     # Den erstellten Plot (nicht den String) zurückgeben
     return(q)
-  }
-  )
+  }, res = 96)
   
   
   
@@ -2256,29 +2263,29 @@ server <- function(input, output, session) {
   
   ############### 3.8 Download Plot ###############
   # Funktion zum Herunterladen
-    output$downloadPlot <- downloadHandler(
-      filename = function() {
-        paste("ggplot-", Sys.Date(), ".", input$file_format, sep = "")
-      },
-      content = function(file) {
-        req(r_code())
-        eval(parse(text = r_code()))  # Den Code erneut ausführen, um 'q' zu erstellen
-        req(exists("q"))              # Sicherstellen, dass 'q' existiert
-        
-        # Pixel in Zoll umrechnen
-        width_inch <- input$plot_width_px / input$dpi
-        height_inch <- input$plot_height_px / input$dpi
-        
-        # Plot speichern
-        ggsave(
-          filename = file, 
-          plot = q, 
-          width = width_inch, 
-          height = height_inch, 
-          dpi = input$dpi, 
-          device = input$file_format
-        )
-      }
+  output$downloadPlot <- downloadHandler(
+    filename = function() {
+      paste("ggplot-", Sys.Date(), ".", input$file_format, sep = "")
+    },
+    content = function(file) {
+      req(r_code())  # Code sicherstellen
+      eval(parse(text = r_code()))  # Plot 'q' erstellen
+      req(exists("q"))  # Sicherstellen, dass der Plot existiert
+      
+      # Umrechnung von Pixel in Zoll (für die richtige Größe beim Speichern)
+      width_inch <- input$plot_width_px / 96
+      height_inch <- input$plot_height_px / 96
+      
+      # Plot speichern
+      ggsave(
+        filename = file,
+        plot = q,
+        width = width_inch,  # Breite in Zoll
+        height = height_inch,  # Höhe in Zoll
+        dpi = 96,  # DPI für die Auflösung
+        device = input$file_format  # Dateiformat
+      )
+    }
   )
 }
 
