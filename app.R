@@ -287,6 +287,24 @@ ui <- fluidPage(
                                                )
                                              ),
                                              
+                                             # Create a Collapse-Panel for Plot-Size
+                                             bsCollapsePanel(
+                                               # Define Title of Collapse-Panel
+                                               title = BSCollapseArrow("Plot-Grösse"),
+                                               # Define CSS Settings
+                                               div(class = ".collapse_panel-settings",
+                                                   column(6,
+                                                          # Define Plot-Width
+                                                          numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
+                                                   ),
+                                                   column(6,
+                                                          # Define Plot-Height
+                                                          numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
+                                                   )
+                                               )
+                                             ),
+                                             
+                                             
                                              # Create a Collapse-Panel for Axis-Range
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
@@ -676,17 +694,21 @@ ui <- fluidPage(
                  ########## 2.2.6 Download ##########
                  # Define Conditional-Panel for when Download tab is selected
                  conditionalPanel(condition = "input.activeTab == 'download'",
-                                  # Define Plot-Width
-                                  numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
-                                  # Define Plot-Height
-                                  numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
-                                  # Define File-format
-                                  selectInput("file_format", "Dateiformat:", 
-                                              choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
-                                  # create a Download-Button for Plot
-                                  downloadButton("downloadPlot", "Plot herunterladen"),
-                                  # create a Download-Button for RCode
-                                  downloadButton("downloadCode", "Code herunterladen")
+                                  fluidRow(
+                                    column(6,
+                                           h3("Plot"),
+                                           # create a Download-Button for Plot
+                                           downloadButton("downloadPlot", "Plot herunterladen"),
+                                           # Define File-format
+                                           selectInput("file_format", "Dateiformat:", 
+                                                       choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
+                                    ),
+                                    column(6,
+                                           h3("R-Code"),
+                                           # create a Download-Button for RCode
+                                           downloadButton("downloadCode", "Code herunterladen")
+                                    ),
+                                  )
                  )
     ),
     
