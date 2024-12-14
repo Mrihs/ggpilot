@@ -125,14 +125,14 @@ ui <- fluidPage(
   
   
   fluidRow(
-    column(3, titlePanel(title = span(img(src = "logo.png", height = 80), HTML('<span style="font-size: 2.5em;">ggpilot</span>')))),
-    column(9, align = "center", 
+    column(2, titlePanel(title = span(img(src = "logo.png", height = 55), HTML('<span style="font-size: 2.00em;">ggpilot</span>')))),
+    column(10, align = "center", 
            style = "margin-top: 15px;",
            tags$head(
              tags$style(HTML("
             .custom-btn {
               font-size: 20px;
-              padding: 5px 30px;
+              padding: 5px 15px;
               margin: 20px 10px;
               color: black;
               border: 5px solid #bbb;
@@ -178,6 +178,7 @@ ui <- fluidPage(
            actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i> Plot Optionen'), class = "custom-btn"),
            actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i> Text'), class = "custom-btn"),
            actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i> Layout'), class = "custom-btn"),
+           actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i> Download'), class = "custom-btn"),
     )
   ),
   
@@ -641,17 +642,20 @@ $('#' + btnId).addClass('active-plot');
                  
                  
                  ########## 2.2.10 Download Plot ##########
-                 # Define Plot-Width
-                 numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
-                 # Define Plot-Height
-                 numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
-                 # Define File-format
-                 selectInput("file_format", "Dateiformat:", 
-                             choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
-                 # create a Download-Button for Plot
-                 downloadButton("downloadPlot", "Plot herunterladen"),
-                 # create a Download-Button for RCode
-                 downloadButton("downloadCode", "Code herunterladen")
+                 conditionalPanel(
+                   condition = "input.activeTab == 'download'",
+                   # Define Plot-Width
+                   numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
+                   # Define Plot-Height
+                   numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
+                   # Define File-format
+                   selectInput("file_format", "Dateiformat:", 
+                               choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
+                   # create a Download-Button for Plot
+                   downloadButton("downloadPlot", "Plot herunterladen"),
+                   # create a Download-Button for RCode
+                   downloadButton("downloadCode", "Code herunterladen")
+                 )
     ),
     
     
@@ -671,9 +675,7 @@ $('#' + btnId).addClass('active-plot');
       
       
       
-      ########## 2.3.2 Conditional-Panel ##########
-      # If input.show_code is true
-      condition = "input.show_code",
+      ########## 2.3.2 Code-Output ##########
       # Add TextOutput for rcode
       verbatimTextOutput("rcode")
 
@@ -765,6 +767,10 @@ server <- function(input, output, session) {
     activeTab("layout")
     session$sendCustomMessage("setActiveButton", "btn_layout")
   })
+  observeEvent(input$btn_download, {
+    activeTab("download")
+    session$sendCustomMessage("setActiveButton", "btn_download")
+  })
   
   observeEvent(input$plot_bar, {
     activePlot("Bar")
@@ -792,6 +798,7 @@ server <- function(input, output, session) {
   observeEvent(input$btn_plot_options, { activeTab("plot_options") })
   observeEvent(input$btn_text, { activeTab("text") })
   observeEvent(input$btn_layout, { activeTab("layout") })
+  observeEvent(input$btn_download, { activeTab("download") })
   
   # Aktiven Tab als Input verfügbar machen
   observe({
