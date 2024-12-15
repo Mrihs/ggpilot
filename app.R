@@ -1180,33 +1180,52 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.9 X-Axis Range ##########  
+    ########## 3.3.9 X and Y-Axis Range ##########  
+    # Define empty Code for axis_code
+    axis_code <- ""
+    
     # Adjust X-Axis range
-    if (!is.na(x_axis_min) || !is.na(x_axis_max)) {
-      p <- p + scale_x_continuous(limits = c(if (!is.na(x_axis_min)) x_axis_min else -Inf, 
-                                             if (!is.na(x_axis_max)) x_axis_max else Inf))
+    if (!is.na(x_axis_min) || !is.na(x_axis_max) ||! is.na(y_axis_min) || !is.na(y_axis_max)) {
+      axis_code <- "coord_cartesian("
+      
+      if (!is.na(x_axis_min) || !is.na(x_axis_max)) {
+        axis_code <- paste0(axis_code, sprintf("xlim = c(%s, %s)", 
+                                        if (!is.na(x_axis_min)) x_axis_min else "NA", 
+                                        if (!is.na(x_axis_max)) x_axis_max else "NA"))
+        
+        if(!is.na(y_axis_min) || !is.na(y_axis_max)){
+          axis_code <- paste0(axis_code, ", ")
+        }
+        
+      }
+      
+      if (!is.na(y_axis_min) || !is.na(y_axis_max)) {
+        axis_code <- paste0(axis_code, sprintf("ylim = c(%s, %s)", 
+                                         if (!is.na(y_axis_min)) y_axis_min else "NA", 
+                                         if (!is.na(y_axis_max)) y_axis_max else "NA"))
+      }
+        
+      axis_code <- paste0(axis_code, ")")
+      
+      r_code <- paste0(r_code, sprintf(" +\n  "), axis_code)
+                          
+    } else {
+      axis_code <- ""
     }
-    if (!is.na(x_axis_min) || !is.na(x_axis_max)) {
-      r_code <- paste0(r_code, sprintf(" +\n  scale_x_continuous(limits = c(%s, %s))", 
-                                       if (!is.na(x_axis_min)) x_axis_min else "NA", 
-                                       if (!is.na(x_axis_max)) x_axis_max else "NA"))
-    }
     
     
     
     
     
-    ########## 3.3.10 Y-Axis Range ##########  
-    # Adjust X-Axis range
-    if (!is.na(y_axis_min) || !is.na(y_axis_max)) {
-      p <- p + scale_y_continuous(limits = c(if (!is.na(y_axis_min)) y_axis_min else -Inf, 
-                                             if (!is.na(y_axis_max)) y_axis_max else Inf))
-    }
-    if (!is.na(y_axis_min) || !is.na(y_axis_max)) {
-      r_code <- paste0(r_code, sprintf(" +\n  scale_y_continuous(limits = c(%s, %s))", 
-                                       if (!is.na(y_axis_min)) y_axis_min else "NA", 
-                                       if (!is.na(y_axis_max)) y_axis_max else "NA"))
-    }
+    
+    
+    # ########## 3.3.10 Y-Axis Range ##########  
+    # # Adjust X-Axis range
+    # if (!is.na(y_axis_min) || !is.na(y_axis_max)) {
+    #   r_code <- paste0(r_code, sprintf(" +\n  scale_y_continuous(limits = c(%s, %s))", 
+    #                                    if (!is.na(y_axis_min)) y_axis_min else "NA", 
+    #                                    if (!is.na(y_axis_max)) y_axis_max else "NA"))
+    # }
     
     
     
