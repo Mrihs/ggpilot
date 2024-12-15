@@ -349,7 +349,8 @@ ui <- fluidPage(
                                                        numericInput(inputId = "y_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
                                                      )
                                                    )                                
-                                               )
+                                               ),
+                                               checkboxInput(inputId = "exact_axis_range", label = "Abstand zu Begrenzung", value = TRUE)
                                              ),
                                              
                                              # Create a Collapse-Panel for Errorbar-Settings
@@ -1185,24 +1186,31 @@ server <- function(input, output, session) {
     axis_code <- ""
     
     # Adjust X-Axis range
-    if (!is.na(x_axis_min) || !is.na(x_axis_max) ||! is.na(y_axis_min) || !is.na(y_axis_max)) {
+    if (!is.na(x_axis_min) || !is.na(x_axis_max) ||! is.na(y_axis_min) || !is.na(y_axis_max) || !input$exact_axis_range) {
       axis_code <- "coord_cartesian("
       
       if (!is.na(x_axis_min) || !is.na(x_axis_max)) {
         axis_code <- paste0(axis_code, sprintf("xlim = c(%s, %s)", 
                                         if (!is.na(x_axis_min)) x_axis_min else "NA", 
                                         if (!is.na(x_axis_max)) x_axis_max else "NA"))
-        
+
         if(!is.na(y_axis_min) || !is.na(y_axis_max)){
           axis_code <- paste0(axis_code, ", ")
         }
-        
       }
-      
+
       if (!is.na(y_axis_min) || !is.na(y_axis_max)) {
         axis_code <- paste0(axis_code, sprintf("ylim = c(%s, %s)", 
                                          if (!is.na(y_axis_min)) y_axis_min else "NA", 
                                          if (!is.na(y_axis_max)) y_axis_max else "NA"))
+      }
+
+      if (!input$exact_axis_range) {
+        if(!is.na(y_axis_min) || !is.na(y_axis_max) || !is.na(x_axis_min) || !is.na(x_axis_max)){
+          axis_code <- paste0(axis_code, ", ")
+        }
+        
+        axis_code <- paste0(axis_code, "expand = FALSE")
       }
         
       axis_code <- paste0(axis_code, ")")
@@ -1213,19 +1221,6 @@ server <- function(input, output, session) {
       axis_code <- ""
     }
     
-    
-    
-    
-    
-    
-    
-    # ########## 3.3.10 Y-Axis Range ##########  
-    # # Adjust X-Axis range
-    # if (!is.na(y_axis_min) || !is.na(y_axis_max)) {
-    #   r_code <- paste0(r_code, sprintf(" +\n  scale_y_continuous(limits = c(%s, %s))", 
-    #                                    if (!is.na(y_axis_min)) y_axis_min else "NA", 
-    #                                    if (!is.na(y_axis_max)) y_axis_max else "NA"))
-    # }
     
     
     
