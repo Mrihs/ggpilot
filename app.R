@@ -112,9 +112,9 @@ ui <- fluidPage(
     
     /* Define Buttons */
     .custom-btn {
-    font-size: 20px;
+    font-size: 18px;
     padding: 5px 15px;
-    margin: 20px 10px;
+    margin: 20px 5px;
     color: black;
     border: 5px solid #bbb;
     border-radius: 5px;
@@ -162,11 +162,11 @@ ui <- fluidPage(
   # Define a fluid Row
   fluidRow(
     # Set a Column
-    column(2, 
+    column(3, 
            # Set the title panel
-           titlePanel(title = span(img(src = "logo.png", height = 55), HTML('<span style="font-size: 2.00em;">ggpilot</span>')))),
+           titlePanel(title = span(img(src = "logo.png", height = 50), HTML('<span style="font-size: 1.95em;">ggpilot</span>')), windowTitle = "ggpilot")),
     # Set a 
-    column(10, align = "center", 
+    column(9, align = "center", 
            style = "margin-top: 15px;",
            tags$head(
              tags$style(HTML("
