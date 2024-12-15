@@ -10,6 +10,7 @@ if (!require("shinyBS")) install.packages("shinyBS")
 if (!require("Hmisc")) install.packages("Hmisc")
 if (!require("ggsci")) install.packages("ggsci")
 if (!require("ggthemes")) install.packages("ggthemes")
+if (!require("rclipboard")) install.packages("rclipboard")
 
 
 
@@ -33,6 +34,7 @@ library(shinyBS)
 library(Hmisc)
 library(ggsci)
 library(ggthemes)
+library(rclipboard)
 
 
 
@@ -733,8 +735,15 @@ ui <- fluidPage(
       
       ########## 2.3.2 Code-Output ##########
       # Add TextOutput for rcode
-      verbatimTextOutput("rcode")
-
+      column(11,
+             verbatimTextOutput("rcode"),
+             ),
+      column(1,
+             rclipboardSetup(),
+             
+             # UI output for copy-to-clipboard button
+             uiOutput("clip"),
+             )
     )
   )
 )
@@ -2363,7 +2372,17 @@ server <- function(input, output, session) {
   })
   
   
-  
+  # Add clipboard buttons
+  output$clip <- renderUI({
+    rclipButton(
+      inputId = "clipbtn",
+      label = "",
+      clipText = reactive_full_code(), 
+      icon = icon("clipboard", class = "fa-3x"),
+      placement = "top",
+      options = list(delay = list(show = 800, hide = 100), trigger = "hover"),
+    )
+  })
   
   
   
