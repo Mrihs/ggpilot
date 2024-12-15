@@ -359,6 +359,8 @@ ui <- fluidPage(
                                                    # Dropdown to select the type of Errorbar
                                                    selectInput(inputId = "error_type", label = "Einheit", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
                                                    # Numeric Input for the width of the Errorbar
+                                                   numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
+                                                   # Numeric Input for the width of the Errorbar
                                                    numericInput(inputId = "error_width", label = "Grösse Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5)
                                                )
                                              ),
@@ -1031,6 +1033,10 @@ server <- function(input, output, session) {
         }
         if (!is.na(dodge_value)) {
           r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
+        }
+        if (((input$error_type != "Standardfehler") & (input$error_mult!=2) & !is.na(input$error_mult))|
+            ((input$error_type == "Standardfehler") & (input$error_mult!=1) & !is.na(input$error_mult))){
+          r_code <- paste0(r_code, sprintf(", fun.args = list(mult = %.0f)", input$error_mult))
         }
         r_code <- paste0(r_code, ")")
       }
