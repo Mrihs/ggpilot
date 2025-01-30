@@ -72,6 +72,26 @@ BSCollapseArrow <- function(text, icon_class = "glyphicon-menu-down") {
 
 
 
+############### 1.4 Define Color Validation Function ###############
+is_valid_color <- function(color) {
+  # empty colors are not invalid
+  if (is.null(color) || color == "") return(FALSE)
+  tryCatch({
+    # Check if valid color
+    col2rgb(color)
+    TRUE
+  }, error = function(e) FALSE)
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -458,7 +478,7 @@ ui <- fluidPage(
                                                div(class = ".collapse_panel-settings",
                                                    # Dropdown with options for color-palette
                                                    selectInput(inputId = "Color_Palette", label = "Farbpalette", 
-                                                               choices = c("Gemäss Theme", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
+                                                               choices = c("Gemäss Theme", "Eigene Farbpalette erstellen", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
                                                                            "viridis - cividis", "viridis - mako", "viridis - rocket", "viridis - turbo",
                                                                            "Accent", "Blues", "Greens", "Greys", "Oranges", "Paired", "Pastel1", 
                                                                            "Pastel2", "Purples", "Reds", "Set1", "Set2", "Set3", "Spectral", 
@@ -468,7 +488,38 @@ ui <- fluidPage(
                                                                            "tron", "uchicago", "ucscgb", "jco", "calc", "canva", "colorblind", 
                                                                            "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
                                                                            "hc", "pander", "ptol", "solarized", 
-                                                                           "stata", "tableau", "wsj"), selected = "Gemäss Theme")
+                                                                           "stata", "tableau", "wsj"), selected = "Gemäss Theme"),
+                                                   
+                                                   # Set UI for individual color palette
+                                                   conditionalPanel(condition = "input.Color_Palette =='Eigene Farbpalette erstellen'",
+                                                                    # Add Button
+                                                                    actionButton("add", "Farbe hinzufügen"),
+                                                                    actionButton("remove_last", "Letzte Farbe entfernen"),
+                                                                    tags$div(id = "input_container"),
+                                                                    verbatimTextOutput("vector_output"),
+                                                                    
+                                                                    # Create CSS for inavlid colors
+                                                                    tags$style(HTML("
+                                                                      .invalid { background-color: #ffcccc !important; }
+                                                                      .error-message { color: red; font-size: 14px; margin-left: 10px; display: inline; }
+                                                                    ")),
+                                                                    
+                                                                    # JS to validate colors
+                                                                    tags$script(HTML("
+                                                                      Shiny.addCustomMessageHandler('validColor', function(data) {
+                                                                        var inputField = document.getElementById(data.id);
+                                                                        var errorText = document.getElementById(data.id + '_error');
+                                                                        
+                                                                        if (data.valid) {
+                                                                          inputField.classList.remove('invalid');
+                                                                          if (errorText) errorText.style.display = 'none';
+                                                                        } else {
+                                                                          inputField.classList.add('invalid');
+                                                                          if (errorText) errorText.style.display = 'inline';
+                                                                        }
+                                                                      });
+                                                                    "))
+                                                                    )
                                                    )
                                                )
                                              )
@@ -841,12 +892,15 @@ ui <- fluidPage(
 
 #################### 3. Server ####################
 server <- function(input, output, session) {
+  ############### 3. Define reactive Values ###############
   X_Factors <- reactiveValues(values = NA)
   is_numeric_x <- reactiveVal(NULL)
   is_numeric_y <- reactiveVal(value = NA)
   is_numeric_group <- reactiveVal(value = NA)
   is_numeric_grid_col <- reactiveVal(value = NA)
   is_numeric_grid_row <- reactiveVal(value = NA)
+  # Manual Colors for color palette
+  manual_colors <- reactiveValues(values = list(), count = 0)  # Zähler für IDs
   
   
   ############### 3.1 Read Data ###############
@@ -1384,6 +1438,78 @@ server <- function(input, output, session) {
   })
   
   
+  
+  
+  
+  
+  
+  
+  
+  ############### 3.X Update Manual Color Palette ###############
+  # When "Add" is Pressed
+  observeEvent(input$add, {
+    # Increase counter of ID's
+    manual_colors$count <- manual_colors$count + 1  # Erhöhe den Zähler für eine neue ID
+    # Set new couner ID
+    new_id <- manual_colors$count
+    
+    # Insert new UI
+    insertUI(
+      selector = "#input_container",
+      where = "beforeEnd",
+      ui = tags$div(
+        id = paste0("input_row_", new_id),
+        style = "display: flex; align-items: center;",
+        textInput(paste0("vector_", new_id), 
+                  label = paste("Color", new_id), 
+                  placeholder = "z.B. 'red', 'grey', '#F00F1F'"),
+        tags$span(id = paste0("vector_", new_id, "_error"), 
+                  class = "error-message", 
+                  "Keine gültige Farbe angegeben", 
+                  style = "display: none;")
+      )
+    )
+    
+    # Create new entries using a standard-color
+    manual_colors$values[[as.character(new_id)]] <- "gray"
+    
+    # Observe all entries
+    observe({for (id in names(manual_colors$values)) {
+      color <- input[[paste0("vector_", id)]]
+      if (!is.null(color)) {
+        if (is_valid_color(color)) {
+          manual_colors$values[[id]] <- color
+          session$sendCustomMessage("validColor", list(id = paste0("vector_", id), valid = TRUE))
+          } else {
+            manual_colors$values[[id]] <- "gray"
+            session$sendCustomMessage("validColor", list(id = paste0("vector_", id), valid = FALSE))
+          }
+      }
+    }
+    })
+  })
+  
+  # When "Remove" is Pressed
+  observeEvent(input$remove_last, {
+    # If there is at least one color defined
+    if (manual_colors$count > 0) {
+      # Remove last element of manual_colors
+      last_id <- as.character(manual_colors$count)
+      # Remove UI
+      removeUI(selector = paste0("#input_row_", last_id))  # UI entfernen
+      # Remove Value of manual_colors
+      manual_colors$values[[last_id]] <- NULL
+      # Reduce counter of manual_colors
+      manual_colors$count <- manual_colors$count - 1
+    }
+  })
+  
+  # Set Output
+  output$vector_output <- renderPrint({
+    unlist(manual_colors$values)
+  })
+
+
   
   
   
