@@ -1819,6 +1819,12 @@ server <- function(input, output, session) {
     ########## 3.3.11 Color-Palette ##########
     # 
     if (input$Color_Palette != "Gemäss Theme") {
+      # If manual color palette should be created
+      if (palette_selected == "Eigene Farbpalette erstellen") {
+        # Add values
+        r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = c(%s))",
+                                         paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))
+      } else {
       r_code <- paste0(r_code, sprintf(" +\n  %s",
                                       switch(palette_selected,
                                              "Accent" = "scale_fill_brewer(palette = 'Accent')",
@@ -1885,7 +1891,7 @@ server <- function(input, output, session) {
                                              "wsj" = "scale_fill_wsj()"
                                              )
                                       )
-                      )
+                      )}
       }
 
 
