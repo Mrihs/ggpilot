@@ -496,7 +496,6 @@ ui <- fluidPage(
                                                                     actionButton("add", "Farbe hinzufügen"),
                                                                     actionButton("remove_last", "Letzte Farbe entfernen"),
                                                                     tags$div(id = "input_container"),
-                                                                    verbatimTextOutput("vector_output"),
                                                                     
                                                                     # Create CSS for inavlid colors
                                                                     tags$style(HTML("
@@ -1503,11 +1502,7 @@ server <- function(input, output, session) {
       manual_colors$count <- manual_colors$count - 1
     }
   })
-  
-  # Set Output
-  output$vector_output <- renderPrint({
-    unlist(manual_colors$values)
-  })
+
 
 
   
@@ -1821,9 +1816,20 @@ server <- function(input, output, session) {
     if (input$Color_Palette != "Gemäss Theme") {
       # If manual color palette should be created
       if (palette_selected == "Eigene Farbpalette erstellen") {
-        # Add values
-        r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = c(%s))",
-                                         paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))
+        # Check if there is at least one value entered
+        if (length(manual_colors$values)>0){
+          if (length(manual_colors$values)<length(unique(data()[[group_var]]))){
+            # Add values
+            r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = rep(c(%s), length(unique(df$%s))))",
+                                             paste0(sprintf("'%s'", manual_colors$values), collapse = ", "),
+                                             group_var))
+            }
+          else{
+          # Add values
+          r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = c(%s))",
+                                           paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))
+          }
+        }
       } else {
       r_code <- paste0(r_code, sprintf(" +\n  %s",
                                       switch(palette_selected,
