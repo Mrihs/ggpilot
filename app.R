@@ -2724,7 +2724,6 @@ server <- function(input, output, session) {
       full_code <- paste0(full_code, "\n\n")
 
       full_code <- paste0(full_code, factor_code())
-      showNotification("Factor-Code pasted!")
     }
     
     
