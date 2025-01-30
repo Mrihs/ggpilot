@@ -905,10 +905,6 @@ ui <- fluidPage(
 
 #################### 3. Server ####################
 server <- function(input, output, session) {
-  observe({
-    print(paste("Color Palette Fill:", input$color_palette_fill))
-  })
-  
   ############### 3. Define reactive Values ###############
   X_Factors <- reactiveValues(values = NA)
   is_numeric_x <- reactiveVal(NULL)
