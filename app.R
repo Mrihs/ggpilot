@@ -11,6 +11,7 @@ if (!require("Hmisc")) install.packages("Hmisc")
 if (!require("ggsci")) install.packages("ggsci")
 if (!require("ggthemes")) install.packages("ggthemes")
 if (!require("rclipboard")) install.packages("rclipboard")
+if (!require("sortable")) install.packages("sortable")
 
 
 
@@ -35,6 +36,7 @@ library(Hmisc)
 library(ggsci)
 library(ggthemes)
 library(rclipboard)
+library(sortable)
 
 
 
@@ -252,14 +254,39 @@ ui <- fluidPage(
                  conditionalPanel(condition = "input.activeTab == 'variables'",
                                   # X-Axis Variable
                                   selectInput("x_var", "X-Achsen Variable", choices = c(""), selected = ""),
+                                  # Create a conditionl-panel for when a variable is selected
+                                  conditionalPanel(condition = "input.x_var != ' '",
+                                                   uiOutput("x_factor_rank_list")  # Platzhalter für `rank_list()`
+                                                   # x_order <- rank_list(input_id = "x_factor_Order", 
+                                                   #                      text = "Faktoren ordnen",
+                                                   #                      labels = X_Factors$values, 
+                                                   #                      options = sortable_options(swap = TRUE)
+                                                   # )
+                                                   ),
                                   # Y-Axis Variable
                                   selectInput("y_var", "Y-Achsen Variable", choices = c(""), selected = ""),
+                                  # Create a conditionl-panel for when a variable is selected
+                                  conditionalPanel(condition = "input.y_var != ' '",
+                                                   uiOutput("y_factor_rank_list")  # Platzhalter für `rank_list()`
+                                                   ),
                                   # Grouping Variable
                                   selectInput("group_var", "Gruppierungs-Variable", choices = c(""), selected = ""),
+                                  # Create a conditionl-panel for when a variable is selected
+                                  conditionalPanel(condition = "input.group_var != ' '",
+                                                   uiOutput("group_factor_rank_list")  # Platzhalter für `rank_list()`
+                                                   ),
                                   # Facet Grid - Columns
                                   selectInput("grid_col_var", "Variable für Spalten-Facettierung", choices = c(""), selected = ""),
+                                  # Create a conditionl-panel for when a variable is selected
+                                  conditionalPanel(condition = "input.grid_col_var != ' '",
+                                                   uiOutput("grid_col_factor_rank_list")  # Platzhalter für `rank_list()`
+                                                   ),
                                   # Facet Grid - Rows
-                                  selectInput("grid_row_var", "Variable für Zeilen-Facettierung", choices = c(""), selected = "")),
+                                  selectInput("grid_row_var", "Variable für Zeilen-Facettierung", choices = c(""), selected = ""),
+                                  # Create a conditionl-panel for when a variable is selected
+                                  conditionalPanel(condition = "input.grid_row_var != ' '",
+                                                   uiOutput("grid_row_factor_rank_list")  # Platzhalter für `rank_list()`
+                                                   )),
                  
                  
                  
@@ -770,6 +797,9 @@ ui <- fluidPage(
 
 #################### 3. Server ####################
 server <- function(input, output, session) {
+  X_Factors <- reactiveValues(values = NA)  
+  
+  
   ############### 3.1 Read Data ###############
   # Create a reactive data with the loaded data
   data <- reactive({
@@ -919,6 +949,123 @@ server <- function(input, output, session) {
     updateSelectInput(session, "grid_col_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
     updateSelectInput(session, "grid_row_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
   })
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 3.X Update Variable Selection ###############
+  Factors <- reactiveValues(values = c(""))  # Reaktive Liste
+  
+  observeEvent(list(input$x_var, input$y_var, input$group_var, input$grid_col_var, input$grid_row_var), {
+    req(data())  
+    req(input$x_var)  
+    req(input$y_var)  
+    req(input$group_var)  
+    req(input$grid_col_var)  
+    req(input$grid_row_var)  
+    
+    x_data <- data()[[input$x_var]]
+    y_data <- data()[[input$y_var]]
+    goup_data <- data()[[input$group_var]]
+    grid_col_data <- data()[[input$grid_col_var]]
+    grid_row_data <- data()[[input$grid_row_var]]
+    
+    if (is.factor(x_data)) {
+      Factors$x_values <- levels(x_data)
+    } else if (is.character(x_data)) {
+      Factors$x_values <- unique(x_data)
+    } else {
+      Factors$x_values <- c("")
+    }
+    
+    if (is.factor(y_data)) {
+      Factors$y_values <- levels(y_data)
+    } else if (is.character(y_data)) {
+      Factors$y_values <- unique(y_data)
+    } else {
+      Factors$y_values <- c("")
+    }
+    
+    if (is.factor(goup_data)) {
+      Factors$group_values <- levels(goup_data)
+    } else if (is.character(goup_data)) {
+      Factors$group_values <- unique(goup_data)
+    } else {
+      Factors$group_values <- c("")
+    }
+    
+    if (is.factor(grid_col_data)) {
+      Factors$grid_cols_values <- levels(grid_col_data)
+    } else if (is.character(grid_col_data)) {
+      Factors$grid_cols_values <- unique(grid_col_data)
+    } else {
+      Factors$grid_cols_values <- c("")
+    }
+    
+    if (is.factor(grid_row_data)) {
+      Factors$grid_row_values <- levels(grid_row_data)
+    } else if (is.character(grid_row_data)) {
+      Factors$grid_row_values <- unique(grid_row_data)
+    } else {
+      Factors$grid_row_values <- c("")
+    }
+  })
+  
+  # **Dynamische UI für `rank_list()`**
+  output$x_factor_rank_list <- renderUI({
+    rank_list(input_id = "x_factor_Order", 
+              text = "Faktoren ordnen",
+              labels = Factors$x_values,  
+              options = sortable_options(swap = TRUE))
+  })
+  
+  # **Dynamische UI für `rank_list()`**
+  output$y_factor_rank_list <- renderUI({
+    rank_list(input_id = "x_factor_Order", 
+              text = "Faktoren ordnen",
+              labels = Factors$y_values,  
+              options = sortable_options(swap = TRUE))
+  })
+  
+  # **Dynamische UI für `rank_list()`**
+  output$group_factor_rank_list <- renderUI({
+    rank_list(input_id = "x_factor_Order", 
+              text = "Faktoren ordnen",
+              labels = Factors$group_values,  
+              options = sortable_options(swap = TRUE))
+  })
+  
+  # **Dynamische UI für `rank_list()`**
+  output$grid_col_factor_rank_list <- renderUI({
+    rank_list(input_id = "x_factor_Order", 
+              text = "Faktoren ordnen",
+              labels = Factors$grid_cols_values,  
+              options = sortable_options(swap = TRUE))
+  })
+  
+  # **Dynamische UI für `rank_list()`**
+  output$grid_row_factor_rank_list <- renderUI({
+    rank_list(input_id = "x_factor_Order", 
+              text = "Faktoren ordnen",
+              labels = Factors$grid_row_values,  
+              options = sortable_options(swap = TRUE))
+  })
+
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 3.X Update Variable Selection UI ###############
+
+  
   
   
   
@@ -2373,7 +2520,7 @@ server <- function(input, output, session) {
     full_code <- gsub("data\\(\\)", "data", full_code)
     
     # Replace aes_string with aes
-    full_code <- gsub("aes_string", "aes", full_code)
+    # full_code <- gsub("aes_string", "aes", full_code)
     
     # Return full_code
     full_code
