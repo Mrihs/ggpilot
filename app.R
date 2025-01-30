@@ -1016,6 +1016,27 @@ server <- function(input, output, session) {
     }
   })
   
+  # Reset factor codes
+  observeEvent(input$x_var, {
+    x_factor_code("")
+    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
+  
+  observeEvent(input$y_var, {
+    y_factor_code("")
+    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
+  
+  observeEvent(input$group_var, {
+    group_factor_code("")
+    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
+  
+  observeEvent(input$grid_col_var, {
+    grid_col_factor_code("")
+    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
+  
+  observeEvent(input$grid_row_var, {
+    grid_row_factor_code("")
+    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
+  
   # **Dynamische UI für `rank_list()`**
   output$x_factor_rank_list <- renderUI({
     rank_list(input_id = "x_factor_Order", 
