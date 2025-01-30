@@ -1070,6 +1070,8 @@ server <- function(input, output, session) {
   x_factor_code <- reactiveVal(value = "")
   y_factor_code <- reactiveVal(value = "")
   group_factor_code <- reactiveVal(value = "")
+  grid_col_factor_code <- reactiveVal(value = "")
+  grid_row_factor_code <- reactiveVal(value = "")
   
   # Check for Update on order of levels on x-factor
   observeEvent(input$x_factor_Order, {
@@ -1099,7 +1101,7 @@ server <- function(input, output, session) {
     x_factor_code(new_x_factor_code)
     
     # Create new factor-code
-    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code())
+    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
     
     # Update factor_code
     factor_code(new_factor_code)
@@ -1133,7 +1135,7 @@ server <- function(input, output, session) {
     y_factor_code(new_y_factor_code)
     
     # Create new factor-code
-    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code())
+    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
     
     # Update factor_code
     factor_code(new_factor_code)
@@ -1167,8 +1169,76 @@ server <- function(input, output, session) {
     group_factor_code(new_group_factor_code)
 
     # Create new factor-code
-    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code())
-
+    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
+    
+    # Update factor_code
+    factor_code(new_factor_code)
+  })
+  
+  # Check for Update on order of levels on grid-column-factor
+  observeEvent(input$grid_col_factor_Order, {
+    # Require data
+    req(data(), input$grid_col_factor_Order, input$grid_col_var)
+    
+    # Initate new_factor_code
+    new_gridcol_factor_code <- ""
+    
+    # Check if order has changed
+    if (!identical(Factors$group_values, input$grid_col_factor_Order)) {
+      # Adjust factors if variable is factor
+      if (is.factor(data()[[input$grid_col_var]])) {
+        new_gridcol_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
+                                         input$grid_col_var, input$grid_col_var,
+                                         paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))
+      }
+      # Make factor if variable is not a factor
+      else if (is.character(data()[[input$grid_col_var]])) {
+        new_gridcol_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
+                                         input$grid_col_var, input$grid_col_var,
+                                         paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))
+      }
+    }
+    
+    # Update reactive group-factor variable
+    grid_col_factor_code(new_gridcol_factor_code)
+    
+    # Create new factor-code
+    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
+    
+    # Update factor_code
+    factor_code(new_factor_code)
+  })
+  
+  # Check for Update on order of levels on grid-row-factor
+  observeEvent(input$grid_row_factor_Order, {
+    # Require data
+    req(data(), input$grid_row_factor_Order, input$grid_row_var)
+    
+    # Initate new_factor_code
+    new_gridrow_factor_code <- ""
+    
+    # Check if order has changed
+    if (!identical(Factors$grid_row_values, input$grid_row_factor_Order)) {
+      # Adjust factors if variable is factor
+      if (is.factor(data()[[input$grid_row_var]])) {
+        new_gridrow_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
+                                           input$grid_row_var, input$grid_row_var,
+                                           paste(sprintf("'%s'", input$grid_row_factor_Order), collapse = ", "))
+      }
+      # Make factor if variable is not a factor
+      else if (is.character(data()[[input$grid_row_var]])) {
+        new_gridrow_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
+                                           input$grid_row_var, input$grid_row_var,
+                                           paste(sprintf("'%s'", input$grid_row_factor_Order), collapse = ", "))
+      }
+    }
+    
+    # Update reactive group-factor variable
+    grid_row_factor_code(new_gridrow_factor_code)
+    
+    # Create new factor-code
+    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
+    
     # Update factor_code
     factor_code(new_factor_code)
   })
