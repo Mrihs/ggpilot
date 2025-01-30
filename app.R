@@ -1065,37 +1065,73 @@ server <- function(input, output, session) {
   
   
   ############### 3.X Check for changes ###############
+  # Create reactive factor_code
   factor_code <- reactiveVal(value = "")
+  x_factor_code <- reactiveVal(value = "")
+  y_factor_code <- reactiveVal(value = "")
   
+  # Check for Update on order of levels on x-factor
   observeEvent(input$x_factor_Order, {
-    req(data(), input$x_factor_Order, input$x_var)  # Sicherstellen, dass alle Werte existieren
+    # Require data
+    req(data(), input$x_factor_Order, input$x_var, y_factor_code)
     
-    # Initialisierung der Variable für den generierten Code
-    new_factor_code <- ""
+    # Initate new_factor_code
+    new_x_factor_code <- ""
     
-    # Überprüfung, ob sich die Reihenfolge der Faktoren geändert hat
+    # Check if order has changed
     if (!identical(Factors$x_values, input$x_factor_Order)) {
+      # Adjust factors if variable is factor
       if (is.factor(data()[[input$x_var]])) {
-        new_factor_code <- sprintf("df$'%s' <- factor(df$'%s', levels = c(%s))", 
+        new_x_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
                                input$x_var, input$x_var, 
                                paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
-      } else if (is.character(data()[[input$x_var]])) {
-        new_factor_code <- sprintf("df$'%s' <- factor(df$'%s', levels = c(%s))", 
+      } 
+      # Make factor if variable is not a factor
+      else if (is.character(data()[[input$x_var]])) {
+        new_x_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
                                input$x_var, input$x_var, 
                                paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
       }
-      
-      showNotification("Nicht mehr original!!!!", type = "warning")
     }
     
-    # Aktualisieren der reaktiven Variable
+    x_factor_code(new_x_factor_code)
+    
+    new_factor_code <- paste(x_factor_code(), y_factor_code())
+    
+    # Update factor_code
     factor_code(new_factor_code)
+  })
+  
+  # Check for Update on order of levels on y-factor
+  observeEvent(input$y_factor_Order, {
+    # Require data
+    req(data(), input$y_factor_Order, input$y_var, x_factor_code)
     
-    # Speichern des generierten Codes in der reaktiven Variable
-    # Factors$factor_code <- factor_code
+    # Initate new_factor_code
+    new_y_factor_code <- ""
     
-    # showNotification(factor_code(), type = "warning")
+    # Check if order has changed
+    if (!identical(Factors$y_values, input$y_factor_Order)) {
+      # Adjust factors if variable is factor
+      if (is.factor(data()[[input$y_var]])) {
+        new_y_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
+                                   input$y_var, input$y_var, 
+                                   paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))
+      } 
+      # Make factor if variable is not a factor
+      else if (is.character(data()[[input$y_var]])) {
+        new_y_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
+                                   input$y_var, input$y_var, 
+                                   paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))
+      }
+    }
     
+    y_factor_code(new_y_factor_code)
+    
+    new_factor_code <- paste(x_factor_code(), y_factor_code())
+    
+    # Update factor_code
+    factor_code(new_factor_code)
   })
 
   
