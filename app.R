@@ -529,7 +529,10 @@ ui <- fluidPage(
                                                                         }
                                                                       });
                                                                     "))
-                                                                    )
+                                                                    ),
+                                                   
+                                                   selectInput(inputId = "color_palette_target", label = "Farbelette anwenden auf...", 
+                                                               choices = c("Füllung", "Umrandung", "Füllung und Umrandung"), selected = "Füllung")
                                                    )
                                                )
                                              )
@@ -902,6 +905,10 @@ ui <- fluidPage(
 
 #################### 3. Server ####################
 server <- function(input, output, session) {
+  observe({
+    print(paste("Color Palette Fill:", input$color_palette_fill))
+  })
+  
   ############### 3. Define reactive Values ###############
   X_Factors <- reactiveValues(values = NA)
   is_numeric_x <- reactiveVal(NULL)
@@ -1606,7 +1613,15 @@ server <- function(input, output, session) {
     ########## 3.3.3 Add Grouping Variable ########## 
     # Define Grouping-variable if selected
     if (!is.null(group_var)) {
-      r_code <- paste0(r_code, sprintf(", fill = '%s'))", group_var))
+      if(input$color_palette_target == "Füllung"){
+        r_code <- paste0(r_code, sprintf(", fill = '%s'))", group_var))
+      }
+      if(input$color_palette_target == "Umrandung"){
+        r_code <- paste0(r_code, sprintf(", color = '%s'))", group_var))
+      }
+      if(input$color_palette_target == "Füllung und Umrandung"){
+        r_code <- paste0(r_code, sprintf(", fill = '%s', color = '%s'))", group_var, group_var))
+      }
       # Close first line of Plot-relevant Code if no Grouping Variable is selected
     } else {
       r_code <- paste0(r_code, sprintf("))"))
@@ -1841,9 +1856,8 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.11 Color-Palette ##########
-    # 
-    if (input$Color_Palette != "Gemäss Theme") {
+    ########## 3.3.11 Color-Palette - Fill ##########
+    if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Füllung" | input$color_palette_target == "Füllung und Umrandung")) {
       # If manual color palette should be created
       if (palette_selected == "Eigene Farbpalette erstellen") {
         # Check if there is at least one value entered
@@ -1928,7 +1942,100 @@ server <- function(input, output, session) {
                                              )
                                       )
                       )}
-      }
+    }
+    
+    
+    
+    
+    
+    
+    ########## 3.3.11 Color-Palette - color ##########
+    if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Umrandung" | input$color_palette_target == "Füllung und Umrandung")) {
+      # If manual color palette should be created
+      if (palette_selected == "Eigene Farbpalette erstellen") {
+        # Check if there is at least one value entered
+        if (length(manual_colors$values)>0){
+          if (length(manual_colors$values)<length(unique(data()[[group_var]]))){
+            # Add values
+            r_code <- paste0(r_code, sprintf(" +\n  scale_color_manual(values = rep(c(%s), length(unique(df$%s))))",
+                                             paste0(sprintf("'%s'", manual_colors$values), collapse = ", "),
+                                             group_var))
+          }
+          else{
+            # Add values
+            r_code <- paste0(r_code, sprintf(" +\n  scale_color_manual(values = c(%s))",
+                                             paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))
+          }
+        }
+      } else {
+        r_code <- paste0(r_code, sprintf(" +\n  %s",
+                                         switch(palette_selected,
+                                                "Accent" = "scale_color_brewer(palette = 'Accent')",
+                                                "Blues" = "scale_color_brewer(palette = 'Blues')",
+                                                "Greens" = "scale_color_brewer(palette = 'Greens')",
+                                                "Greys" = "scale_color_brewer(palette = 'Greys')",
+                                                "Oranges" = "scale_color_brewer(palette = 'Oranges')",
+                                                "Paired" = "scale_color_brewer(palette = 'Paired')",
+                                                "Pastel1" = "scale_color_brewer(palette = 'Pastel1')",
+                                                "Pastel2" = "scale_color_brewer(palette = 'Pastel2')",
+                                                "Purples" = "scale_color_brewer(palette = 'Purples')",
+                                                "Reds" = "scale_color_brewer(palette = 'Reds')",
+                                                "Set1" = "scale_color_brewer(palette = 'Set1')",
+                                                "Set2" = "scale_color_brewer(palette = 'Set2')",
+                                                "Set3" = "scale_color_brewer(palette = 'Set3')",
+                                                "Spectral" = "scale_color_brewer(palette = 'Spectral')",
+                                                "grey" = "scale_color_grey()",
+                                                "hue" = "scale_color_hue()",
+                                                "ordinal" = "scale_color_ordinal()",
+                                                "viridis" = "scale_color_viridis_d(option = 'viridis')",
+                                                "viridis - magma" = "scale_color_viridis_d(option = 'magma')",
+                                                "viridis - plasma" = "scale_color_viridis_d(option = 'plasma')",
+                                                "viridis - inferno" = "scale_color_viridis_d(option = 'inferno')",
+                                                "viridis - cividis" = "scale_color_viridis_d(option = 'cividis')",
+                                                "viridis - mako" = "scale_color_viridis_d(option = 'mako')",
+                                                "viridis - rocket" = "scale_color_viridis_d(option = 'rocket')",
+                                                "viridis - turbo" = "scale_color_viridis_d(option = 'turbo')",
+                                                "aas" = "scale_color_aaas()",
+                                                "bmj" = "scale_color_bmj()",
+                                                "cosmic" = "scale_color_cosmic()",
+                                                "d3" = "scale_color_d3()",
+                                                "flatui" = "scale_color_flatui()",
+                                                "frontiers" = "scale_color_frontiers()",
+                                                "futurama" = "scale_color_futurama()",
+                                                "igv" = "scale_color_igv()",
+                                                "jama" = "scale_color_jama()",
+                                                "lancet" = "scale_color_lancet()",
+                                                "locuszoom" = "scale_color_locuszoom()",
+                                                "nejm" = "scale_color_nejm()",
+                                                "npg" = "scale_color_npg()",
+                                                "observable" = "scale_color_observable()",
+                                                "rickandmorty" = "scale_color_rickandmorty()",
+                                                "simpsons" = "scale_color_simpsons()",
+                                                "startrek" = "scale_color_startrek()",
+                                                "tron" = "scale_color_tron()",
+                                                "uchicago" = "scale_color_uchicago()",
+                                                "ucscgb" = "scale_color_ucscgb()",
+                                                "jco" = "scale_color_jco()",
+                                                "calc" = "scale_color_calc()",
+                                                "canva" = "scale_color_canva()",
+                                                "colorblind" = "scale_color_colorblind()",
+                                                "economist" = "scale_color_economist()",
+                                                "excel" = "scale_color_excel()",
+                                                "excel_new" = "scale_color_excel_new()",
+                                                "few" = "scale_color_few()",
+                                                "fivethirtyeight" = "scale_color_fivethirtyeight()",
+                                                "gdocs" = "scale_color_gdocs()",
+                                                "hc" = "scale_color_hc()",
+                                                "pander" = "scale_color_pander()",
+                                                "ptol" = "scale_color_ptol()",
+                                                "solarized" = "scale_color_solarized()",
+                                                "stata" = "scale_color_stata()",
+                                                "tableau" = "scale_color_tableau()",
+                                                "wsj" = "scale_color_wsj()"
+                                         )
+        )
+        )}
+    }    
 
 
     
