@@ -272,8 +272,10 @@ ui <- fluidPage(
                  ########## 2.2.2 Select Variables ##########
                  # Define Conditional-Panel for when Variables tab is selected
                  conditionalPanel(condition = "input.activeTab == 'variables'",
+                                  # Set title
+                                  h3("X-Achsen Variable"),
                                   # X-Axis Variable
-                                  selectInput("x_var", "X-Achsen Variable", choices = c(""), selected = ""),
+                                  selectInput("x_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
                                   conditionalPanel(condition = "output.is_numeric_x == false",
                                                    # Create a Layout for CollapsePanels
@@ -288,10 +290,13 @@ ui <- fluidPage(
                                                               )
                                                    )
                                   ),
+                                  # Set title
+                                  h3("y-Achsen Variable"),
                                   # Y-Axis Variable
-                                  selectInput("y_var", "Y-Achsen Variable", choices = c(""), selected = ""),
+                                  selectInput("y_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
                                   conditionalPanel(condition = "output.is_numeric_y == false",
+                                                   
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               
@@ -303,9 +308,11 @@ ui <- fluidPage(
                                                                 uiOutput("y_factor_rank_list")
                                                               )
                                                    )
-                                  ),                                                   
+                                  ),
+                                  # Set title
+                                  h3("Gruppierungs-Variable"),
                                   # Grouping Variable
-                                  selectInput("group_var", "Gruppierungs-Variable", choices = c(""), selected = ""),
+                                  selectInput("group_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
                                   conditionalPanel(condition =  "output.is_numeric_group == false",
                                                    # Create a Layout for CollapsePanels
@@ -319,8 +326,10 @@ ui <- fluidPage(
                                                               )
                                                    )
                                   ),
+                                  # Set title
+                                  h3("Variable für Spalten-Facettierung"),
                                   # Facet Grid - Columns
-                                  selectInput("grid_col_var", "Variable für Spalten-Facettierung", choices = c(""), selected = ""),
+                                  selectInput("grid_col_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
                                   conditionalPanel(condition =  "output.is_numeric_col == false",
                                                    # Create a Layout for CollapsePanels
@@ -335,8 +344,10 @@ ui <- fluidPage(
                                                                 )
                                                               )
                                   ),
+                                  # Set title
+                                  h3("Variable für Zeilen-Facettierung"),
                                   # Facet Grid - Rows
-                                  selectInput("grid_row_var", "Variable für Zeilen-Facettierung", choices = c(""), selected = ""),
+                                  selectInput("grid_row_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
                                   conditionalPanel(condition =  "output.is_numeric_row == false",
                                                    # Create a Layout for CollapsePanels
