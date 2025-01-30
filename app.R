@@ -255,38 +255,82 @@ ui <- fluidPage(
                                   # X-Axis Variable
                                   selectInput("x_var", "X-Achsen Variable", choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition = "input.x_var != ' '",
-                                                   uiOutput("x_factor_rank_list")  # Platzhalter für `rank_list()`
-                                                   # x_order <- rank_list(input_id = "x_factor_Order", 
-                                                   #                      text = "Faktoren ordnen",
-                                                   #                      labels = X_Factors$values, 
-                                                   #                      options = sortable_options(swap = TRUE)
-                                                   # )
-                                                   ),
+                                  conditionalPanel(condition = "output.is_numeric_x == false",
+                                                   # Create a Layout for CollapsePanels
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              
+                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                # Placeholder for the ranking-UI
+                                                                uiOutput("x_factor_rank_list")
+                                                              )
+                                                   )
+                                  ),
                                   # Y-Axis Variable
                                   selectInput("y_var", "Y-Achsen Variable", choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition = "input.y_var != ' '",
-                                                   uiOutput("y_factor_rank_list")  # Platzhalter für `rank_list()`
-                                                   ),
+                                  conditionalPanel(condition = "output.is_numeric_y == false",
+                                                   # Create a Layout for CollapsePanels
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              
+                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                # Placeholder for the ranking-UI
+                                                                uiOutput("y_factor_rank_list")
+                                                              )
+                                                   )
+                                  ),                                                   
                                   # Grouping Variable
                                   selectInput("group_var", "Gruppierungs-Variable", choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition = "input.group_var != ' '",
-                                                   uiOutput("group_factor_rank_list")  # Platzhalter für `rank_list()`
-                                                   ),
+                                  conditionalPanel(condition =  "output.is_numeric_group == false",
+                                                   # Create a Layout for CollapsePanels
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                # Placeholder for the ranking-UI
+                                                                uiOutput("group_factor_rank_list")
+                                                              )
+                                                   )
+                                  ),
                                   # Facet Grid - Columns
                                   selectInput("grid_col_var", "Variable für Spalten-Facettierung", choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition = "input.grid_col_var != ' '",
-                                                   uiOutput("grid_col_factor_rank_list")  # Platzhalter für `rank_list()`
-                                                   ),
+                                  conditionalPanel(condition =  "output.is_numeric_col == false",
+                                                   # Create a Layout for CollapsePanels
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              
+                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                # Placeholder for the ranking-UI
+                                                                uiOutput("grid_col_factor_rank_list")
+                                                                )
+                                                              )
+                                  ),
                                   # Facet Grid - Rows
                                   selectInput("grid_row_var", "Variable für Zeilen-Facettierung", choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition = "input.grid_row_var != ' '",
-                                                   uiOutput("grid_row_factor_rank_list")  # Platzhalter für `rank_list()`
-                                                   )),
+                                  conditionalPanel(condition =  "output.is_numeric_row == false",
+                                                   # Create a Layout for CollapsePanels
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                # Placeholder for the ranking-UI
+                                                                uiOutput("grid_row_factor_rank_list")
+                                                                )
+                                                              )
+                                                   )
+                                  ),
                  
                  
                  
@@ -797,7 +841,12 @@ ui <- fluidPage(
 
 #################### 3. Server ####################
 server <- function(input, output, session) {
-  X_Factors <- reactiveValues(values = NA)  
+  X_Factors <- reactiveValues(values = NA)
+  is_numeric_x <- reactiveVal(NULL)
+  is_numeric_y <- reactiveVal(value = NA)
+  is_numeric_group <- reactiveVal(value = NA)
+  is_numeric_grid_col <- reactiveVal(value = NA)
+  is_numeric_grid_row <- reactiveVal(value = NA)
   
   
   ############### 3.1 Read Data ###############
@@ -967,7 +1016,7 @@ server <- function(input, output, session) {
     req(input$group_var)  
     req(input$grid_col_var)  
     req(input$grid_row_var)  
-    
+
     
     x_data <- data()[[input$x_var]]
     y_data <- data()[[input$y_var]]
@@ -977,10 +1026,13 @@ server <- function(input, output, session) {
     
     if (is.factor(x_data)) {
       Factors$x_values <- levels(x_data)
+      is_numeric_x(FALSE)
     } else if (is.character(x_data)) {
       Factors$x_values <- unique(x_data)
+      is_numeric_x(FALSE)
     } else {
       Factors$x_values <- c("")
+      is_numeric_x(TRUE)
     }
     
     if (is.factor(y_data)) {
@@ -1016,6 +1068,78 @@ server <- function(input, output, session) {
     }
   })
   
+  output$is_numeric_x <- reactive({
+    req(input$x_var, data())  # Stelle sicher, dass x_var existiert
+    
+    x_data <- data()[[input$x_var]]
+    
+    if (is.factor(x_data) || is.character(x_data)) {
+      return(FALSE)  # Kein numerischer Wert
+    } else {
+      return(TRUE)  # Numerischer Wert
+    }
+  })
+  
+  
+  output$is_numeric_y <- reactive({
+    req(input$y_var, data())  # Stelle sicher, dass x_var existiert
+    
+    y_data <- data()[[input$y_var]]
+    
+    if (is.factor(y_data) || is.character(y_data)) {
+      return(FALSE)  # Kein numerischer Wert
+    } else {
+      return(TRUE)  # Numerischer Wert
+    }
+  })
+  
+  
+  output$is_numeric_group <- reactive({
+    req(input$group_var, data())  # Stelle sicher, dass x_var existiert
+    
+    group_data <- data()[[input$group_var]]
+    
+    if (is.factor(group_data) || is.character(group_data)) {
+      return(FALSE)  # Kein numerischer Wert
+    } else {
+      return(TRUE)  # Numerischer Wert
+    }
+  })
+  
+  
+  output$is_numeric_col <- reactive({
+    req(input$grid_col_var, data())  # Stelle sicher, dass x_var existiert
+    
+    gridcol_data <- data()[[input$grid_col_var]]
+    
+    if (is.factor(gridcol_data) || is.character(gridcol_data)) {
+      return(FALSE)  # Kein numerischer Wert
+    } else {
+      return(TRUE)  # Numerischer Wert
+    }
+  })
+  
+  
+  output$is_numeric_row <- reactive({
+    req(input$grid_row_var, data())  # Stelle sicher, dass x_var existiert
+    
+    grid_row <- data()[[input$grid_row_var]]
+    
+    if (is.factor(grid_row) || is.character(grid_row)) {
+      return(FALSE)  # Kein numerischer Wert
+    } else {
+      return(TRUE)  # Numerischer Wert
+    }
+  })
+  
+  # Hide Output variables
+  outputOptions(output, "is_numeric_x", suspendWhenHidden = FALSE)
+  outputOptions(output, "is_numeric_y", suspendWhenHidden = FALSE)
+  outputOptions(output, "is_numeric_group", suspendWhenHidden = FALSE)
+  outputOptions(output, "is_numeric_col", suspendWhenHidden = FALSE)
+  outputOptions(output, "is_numeric_row", suspendWhenHidden = FALSE)
+  
+  
   # Reset factor codes
   observeEvent(input$x_var, {
     x_factor_code("")
@@ -1037,42 +1161,37 @@ server <- function(input, output, session) {
     grid_row_factor_code("")
     factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
   
-  # **Dynamische UI für `rank_list()`**
+  # Create dynamic UI for rank_list()
   output$x_factor_rank_list <- renderUI({
     rank_list(input_id = "x_factor_Order", 
-              text = "Faktoren ordnen",
               labels = Factors$x_values,  
               options = sortable_options(swap = TRUE))
   })
   
-  # **Dynamische UI für `rank_list()`**
+  # Create dynamic UI for rank_list()
   output$y_factor_rank_list <- renderUI({
     rank_list(input_id = "y_factor_Order", 
-              text = "Faktoren ordnen",
               labels = Factors$y_values,  
               options = sortable_options(swap = TRUE))
   })
   
-  # **Dynamische UI für `rank_list()`**
+  # Create dynamic UI for rank_list()
   output$group_factor_rank_list <- renderUI({
     rank_list(input_id = "group_factor_Order", 
-              text = "Faktoren ordnen",
               labels = Factors$group_values,  
               options = sortable_options(swap = TRUE))
   })
   
-  # **Dynamische UI für `rank_list()`**
+  # Create dynamic UI for rank_list()
   output$grid_col_factor_rank_list <- renderUI({
     rank_list(input_id = "grid_col_factor_Order", 
-              text = "Faktoren ordnen",
               labels = Factors$grid_cols_values,  
               options = sortable_options(swap = TRUE))
   })
   
-  # **Dynamische UI für `rank_list()`**
+  # Create dynamic UI for rank_list()
   output$grid_row_factor_rank_list <- renderUI({
     rank_list(input_id = "grid_row_factor_Order", 
-              text = "Faktoren ordnen",
               labels = Factors$grid_row_values,  
               options = sortable_options(swap = TRUE))
   })
