@@ -968,6 +968,7 @@ server <- function(input, output, session) {
     req(input$grid_col_var)  
     req(input$grid_row_var)  
     
+    
     x_data <- data()[[input$x_var]]
     y_data <- data()[[input$y_var]]
     goup_data <- data()[[input$group_var]]
@@ -1025,7 +1026,7 @@ server <- function(input, output, session) {
   
   # **Dynamische UI für `rank_list()`**
   output$y_factor_rank_list <- renderUI({
-    rank_list(input_id = "x_factor_Order", 
+    rank_list(input_id = "y_factor_Order", 
               text = "Faktoren ordnen",
               labels = Factors$y_values,  
               options = sortable_options(swap = TRUE))
@@ -1033,7 +1034,7 @@ server <- function(input, output, session) {
   
   # **Dynamische UI für `rank_list()`**
   output$group_factor_rank_list <- renderUI({
-    rank_list(input_id = "x_factor_Order", 
+    rank_list(input_id = "group_factor_Order", 
               text = "Faktoren ordnen",
               labels = Factors$group_values,  
               options = sortable_options(swap = TRUE))
@@ -1041,7 +1042,7 @@ server <- function(input, output, session) {
   
   # **Dynamische UI für `rank_list()`**
   output$grid_col_factor_rank_list <- renderUI({
-    rank_list(input_id = "x_factor_Order", 
+    rank_list(input_id = "grid_col_factor_Order", 
               text = "Faktoren ordnen",
               labels = Factors$grid_cols_values,  
               options = sortable_options(swap = TRUE))
@@ -1049,7 +1050,7 @@ server <- function(input, output, session) {
   
   # **Dynamische UI für `rank_list()`**
   output$grid_row_factor_rank_list <- renderUI({
-    rank_list(input_id = "x_factor_Order", 
+    rank_list(input_id = "grid_row_factor_Order", 
               text = "Faktoren ordnen",
               labels = Factors$grid_row_values,  
               options = sortable_options(swap = TRUE))
@@ -1059,11 +1060,43 @@ server <- function(input, output, session) {
   
   
   
+
   
   
   
+  ############### 3.X Check for changes ###############
+  factor_code <- reactiveVal(value = "")
   
-  ############### 3.X Update Variable Selection UI ###############
+  observeEvent(input$x_factor_Order, {
+    req(data(), input$x_factor_Order, input$x_var)  # Sicherstellen, dass alle Werte existieren
+    
+    # Initialisierung der Variable für den generierten Code
+    new_factor_code <- ""
+    
+    # Überprüfung, ob sich die Reihenfolge der Faktoren geändert hat
+    if (!identical(Factors$x_values, input$x_factor_Order)) {
+      if (is.factor(data()[[input$x_var]])) {
+        new_factor_code <- sprintf("df$'%s' <- factor(df$'%s', levels = c(%s))", 
+                               input$x_var, input$x_var, 
+                               paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
+      } else if (is.character(data()[[input$x_var]])) {
+        new_factor_code <- sprintf("df$'%s' <- factor(df$'%s', levels = c(%s))", 
+                               input$x_var, input$x_var, 
+                               paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
+      }
+      
+      showNotification("Nicht mehr original!!!!", type = "warning")
+    }
+    
+    # Aktualisieren der reaktiven Variable
+    factor_code(new_factor_code)
+    
+    # Speichern des generierten Codes in der reaktiven Variable
+    # Factors$factor_code <- factor_code
+    
+    # showNotification(factor_code(), type = "warning")
+    
+  })
 
   
   
@@ -1130,7 +1163,7 @@ server <- function(input, output, session) {
     
     ########## 3.3.2 Generate Code-Output ##########
     # Define Code Lines
-    r_code <- sprintf("q <- ggplot(data(), aes_string(x = '%s', y = '%s'", x_var, y_var)
+    r_code <- sprintf("q <- ggplot(df, aes_string(x = '%s', y = '%s'", x_var, y_var)
     
     
     
@@ -2462,9 +2495,16 @@ server <- function(input, output, session) {
   })
   
   output$plot <- renderPlot({
-    req(data())
-    req(r_code())
+    req(data(), r_code())
 
+
+    df <- data()
+    
+    if (!is.null(factor_code()) && !identical(factor_code(), "")) {
+      eval(parse(text = factor_code()))
+    }
+    
+    
     # Code ausführen und 'q' erstellen
     eval(parse(text = r_code()))
     
@@ -2482,12 +2522,15 @@ server <- function(input, output, session) {
   ############### 3.7 Execute Code ###############
   # Create reactive full code
   reactive_full_code <- reactive({
+    df <- data()
+    
     # Require that r_code exists
     req(r_code())
     
     # Define Code-Line for ggplot2
     full_code <- "library(ggplot2)"
     
+
     # Define Code-Line for ggthemes if needed
     # Check if themes is by ggthemes
     if(input$plot_theme %in% c("Calc", "the Economist", "the Economist White", "Excel", "Few", "FiveThirtyEight", 
@@ -2510,6 +2553,13 @@ server <- function(input, output, session) {
                                   "tron", "uchicago", "ucscgb", "jco")) {
       # Add line for loading ggsci
       full_code <- paste0(full_code, "\nlibrary(ggsci)")
+    }
+    
+    if (!is.null(factor_code()) && !identical(factor_code(), "")) {
+      full_code <- paste0(full_code, "\n\n")
+
+      full_code <- paste0(full_code, factor_code())
+      showNotification("Factor-Code pasted!")
     }
     
     
