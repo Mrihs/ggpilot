@@ -242,7 +242,7 @@ ui <- fluidPage(
                                   # Add Button for File Input
                                   fileInput("file", "Datensatz auswählen",
                                             buttonLabel = "Durchsuchen", placeholder = "Keine Datei ausgewählt", 
-                                            accept = c(".csv", ".xlsx", ".rds"))),
+                                            accept = c(".csv", ".xlsx", ".rds", ".RData"))),
                  
                  
                  
@@ -919,19 +919,38 @@ server <- function(input, output, session) {
       
       # If file type is csv, read csv-File
       if (file_ext == "csv") {
-        read.csv(input$file$datapath, header = TRUE)
+        return(read.csv(input$file$datapath, header = TRUE))
       }
       # If file type is xlsx, read xlsx-File
       else if (file_ext == "xlsx") {
-        read_excel(input$file$datapath)
+        return(readxl::read_excel(input$file$datapath))
       }
       # If file type is rds, load rds-File
       else if (file_ext == "rds") {
-        readRDS(input$file$datapath)
+        return(readRDS(input$file$datapath))
+      }
+      # If file type is rds, load rds-File
+      else if (file_ext == "rdata") {
+        # Create new environment
+        env <- new.env()
+        
+        # Load file
+        load(input$file$datapath, envir = env)
+        
+        # List all files in environment
+        obj_names <- ls(env)
+        
+        # Select first object of .RData-File if there is only one object
+        if (length(obj_names) == 1) {
+          return(env[[obj_names[1]]])
+          # Give error-message if there are more objects in the .RData-File
+        } else {
+          stop("Das .RData-File beinhaltet mehrere Objekte. Bitte .RData-File mit nur einem Objekt verwenden.")
+        }
       }
       # If file is other type, stop
       else {
-        stop("Unbekanntes Dateiformat. Bitte laden Sie eine CSV-, XLSX- oder RDS-Datei hoch.")
+        stop("Unbekanntes Dateiformat. Bitte laden Sie eine CSV-, XLSX-, rdata oder RDS-Datei hoch.")
       }
     }})
   
