@@ -1069,11 +1069,12 @@ server <- function(input, output, session) {
   factor_code <- reactiveVal(value = "")
   x_factor_code <- reactiveVal(value = "")
   y_factor_code <- reactiveVal(value = "")
+  group_factor_code <- reactiveVal(value = "")
   
   # Check for Update on order of levels on x-factor
   observeEvent(input$x_factor_Order, {
     # Require data
-    req(data(), input$x_factor_Order, input$x_var, y_factor_code)
+    req(data(), input$x_factor_Order, input$x_var)
     
     # Initate new_factor_code
     new_x_factor_code <- ""
@@ -1094,9 +1095,11 @@ server <- function(input, output, session) {
       }
     }
     
+    # Update reactive x-factor variable
     x_factor_code(new_x_factor_code)
     
-    new_factor_code <- paste(x_factor_code(), y_factor_code())
+    # Create new factor-code
+    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code())
     
     # Update factor_code
     factor_code(new_factor_code)
@@ -1105,7 +1108,7 @@ server <- function(input, output, session) {
   # Check for Update on order of levels on y-factor
   observeEvent(input$y_factor_Order, {
     # Require data
-    req(data(), input$y_factor_Order, input$y_var, x_factor_code)
+    req(data(), input$y_factor_Order, input$y_var)
     
     # Initate new_factor_code
     new_y_factor_code <- ""
@@ -1126,14 +1129,49 @@ server <- function(input, output, session) {
       }
     }
     
+    # Update reactive y-factor variable
     y_factor_code(new_y_factor_code)
     
-    new_factor_code <- paste(x_factor_code(), y_factor_code())
+    # Create new factor-code
+    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code())
     
     # Update factor_code
     factor_code(new_factor_code)
   })
+  
+  # Check for Update on order of levels on grouping-factor
+  observeEvent(input$group_factor_Order, {
+    # Require data
+    req(data(), input$group_factor_Order, input$group_var)
 
+    # Initate new_factor_code
+    new_group_factor_code <- ""
+
+    # Check if order has changed
+    if (!identical(Factors$group_values, input$group_factor_Order)) {
+      # Adjust factors if variable is factor
+      if (is.factor(data()[[input$group_var]])) {
+        new_group_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
+                                     input$group_var, input$group_var,
+                                     paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))
+      }
+      # Make factor if variable is not a factor
+      else if (is.character(data()[[input$group_var]])) {
+        new_group_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
+                                     input$group_var, input$group_var,
+                                     paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))
+      }
+    }
+
+    # Update reactive group-factor variable
+    group_factor_code(new_group_factor_code)
+
+    # Create new factor-code
+    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code())
+
+    # Update factor_code
+    factor_code(new_factor_code)
+  })
   
   
   
