@@ -651,7 +651,7 @@ ui <- fluidPage(
                                                    ),
                                                    column(6,
                                                           h3("Y-Achse"),
-                                                          selectInput(inputId = "Axis_Y_Linetype", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                                          selectInput(inputId = "Axis_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Axis_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Axis_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    )
