@@ -532,22 +532,24 @@ ui <- fluidPage(
                                                    )
                                                    
                                   ),
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             
-                                             # Create a Collapse-Panel for Errorbar-Settings
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Fehlerbalken"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   # Dropdown to select the type of Errorbar
-                                                   selectInput(inputId = "error_type", label = "Einheit", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
-                                                   # Numeric Input for the width of the Errorbar
-                                                   numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
-                                                   # Numeric Input for the width of the Errorbar
-                                                   numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, max = 2, step = 0.1, value = "")
-                                               )
-                                             )
+                                  conditionalPanel(condition = "output.show_errorbar_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              
+                                                              # Create a Collapse-Panel for Errorbar-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Fehlerbalken"),
+                                                                # Define CSS Settings
+                                                                div(class = ".collapse_panel-settings",
+                                                                    # Dropdown to select the type of Errorbar
+                                                                    selectInput(inputId = "error_type", label = "Einheit", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
+                                                                    # Numeric Input for the width of the Errorbar
+                                                                    numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
+                                                                    # Numeric Input for the width of the Errorbar
+                                                                    numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, max = 2, step = 0.1, value = "")
+                                                                )
+                                                              )
+                                                   )
                                   )
                  ),
                  
@@ -578,31 +580,33 @@ ui <- fluidPage(
                  ########## 2.2.5 Layout ##########
                  # Define Conditional-Panel for when layout tab is selected
                  conditionalPanel(condition = "input.activeTab == 'layout'",
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow("Überschrift"),
-                                               div(class = ".collapse_panel-settings",
-                                                   column(6,
-                                                          h3("Titel"),
-                                                          # Text-Input for the Title
-                                                          selectInput(inputId = "Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-                                                   ),
-                                                   column(6,
-                                                          h3("Untertitel"),
-                                                          title = BSCollapseArrow("Untertitel"),
-                                                          # Text-Input for the X-Axis-Title
-                                                          selectInput(inputId = "Subtitle_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Subtitle_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Subtitle_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Subtitle_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-                                                   )
-                                               )
-                                             )
+                                  conditionalPanel(condition = "output.show_title_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              bsCollapsePanel(
+                                                                title = BSCollapseArrow("Überschrift"),
+                                                                div(class = ".collapse_panel-settings",
+                                                                    column(6,
+                                                                           h3("Titel"),
+                                                                           # Text-Input for the Title
+                                                                           selectInput(inputId = "Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           numericInput(inputId = "Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                    ),
+                                                                    column(6,
+                                                                           h3("Untertitel"),
+                                                                           title = BSCollapseArrow("Untertitel"),
+                                                                           # Text-Input for the X-Axis-Title
+                                                                           selectInput(inputId = "Subtitle_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Subtitle_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Subtitle_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           numericInput(inputId = "Subtitle_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                    )
+                                                                )
+                                                              )
+                                                              )
                                              ),
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
@@ -1038,6 +1042,38 @@ server <- function(input, output, session) {
   
   output$show_facet_options <- reactive({ show_facet_options() })
   outputOptions(output, "show_facet_options", suspendWhenHidden = FALSE)
+  
+  
+  show_errorbar_options <- reactiveVal(value = FALSE)
+  
+  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
+    if(activePlot() == "Bar" | activePlot() == "Line"){
+      show_errorbar_options(TRUE)
+      showNotification(show_errorbar_options())}
+    else{
+      show_errorbar_options(FALSE)
+      showNotification(show_errorbar_options())}
+  })
+  
+  output$show_errorbar_options <- reactive({ show_errorbar_options() })
+  outputOptions(output, "show_errorbar_options", suspendWhenHidden = FALSE)
+  
+  
+  
+  show_title_options <- reactiveVal(value = FALSE)
+
+  observeEvent(list(input$plot_title, input$plot_subtitle), {
+    if(input$plot_title == "" & input$plot_subtitle ==""){
+      show_title_options(FALSE)
+      showNotification(show_title_options())}
+    else{
+      show_title_options(TRUE)
+      showNotification(show_title_options())}
+  })
+
+  output$show_title_options <- reactive({ show_title_options() })
+  outputOptions(output, "show_title_options", suspendWhenHidden = FALSE)
+  
   
   
   
