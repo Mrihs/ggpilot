@@ -576,7 +576,9 @@ ui <- fluidPage(
                                                                     # Numeric Input for the width of the Errorbar
                                                                     numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
                                                                     # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, max = 2, step = 0.1, value = "")
+                                                                    numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, step = 0.1, value = ""),
+                                                                    # Numeric Input for the width of the Errorbar
+                                                                    numericInput(inputId = "error_size", label = "Grösse der Fehlerbalken-Linien", min = 0, step = 0.1, value = "")
                                                                 )
                                                               )
                                                    )
@@ -1788,6 +1790,8 @@ server <- function(input, output, session) {
     
     # Errorbar Width
     error_width <- if (!is.na(input$error_width)) input$error_width else NULL
+    # Errorbar Size
+    error_size <- if (!is.na(input$error_size)) input$error_size else NULL 
     # Position-Dodge value
     dodge_value <- if (is.na(input$dodge_value)==TRUE) NA else input$dodge_value
     # Scatter-Point size
@@ -1879,7 +1883,10 @@ server <- function(input, output, session) {
                                              "mean_sdl" # Default-Wert
                                            )))
           if (!is.null(error_width)) {
-            r_code <- paste0(r_code, sprintf(", width = %s", error_width))
+            r_code <- paste0(r_code, sprintf(", width = %.1f", error_width))
+          }
+          if (!is.null(error_size)) {
+            r_code <- paste0(r_code, sprintf(", size = %.1f", error_size))
           }
           if (!is.na(dodge_value)) {
             r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
