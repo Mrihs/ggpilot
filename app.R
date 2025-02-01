@@ -466,7 +466,7 @@ ui <- fluidPage(
                                                    # Numeric Input for the width of the Errorbar
                                                    numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
                                                    # Numeric Input for the width of the Errorbar
-                                                   numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5)
+                                                   numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, max = 2, step = 0.1, value = "")
                                                )
                                              ),
                                              
@@ -477,7 +477,7 @@ ui <- fluidPage(
                                                # Define CSS Settings
                                                div(class = ".collapse_panel-settings",
                                                    # Numeric Input for the position-dodge value
-                                                   numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = 0.9)
+                                                   numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = "")
                                                )
                                              ),
 
@@ -647,13 +647,13 @@ ui <- fluidPage(
                                                           h3("X-Achse"),
                                                           selectInput(inputId = "Axis_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Axis_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Axis_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
                                                    column(6,
                                                           h3("Y-Achse"),
                                                           selectInput(inputId = "Axis_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Axis_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Axis_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    )
                                                )
                                              ),
@@ -662,17 +662,17 @@ ui <- fluidPage(
                                                div(class = ".collapse_panel-settings",
                                                    column(6,
                                                           h3("X-Achse"),
-                                                          numericInput(inputId = "Axis_X_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Axis_X_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           selectInput(inputId = "Axis_X_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Axis_X_Ticks_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          numericInput(inputId = "Axis_X_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Axis_X_Ticks_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                          numericInput(inputId = "Axis_X_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA)
                                                    ),
                                                    column(6,
                                                           h3("Y-Achse"),
-                                                          numericInput(inputId = "Axis_Y_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Axis_Y_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           selectInput(inputId = "Axis_Y_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Axis_Y_Ticks_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          numericInput(inputId = "Axis_Y_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Axis_Y_Ticks_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                          numericInput(inputId = "Axis_Y_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA)
                                                    )
                                                )
                                              ),
@@ -683,13 +683,13 @@ ui <- fluidPage(
                                                           h3("X-Achse"),
                                                           selectInput(inputId = "Major_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Major_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Major_Grid_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Major_Grid_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
                                                    column(6,
                                                           h3("Y-Achse"),
                                                           selectInput(inputId = "Major_Grid_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Major_Grid_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Major_Grid_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Major_Grid_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    )
                                                )
                                              ),
@@ -700,13 +700,13 @@ ui <- fluidPage(
                                                           h3("X-Achse"),
                                                           selectInput(inputId = "Minor_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Minor_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Minor_Grid_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Minor_Grid_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
                                                    column(6,
                                                           h3("Y-Achse"),
                                                           selectInput(inputId = "Minor_Grid_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Minor_Grid_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Minor_Grid_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Minor_Grid_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    )
                                                )
                                              ),
@@ -715,14 +715,14 @@ ui <- fluidPage(
                                                div(class = ".collapse_panel-settings",
                                                    column(6,
                                                           h3("Plot"),
-                                                          textInput(inputId = "Plot_Background_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                          textInput(inputId = "Plot_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           selectInput(inputId = "Plot_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Plot_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Plot_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
                                                    column(6,
                                                           h3("Panel"),
-                                                          textInput(inputId = "Panel_Background_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                          textInput(inputId = "Panel_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           selectInput(inputId = "Panel_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Panel_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Panel_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
@@ -758,7 +758,7 @@ ui <- fluidPage(
                                                    column(6,
                                                           h3("Legenden-Box"),
                                                           title = BSCollapseArrow("Legenden-Hintergrund"),
-                                                          textInput(inputId = "Legend_Background_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                          textInput(inputId = "Legend_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           selectInput(inputId = "Legend_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Legend_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Legend_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
@@ -789,14 +789,14 @@ ui <- fluidPage(
                                                div(class = ".collapse_panel-settings",
                                                    column(6,
                                                           h3("Zeilen"),
-                                                          textInput(inputId = "Stripe_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                          textInput(inputId = "Stripe_X_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           selectInput(inputId = "Stripe_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Stripe_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Stripe_X_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
                                                    column(6,
                                                           h3("Spalten"),
-                                                          textInput(inputId = "Stripe_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                          textInput(inputId = "Stripe_Y_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           selectInput(inputId = "Stripe_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Stripe_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Stripe_Y_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
