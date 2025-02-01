@@ -550,6 +550,36 @@ ui <- fluidPage(
                                                                 )
                                                               )
                                                    )
+                                  ),
+                                  conditionalPanel(condition = "output.show_scatter_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Scatterplot-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Scatterplot"),
+                                                                # Define CSS Settings
+                                                                div(class = ".collapse_panel-settings",
+                                                                    # Dropdown to select the size of the Points
+                                                                    numericInput(inputId = "scatterpoint_size", label = "Grösse der Punkte", min = 0, step = .1, value = ""),
+                                                                )
+                                                              )
+                                                   )
+                                  ),
+                                  conditionalPanel(condition = "output.show_scatter_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Scatterplot-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Regressionslinie"),
+                                                                checkboxInput(inputId = "show_line", label = "Regressionslinie anzeigen", value = FALSE),
+                                                                conditionalPanel(condition = "input.show_line",
+                                                                                 checkboxInput(inputId = "scater_line_full_range", label = "Regressionslinie verlängern", value = FALSE),
+                                                                                     selectInput(inputId = "scater_line_type", label = "Linien-Art", choices = c("Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Solide"),
+                                                                                     numericInput(inputId = "scater_line_size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                                                                     checkboxInput(inputId = "scater_line_show_se", label = "Standardfehler anzeigen", value = TRUE)
+                                                                )
+                                                              )
+                                                   )
                                   )
                  ),
                  
@@ -1045,19 +1075,26 @@ server <- function(input, output, session) {
   
   
   show_errorbar_options <- reactiveVal(value = FALSE)
+  show_scatter_options <- reactiveVal(value = FALSE)
   
   observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
     if(activePlot() == "Bar" | activePlot() == "Line"){
       show_errorbar_options(TRUE)
-      showNotification(show_errorbar_options())}
-    else{
+      show_scatter_options(FALSE)}
+    else if (activePlot() == "Scatter"){
+      show_scatter_options(TRUE)
       show_errorbar_options(FALSE)
-      showNotification(show_errorbar_options())}
+    }
+    else{
+      show_scatter_options(FALSE)
+      show_errorbar_options(FALSE)}
   })
+  
+  output$show_scatter_options <- reactive({ show_scatter_options() })
+  outputOptions(output, "show_scatter_options", suspendWhenHidden = FALSE)
   
   output$show_errorbar_options <- reactive({ show_errorbar_options() })
   outputOptions(output, "show_errorbar_options", suspendWhenHidden = FALSE)
-  
   
   
   show_title_options <- reactiveVal(value = FALSE)
@@ -1698,6 +1735,8 @@ server <- function(input, output, session) {
     error_width <- if (!is.na(input$error_width)) input$error_width else NULL
     # Position-Dodge value
     dodge_value <- if (is.na(input$dodge_value)==TRUE) NA else input$dodge_value
+    # Scatter-Point size
+    scatterpoint_size <-  if (is.na(input$scatterpoint_size)==TRUE) NA else input$scatterpoint_size
     # Selected Theme
     theme_selected <- input$plot_theme
     # Selected Color-Palette
@@ -1811,9 +1850,35 @@ server <- function(input, output, session) {
         if (!is.na(dodge_value)) {
           r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
         }
+        
+        if (!is.na(scatterpoint_size)){
+          r_code <- paste0(r_code, sprintf(", size = %s", scatterpoint_size))
+        }
         r_code <- paste0(r_code, ")")
         
-        
+        if(input$show_line==TRUE){
+          r_code <- paste0(r_code, " +\n  geom_smooth(method = 'lm'")
+          if(input$scater_line_show_se==FALSE){
+            r_code <- paste0(r_code, ", se = FALSE")
+          }
+          if(!is.na(input$scater_line_size)){
+            r_code <- paste0(r_code, ", size = ", input$scater_line_size)
+          }
+          if (input$scater_line_type != "Solide") {
+            r_code <- paste0(r_code, sprintf(", linetype = '%s'",
+                                                               switch(input$scater_line_type,
+                                                                      "Solide" = "solid",
+                                                                      "Gestrichelt" = "dashed",
+                                                                      "Gepunkted" = "dotted",
+                                                                      "Punktgestrichelt" = "dotdash",
+                                                                      "Langgestrichen" = "longdash",
+                                                                      "Doppelt gestrichelt" = "twodash"
+                                                               )))}
+          if(input$scater_line_full_range){
+            r_code <- paste0(r_code, ", fullrange = TRUE")
+          }
+          r_code <- paste0(r_code, ")")
+        }
       }
     }
     
