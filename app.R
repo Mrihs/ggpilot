@@ -219,7 +219,7 @@ ui <- fluidPage(
     # Set the Input to be hidden
     style = "display: none;"
   ),  
-
+  
   # Define Sidebar-Layout
   sidebarLayout(
     
@@ -263,7 +263,7 @@ ui <- fluidPage(
                                   actionButton("plot_line", label = HTML('<img src="Icon_Line.png" height="100px" style="horizontal-align: middle;"> <br> Linien'), class = "plot-btn"),
                                   actionButton("plot_box", label = HTML('<img src="Icon_Box.png" height="100px" style="horizontal-align: middle;"> <br> Boxplot'), class = "plot-btn"),
                                   actionButton("plot_scatter", label = HTML('<img src="Icon_Scatter.png" height="100px" style="horizontal-align: middle;"> <br> Scatter'), class = "plot-btn")
-                                  ),
+                 ),
                  
                  
                  
@@ -341,8 +341,8 @@ ui <- fluidPage(
                                                                 title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
                                                                 # Placeholder for the ranking-UI
                                                                 uiOutput("grid_col_factor_rank_list")
-                                                                )
                                                               )
+                                                   )
                                   ),
                                   # Set title
                                   h3("Variable für Zeilen-Facettierung"),
@@ -358,10 +358,10 @@ ui <- fluidPage(
                                                                 title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
                                                                 # Placeholder for the ranking-UI
                                                                 uiOutput("grid_row_factor_rank_list")
-                                                                )
                                                               )
                                                    )
-                                  ),
+                                  )
+                 ),
                  
                  
                  
@@ -480,7 +480,7 @@ ui <- fluidPage(
                                                    numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = "")
                                                )
                                              ),
-
+                                             
                                              # Create a Collapse-Panel for Color-Palette-Settings
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
@@ -529,14 +529,14 @@ ui <- fluidPage(
                                                                         }
                                                                       });
                                                                     "))
-                                                                    ),
+                                                   ),
                                                    
                                                    selectInput(inputId = "color_palette_target", label = "Farbelette anwenden auf...", 
                                                                choices = c("Füllung", "Linien", "Füllung und Linien"), selected = "Füllung")
-                                                   )
                                                )
                                              )
-                                  ),
+                                  )
+                 ),
                  
                  
                  
@@ -589,7 +589,9 @@ ui <- fluidPage(
                                                           selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                                                    )
                                                )
+                                             )
                                              ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Achsen-Überschrift"),
                                                div(class = ".collapse_panel-settings", 
@@ -612,7 +614,9 @@ ui <- fluidPage(
                                                           selectInput(inputId = "Y_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                                                    )
                                                )
-                                             ),
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Achsen-Text"),
                                                div(class = ".collapse_panel-settings",
@@ -639,7 +643,9 @@ ui <- fluidPage(
                                                           selectInput(inputId = "Axis_Y_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
                                                    )
                                                )
-                                             ),
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Achsen-Linien"),
                                                div(class = ".collapse_panel-settings",
@@ -656,7 +662,9 @@ ui <- fluidPage(
                                                           textInput(inputId = "Axis_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    )
                                                )
-                                             ),
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Achsen-Ticks"),
                                                div(class = ".collapse_panel-settings",
@@ -675,7 +683,9 @@ ui <- fluidPage(
                                                           numericInput(inputId = "Axis_Y_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA)
                                                    )
                                                )
-                                             ),
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Haupt-Linien"),
                                                div(class = ".collapse_panel-settings",
@@ -692,7 +702,9 @@ ui <- fluidPage(
                                                           textInput(inputId = "Major_Grid_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    )
                                                )
-                                             ),
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Minor-Linien"),
                                                div(class = ".collapse_panel-settings",
@@ -709,7 +721,9 @@ ui <- fluidPage(
                                                           textInput(inputId = "Minor_Grid_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    )
                                                )
-                                             ),
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Hintergrund"),
                                                div(class = ".collapse_panel-settings",
@@ -728,101 +742,116 @@ ui <- fluidPage(
                                                           textInput(inputId = "Panel_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    )
                                                )
-                                             ),
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow("Legende"),
-                                               div(class = ".collapse_panel-settings",
-                                                   column(6,
-                                                          h3("Titel"),
-                                                          # Text-Input for the Legend-Title
-                                                          selectInput(inputId = "Legend_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Legend_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Legend_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Legend_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                             )
+                                  ),
+                                  conditionalPanel(condition = "output.show_legend_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              bsCollapsePanel(
+                                                                title = BSCollapseArrow("Legende"),
+                                                                div(class = ".collapse_panel-settings",
+                                                                    column(6,
+                                                                           h3("Titel"),
+                                                                           # Text-Input for the Legend-Title
+                                                                           selectInput(inputId = "Legend_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Legend_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           numericInput(inputId = "Legend_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                    ),
+                                                                    column(6,
+                                                                           h3("Items"),
+                                                                           # Text-Input for the X-Axis-Title
+                                                                           selectInput(inputId = "Legend_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Legend_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           numericInput(inputId = "Legend_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Legend_Text_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                    )
+                                                                )
+                                                              )
                                                    ),
-                                                   column(6,
-                                                          h3("Items"),
-                                                          # Text-Input for the X-Axis-Title
-                                                          selectInput(inputId = "Legend_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Legend_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Legend_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Legend_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "Legend_Text_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-                                                   )
-                                               )
-                                             ),
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow("Legenden-Hintergrund"),
-                                               div(class = ".collapse_panel-settings",
-                                                   column(6,
-                                                          h3("Legenden-Box"),
-                                                          title = BSCollapseArrow("Legenden-Hintergrund"),
-                                                          textInput(inputId = "Legend_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          selectInput(inputId = "Legend_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Legend_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Legend_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
-                                                   )
-                                               )
-                                             ),
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow("Legenden-Optionen"),
-                                               div(class = ".collapse_panel-settings",
-                                                   column(6,
-                                                          h3("Anordnung"),
-                                                          selectInput(inputId = "Legend_Position", label = "Position der Legende", choices = c("Gemäss Theme", "Keine", "Rechts", "Links", "Unten", "Oben", "Im Plot"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Legend_Title_Position", label = "Position des Legenden-Titel", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Legend_Text_Position", label = "Position der Legenden-Items", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Legend_Text_Direktion", label = "Ausrichtung der Legenden-Items", choices = c("Gemäss Theme", "Vertikal", "Horizontal"), selected = "Gemäss Theme")
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              bsCollapsePanel(
+                                                                title = BSCollapseArrow("Legenden-Hintergrund"),
+                                                                div(class = ".collapse_panel-settings",
+                                                                    column(6,
+                                                                           h3("Legenden-Box"),
+                                                                           title = BSCollapseArrow("Legenden-Hintergrund"),
+                                                                           textInput(inputId = "Legend_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           selectInput(inputId = "Legend_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                                                           numericInput(inputId = "Legend_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                                                           textInput(inputId = "Legend_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                                    )
+                                                                )
+                                                              )
                                                    ),
-                                                   column(6,
-                                                          h3("Grösse & Abstände"),
-                                                          numericInput(inputId = "Legend_Key_Width", label = "Breite der Symbole", min = 0, max = 50, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Legend_Key_Height", label = "Höhe der Symbole", min = 0, max = 50, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Legend_Key_Spacing", label = "Abstand der Symbole", min = 0, max = 50, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Legend_Box_Spacing", label = "Abstand zum Plot", min = 0, max = 50, step = 0.1, value = NA)
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              bsCollapsePanel(
+                                                                title = BSCollapseArrow("Legenden-Optionen"),
+                                                                div(class = ".collapse_panel-settings",
+                                                                    column(6,
+                                                                           h3("Anordnung"),
+                                                                           selectInput(inputId = "Legend_Position", label = "Position der Legende", choices = c("Gemäss Theme", "Keine", "Rechts", "Links", "Unten", "Oben", "Im Plot"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Title_Position", label = "Position des Legenden-Titel", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Text_Position", label = "Position der Legenden-Items", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Text_Direktion", label = "Ausrichtung der Legenden-Items", choices = c("Gemäss Theme", "Vertikal", "Horizontal"), selected = "Gemäss Theme")
+                                                                    ),
+                                                                    column(6,
+                                                                           h3("Grösse & Abstände"),
+                                                                           numericInput(inputId = "Legend_Key_Width", label = "Breite der Symbole", min = 0, max = 50, step = 0.1, value = NA),
+                                                                           numericInput(inputId = "Legend_Key_Height", label = "Höhe der Symbole", min = 0, max = 50, step = 0.1, value = NA),
+                                                                           numericInput(inputId = "Legend_Key_Spacing", label = "Abstand der Symbole", min = 0, max = 50, step = 0.1, value = NA),
+                                                                           numericInput(inputId = "Legend_Box_Spacing", label = "Abstand zum Plot", min = 0, max = 50, step = 0.1, value = NA)
+                                                                    )
+                                                                )
+                                                              )
                                                    )
-                                               )
-                                             ),
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow("Facetten-Hintergrund"),
-                                               div(class = ".collapse_panel-settings",
-                                                   column(6,
-                                                          h3("Zeilen"),
-                                                          textInput(inputId = "Stripe_X_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          selectInput(inputId = "Stripe_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Stripe_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Stripe_X_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                  ),
+                                  conditionalPanel(condition = "output.show_facet_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              bsCollapsePanel(
+                                                                title = BSCollapseArrow("Facetten-Hintergrund"),
+                                                                div(class = ".collapse_panel-settings",
+                                                                    column(6,
+                                                                           h3("Zeilen"),
+                                                                           textInput(inputId = "Stripe_X_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           selectInput(inputId = "Stripe_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                                                           numericInput(inputId = "Stripe_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                                                           textInput(inputId = "Stripe_X_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                                    ),
+                                                                    column(6,
+                                                                           h3("Spalten"),
+                                                                           textInput(inputId = "Stripe_Y_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           selectInput(inputId = "Stripe_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                                                           numericInput(inputId = "Stripe_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                                                           textInput(inputId = "Stripe_Y_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                                    )
+                                                                )
+                                                              )
                                                    ),
-                                                   column(6,
-                                                          h3("Spalten"),
-                                                          textInput(inputId = "Stripe_Y_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          selectInput(inputId = "Stripe_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Stripe_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Stripe_Y_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
-                                                   )
-                                               )
-                                             ),
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow("Facetten-Beschriftung"),
-                                               div(class = ".collapse_panel-settings",
-                                                   column(6,
-                                                          h3("Zeilen"),
-                                                          selectInput(inputId = "Stripe_X_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Stripe_X_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Stripe_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Stripe_X_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "Stripe_X_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-                                                   ),
-                                                   column(6,
-                                                          h3("Spalten"),
-                                                          selectInput(inputId = "Stripe_Y_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Stripe_Y_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Stripe_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Stripe_Y_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "Stripe_Y_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
-                                                   )
-                                               )
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              bsCollapsePanel(
+                                                                title = BSCollapseArrow("Facetten-Beschriftung"),
+                                                                div(class = ".collapse_panel-settings",
+                                                                    column(6,
+                                                                           h3("Zeilen"),
+                                                                           selectInput(inputId = "Stripe_X_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Stripe_X_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Stripe_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           numericInput(inputId = "Stripe_X_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Stripe_X_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                    ),
+                                                                    column(6,
+                                                                           h3("Spalten"),
+                                                                           selectInput(inputId = "Stripe_Y_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Stripe_Y_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Stripe_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           numericInput(inputId = "Stripe_Y_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Stripe_Y_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                    )
+                                                                )
+                                                              )
+
                                              )
                                   )
                  ),
@@ -865,7 +894,7 @@ ui <- fluidPage(
     mainPanel(
       # Set the plot as output
       uiOutput("dynamic_plot"),
-
+      
       
       
       
@@ -873,13 +902,13 @@ ui <- fluidPage(
       # Add TextOutput for rcode
       column(11,
              verbatimTextOutput("rcode"),
-             ),
+      ),
       column(1,
              rclipboardSetup(),
              
              # UI output for copy-to-clipboard button
              uiOutput("clip"),
-             )
+      )
     )
   )
 )
@@ -967,6 +996,36 @@ server <- function(input, output, session) {
         stop("Unbekanntes Dateiformat. Bitte laden Sie eine CSV-, XLSX-, rdata oder RDS-Datei hoch.")
       }
     }})
+  
+  show_legend_options <- reactiveVal(value = FALSE)
+  
+  observeEvent(input$group_var, {
+    if(input$group_var == " "){
+      show_legend_options(FALSE)
+      showNotification(show_legend_options())}
+    else{
+      show_legend_options(TRUE)
+      showNotification(show_legend_options())}
+  })
+  
+  output$show_legend_options <- reactive({ show_legend_options() })
+  outputOptions(output, "show_legend_options", suspendWhenHidden = FALSE)
+  
+
+  show_facet_options <- reactiveVal(value = FALSE)
+  
+  observeEvent(list(input$grid_col_var, input$grid_row_var), {
+    if(input$grid_col_var == " " & input$grid_row_var == " "){
+      show_facet_options(FALSE)
+      showNotification(show_facet_options())}
+    else{
+      show_facet_options(TRUE)
+      showNotification(show_facet_options())}
+  })
+  
+  output$show_facet_options <- reactive({ show_facet_options() })
+  outputOptions(output, "show_facet_options", suspendWhenHidden = FALSE)
+  
   
   
   # Create reactive Value for active Tab
@@ -1102,7 +1161,7 @@ server <- function(input, output, session) {
     req(input$group_var)  
     req(input$grid_col_var)  
     req(input$grid_row_var)  
-
+    
     
     x_data <- data()[[input$x_var]]
     y_data <- data()[[input$y_var]]
@@ -1281,12 +1340,12 @@ server <- function(input, output, session) {
               labels = Factors$grid_row_values,  
               options = sortable_options(swap = TRUE))
   })
-
   
   
   
   
-
+  
+  
   
   
   
@@ -1312,14 +1371,14 @@ server <- function(input, output, session) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$x_var]])) {
         new_x_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
-                               input$x_var, input$x_var, 
-                               paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
+                                     input$x_var, input$x_var, 
+                                     paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
       } 
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$x_var]])) {
         new_x_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
-                               input$x_var, input$x_var, 
-                               paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
+                                     input$x_var, input$x_var, 
+                                     paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
       }
     }
     
@@ -1346,14 +1405,14 @@ server <- function(input, output, session) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$y_var]])) {
         new_y_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
-                                   input$y_var, input$y_var, 
-                                   paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))
+                                     input$y_var, input$y_var, 
+                                     paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))
       } 
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$y_var]])) {
         new_y_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
-                                   input$y_var, input$y_var, 
-                                   paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))
+                                     input$y_var, input$y_var, 
+                                     paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))
       }
     }
     
@@ -1371,29 +1430,29 @@ server <- function(input, output, session) {
   observeEvent(input$group_factor_Order, {
     # Require data
     req(data(), input$group_factor_Order, input$group_var)
-
+    
     # Initate new_factor_code
     new_group_factor_code <- ""
-
+    
     # Check if order has changed
     if (!identical(Factors$group_values, input$group_factor_Order)) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$group_var]])) {
         new_group_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                     input$group_var, input$group_var,
-                                     paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))
+                                         input$group_var, input$group_var,
+                                         paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))
       }
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$group_var]])) {
         new_group_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                     input$group_var, input$group_var,
-                                     paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))
+                                         input$group_var, input$group_var,
+                                         paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))
       }
     }
-
+    
     # Update reactive group-factor variable
     group_factor_code(new_group_factor_code)
-
+    
     # Create new factor-code
     new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
     
@@ -1414,14 +1473,14 @@ server <- function(input, output, session) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$grid_col_var]])) {
         new_gridcol_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                         input$grid_col_var, input$grid_col_var,
-                                         paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))
+                                           input$grid_col_var, input$grid_col_var,
+                                           paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))
       }
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$grid_col_var]])) {
         new_gridcol_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                         input$grid_col_var, input$grid_col_var,
-                                         paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))
+                                           input$grid_col_var, input$grid_col_var,
+                                           paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))
       }
     }
     
@@ -1512,10 +1571,10 @@ server <- function(input, output, session) {
         if (is_valid_color(color)) {
           manual_colors$values[[id]] <- color
           session$sendCustomMessage("validColor", list(id = paste0("vector_", id), valid = TRUE))
-          } else {
-            manual_colors$values[[id]] <- "gray"
-            session$sendCustomMessage("validColor", list(id = paste0("vector_", id), valid = FALSE))
-          }
+        } else {
+          manual_colors$values[[id]] <- "gray"
+          session$sendCustomMessage("validColor", list(id = paste0("vector_", id), valid = FALSE))
+        }
       }
     }
     })
@@ -1535,9 +1594,9 @@ server <- function(input, output, session) {
       manual_colors$count <- manual_colors$count - 1
     }
   })
-
-
-
+  
+  
+  
   
   
   
@@ -1594,7 +1653,7 @@ server <- function(input, output, session) {
     theme_selected <- input$plot_theme
     # Selected Color-Palette
     palette_selected <- input$Color_Palette
-
+    
     
     
     
@@ -1631,7 +1690,7 @@ server <- function(input, output, session) {
     if (x_var != "1" && y_var != "1") {
       if (activePlot() == "Bar"|activePlot() == "Line"){
         if (activePlot() == "Bar"){
-        r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'bar'")
+          r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'bar'")
         }
         if (activePlot() == "Line"){
           # r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'line'")
@@ -1650,33 +1709,33 @@ server <- function(input, output, session) {
           r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
         }
         r_code <- paste0(r_code, ")")
-      
-      
-      
-      
-      ########## 3.3.5 Define Errorbar-Geom ##########       
-      if (input$error_type != "Keiner") {
-        r_code <- paste0(r_code, sprintf(" +\n  stat_summary(fun.data = %s, geom = 'errorbar'",
-                                         switch(
-                                           input$error_type,
-                                           "Standardabweichung" = "mean_sdl",
-                                           "Konfidenzintervall" = "mean_cl_normal",
-                                           "Standardfehler" = "mean_se",
-                                           "mean_sdl" # Default-Wert
-                                         )))
-        if (!is.null(error_width)) {
-          r_code <- paste0(r_code, sprintf(", width = %s", error_width))
+        
+        
+        
+        
+        ########## 3.3.5 Define Errorbar-Geom ##########       
+        if (input$error_type != "Keiner") {
+          r_code <- paste0(r_code, sprintf(" +\n  stat_summary(fun.data = %s, geom = 'errorbar'",
+                                           switch(
+                                             input$error_type,
+                                             "Standardabweichung" = "mean_sdl",
+                                             "Konfidenzintervall" = "mean_cl_normal",
+                                             "Standardfehler" = "mean_se",
+                                             "mean_sdl" # Default-Wert
+                                           )))
+          if (!is.null(error_width)) {
+            r_code <- paste0(r_code, sprintf(", width = %s", error_width))
+          }
+          if (!is.na(dodge_value)) {
+            r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
+          }
+          if (((input$error_type != "Standardfehler") & (input$error_mult!=2) & !is.na(input$error_mult))|
+              ((input$error_type == "Standardfehler") & (input$error_mult!=1) & !is.na(input$error_mult))){
+            r_code <- paste0(r_code, sprintf(", fun.args = list(mult = %.0f)", input$error_mult))
+          }
+          r_code <- paste0(r_code, ")")
         }
-        if (!is.na(dodge_value)) {
-          r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
-        }
-        if (((input$error_type != "Standardfehler") & (input$error_mult!=2) & !is.na(input$error_mult))|
-            ((input$error_type == "Standardfehler") & (input$error_mult!=1) & !is.na(input$error_mult))){
-          r_code <- paste0(r_code, sprintf(", fun.args = list(mult = %.0f)", input$error_mult))
-        }
-        r_code <- paste0(r_code, ")")
       }
-        }
     }
     
     
@@ -1692,7 +1751,7 @@ server <- function(input, output, session) {
         
         
       }
-      }
+    }
     
     
     
@@ -1754,8 +1813,8 @@ server <- function(input, output, session) {
                                               "Tufte" = "theme_tufte()",
                                               "Wall Street Journal" = "theme_wsj()",
                                               paste0("theme_", tolower(theme_selected), "()") # Fallback
-          )
-        )
+                                       )
+      )
       )
     }
     
@@ -1817,20 +1876,20 @@ server <- function(input, output, session) {
       
       if (!is.na(x_axis_min) || !is.na(x_axis_max)) {
         axis_code <- paste0(axis_code, sprintf("xlim = c(%s, %s)", 
-                                        if (!is.na(x_axis_min)) x_axis_min else "NA", 
-                                        if (!is.na(x_axis_max)) x_axis_max else "NA"))
-
+                                               if (!is.na(x_axis_min)) x_axis_min else "NA", 
+                                               if (!is.na(x_axis_max)) x_axis_max else "NA"))
+        
         if(!is.na(y_axis_min) || !is.na(y_axis_max)){
           axis_code <- paste0(axis_code, ", ")
         }
       }
-
+      
       if (!is.na(y_axis_min) || !is.na(y_axis_max)) {
         axis_code <- paste0(axis_code, sprintf("ylim = c(%s, %s)", 
-                                         if (!is.na(y_axis_min)) y_axis_min else "NA", 
-                                         if (!is.na(y_axis_max)) y_axis_max else "NA"))
+                                               if (!is.na(y_axis_min)) y_axis_min else "NA", 
+                                               if (!is.na(y_axis_max)) y_axis_max else "NA"))
       }
-
+      
       if (!input$exact_axis_range) {
         if(!is.na(y_axis_min) || !is.na(y_axis_max) || !is.na(x_axis_min) || !is.na(x_axis_max)){
           axis_code <- paste0(axis_code, ", ")
@@ -1838,11 +1897,11 @@ server <- function(input, output, session) {
         
         axis_code <- paste0(axis_code, "expand = FALSE")
       }
-        
+      
       axis_code <- paste0(axis_code, ")")
       
       r_code <- paste0(r_code, sprintf(" +\n  "), axis_code)
-                          
+      
     } else {
       axis_code <- ""
     }
@@ -1863,81 +1922,81 @@ server <- function(input, output, session) {
             r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = rep(c(%s), length(unique(df$%s))))",
                                              paste0(sprintf("'%s'", manual_colors$values), collapse = ", "),
                                              group_var))
-            }
+          }
           else{
-          # Add values
-          r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = c(%s))",
-                                           paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))
+            # Add values
+            r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = c(%s))",
+                                             paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))
           }
         }
       } else {
-      r_code <- paste0(r_code, sprintf(" +\n  %s",
-                                      switch(palette_selected,
-                                             "Accent" = "scale_fill_brewer(palette = 'Accent')",
-                                             "Blues" = "scale_fill_brewer(palette = 'Blues')",
-                                             "Greens" = "scale_fill_brewer(palette = 'Greens')",
-                                             "Greys" = "scale_fill_brewer(palette = 'Greys')",
-                                             "Oranges" = "scale_fill_brewer(palette = 'Oranges')",
-                                             "Paired" = "scale_fill_brewer(palette = 'Paired')",
-                                             "Pastel1" = "scale_fill_brewer(palette = 'Pastel1')",
-                                             "Pastel2" = "scale_fill_brewer(palette = 'Pastel2')",
-                                             "Purples" = "scale_fill_brewer(palette = 'Purples')",
-                                             "Reds" = "scale_fill_brewer(palette = 'Reds')",
-                                             "Set1" = "scale_fill_brewer(palette = 'Set1')",
-                                             "Set2" = "scale_fill_brewer(palette = 'Set2')",
-                                             "Set3" = "scale_fill_brewer(palette = 'Set3')",
-                                             "Spectral" = "scale_fill_brewer(palette = 'Spectral')",
-                                             "grey" = "scale_fill_grey()",
-                                             "hue" = "scale_fill_hue()",
-                                             "ordinal" = "scale_fill_ordinal()",
-                                             "viridis" = "scale_fill_viridis_d(option = 'viridis')",
-                                             "viridis - magma" = "scale_fill_viridis_d(option = 'magma')",
-                                             "viridis - plasma" = "scale_fill_viridis_d(option = 'plasma')",
-                                             "viridis - inferno" = "scale_fill_viridis_d(option = 'inferno')",
-                                             "viridis - cividis" = "scale_fill_viridis_d(option = 'cividis')",
-                                             "viridis - mako" = "scale_fill_viridis_d(option = 'mako')",
-                                             "viridis - rocket" = "scale_fill_viridis_d(option = 'rocket')",
-                                             "viridis - turbo" = "scale_fill_viridis_d(option = 'turbo')",
-                                             "aas" = "scale_fill_aaas()",
-                                             "bmj" = "scale_fill_bmj()",
-                                             "cosmic" = "scale_fill_cosmic()",
-                                             "d3" = "scale_fill_d3()",
-                                             "flatui" = "scale_fill_flatui()",
-                                             "frontiers" = "scale_fill_frontiers()",
-                                             "futurama" = "scale_fill_futurama()",
-                                             "igv" = "scale_fill_igv()",
-                                             "jama" = "scale_fill_jama()",
-                                             "lancet" = "scale_fill_lancet()",
-                                             "locuszoom" = "scale_fill_locuszoom()",
-                                             "nejm" = "scale_fill_nejm()",
-                                             "npg" = "scale_fill_npg()",
-                                             "observable" = "scale_fill_observable()",
-                                             "rickandmorty" = "scale_fill_rickandmorty()",
-                                             "simpsons" = "scale_fill_simpsons()",
-                                             "startrek" = "scale_fill_startrek()",
-                                             "tron" = "scale_fill_tron()",
-                                             "uchicago" = "scale_fill_uchicago()",
-                                             "ucscgb" = "scale_fill_ucscgb()",
-                                             "jco" = "scale_fill_jco()",
-                                             "calc" = "scale_fill_calc()",
-                                             "canva" = "scale_fill_canva()",
-                                             "colorblind" = "scale_fill_colorblind()",
-                                             "economist" = "scale_fill_economist()",
-                                             "excel" = "scale_fill_excel()",
-                                             "excel_new" = "scale_fill_excel_new()",
-                                             "few" = "scale_fill_few()",
-                                             "fivethirtyeight" = "scale_fill_fivethirtyeight()",
-                                             "gdocs" = "scale_fill_gdocs()",
-                                             "hc" = "scale_fill_hc()",
-                                             "pander" = "scale_fill_pander()",
-                                             "ptol" = "scale_fill_ptol()",
-                                             "solarized" = "scale_fill_solarized()",
-                                             "stata" = "scale_fill_stata()",
-                                             "tableau" = "scale_fill_tableau()",
-                                             "wsj" = "scale_fill_wsj()"
-                                             )
-                                      )
-                      )}
+        r_code <- paste0(r_code, sprintf(" +\n  %s",
+                                         switch(palette_selected,
+                                                "Accent" = "scale_fill_brewer(palette = 'Accent')",
+                                                "Blues" = "scale_fill_brewer(palette = 'Blues')",
+                                                "Greens" = "scale_fill_brewer(palette = 'Greens')",
+                                                "Greys" = "scale_fill_brewer(palette = 'Greys')",
+                                                "Oranges" = "scale_fill_brewer(palette = 'Oranges')",
+                                                "Paired" = "scale_fill_brewer(palette = 'Paired')",
+                                                "Pastel1" = "scale_fill_brewer(palette = 'Pastel1')",
+                                                "Pastel2" = "scale_fill_brewer(palette = 'Pastel2')",
+                                                "Purples" = "scale_fill_brewer(palette = 'Purples')",
+                                                "Reds" = "scale_fill_brewer(palette = 'Reds')",
+                                                "Set1" = "scale_fill_brewer(palette = 'Set1')",
+                                                "Set2" = "scale_fill_brewer(palette = 'Set2')",
+                                                "Set3" = "scale_fill_brewer(palette = 'Set3')",
+                                                "Spectral" = "scale_fill_brewer(palette = 'Spectral')",
+                                                "grey" = "scale_fill_grey()",
+                                                "hue" = "scale_fill_hue()",
+                                                "ordinal" = "scale_fill_ordinal()",
+                                                "viridis" = "scale_fill_viridis_d(option = 'viridis')",
+                                                "viridis - magma" = "scale_fill_viridis_d(option = 'magma')",
+                                                "viridis - plasma" = "scale_fill_viridis_d(option = 'plasma')",
+                                                "viridis - inferno" = "scale_fill_viridis_d(option = 'inferno')",
+                                                "viridis - cividis" = "scale_fill_viridis_d(option = 'cividis')",
+                                                "viridis - mako" = "scale_fill_viridis_d(option = 'mako')",
+                                                "viridis - rocket" = "scale_fill_viridis_d(option = 'rocket')",
+                                                "viridis - turbo" = "scale_fill_viridis_d(option = 'turbo')",
+                                                "aas" = "scale_fill_aaas()",
+                                                "bmj" = "scale_fill_bmj()",
+                                                "cosmic" = "scale_fill_cosmic()",
+                                                "d3" = "scale_fill_d3()",
+                                                "flatui" = "scale_fill_flatui()",
+                                                "frontiers" = "scale_fill_frontiers()",
+                                                "futurama" = "scale_fill_futurama()",
+                                                "igv" = "scale_fill_igv()",
+                                                "jama" = "scale_fill_jama()",
+                                                "lancet" = "scale_fill_lancet()",
+                                                "locuszoom" = "scale_fill_locuszoom()",
+                                                "nejm" = "scale_fill_nejm()",
+                                                "npg" = "scale_fill_npg()",
+                                                "observable" = "scale_fill_observable()",
+                                                "rickandmorty" = "scale_fill_rickandmorty()",
+                                                "simpsons" = "scale_fill_simpsons()",
+                                                "startrek" = "scale_fill_startrek()",
+                                                "tron" = "scale_fill_tron()",
+                                                "uchicago" = "scale_fill_uchicago()",
+                                                "ucscgb" = "scale_fill_ucscgb()",
+                                                "jco" = "scale_fill_jco()",
+                                                "calc" = "scale_fill_calc()",
+                                                "canva" = "scale_fill_canva()",
+                                                "colorblind" = "scale_fill_colorblind()",
+                                                "economist" = "scale_fill_economist()",
+                                                "excel" = "scale_fill_excel()",
+                                                "excel_new" = "scale_fill_excel_new()",
+                                                "few" = "scale_fill_few()",
+                                                "fivethirtyeight" = "scale_fill_fivethirtyeight()",
+                                                "gdocs" = "scale_fill_gdocs()",
+                                                "hc" = "scale_fill_hc()",
+                                                "pander" = "scale_fill_pander()",
+                                                "ptol" = "scale_fill_ptol()",
+                                                "solarized" = "scale_fill_solarized()",
+                                                "stata" = "scale_fill_stata()",
+                                                "tableau" = "scale_fill_tableau()",
+                                                "wsj" = "scale_fill_wsj()"
+                                         )
+        )
+        )}
     }
     
     
@@ -2032,8 +2091,8 @@ server <- function(input, output, session) {
         )
         )}
     }    
-
-
+    
+    
     
     
     
@@ -2321,32 +2380,32 @@ server <- function(input, output, session) {
       if (input$Axis_X_Linetype == "Keine"){
         theme_code <- paste0(theme_code, "axis.line.x = element_blank(")
       } else {
-      theme_code <- paste0(theme_code, "axis.line.x = element_line(")
-
-      theme_code <- paste0(theme_code,
-                           if (input$Axis_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
-                                                                                switch(input$Axis_X_Linetype,
-                                                                                       "Solide" = "solid",
-                                                                                       "Gestrichelt" = "dashed",
-                                                                                       "Gepunkted" = "dotted",
-                                                                                       "Punktgestrichelt" = "dotdash",
-                                                                                       "Langgestrichen" = "longdash",
-                                                                                       "Doppelt gestrichelt" = "twodash"
-                                                                                       )) else "",
-                           if (!is.na(input$Axis_X_Size)) sprintf("size = %.1f, ", input$Axis_X_Size) else "",
-                           if (input$Axis_X_Color != "") sprintf("colour = '%s', ", input$Axis_X_Color) else ""
-                           )
+        theme_code <- paste0(theme_code, "axis.line.x = element_line(")
+        
+        theme_code <- paste0(theme_code,
+                             if (input$Axis_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                  switch(input$Axis_X_Linetype,
+                                                                                         "Solide" = "solid",
+                                                                                         "Gestrichelt" = "dashed",
+                                                                                         "Gepunkted" = "dotted",
+                                                                                         "Punktgestrichelt" = "dotdash",
+                                                                                         "Langgestrichen" = "longdash",
+                                                                                         "Doppelt gestrichelt" = "twodash"
+                                                                                  )) else "",
+                             if (!is.na(input$Axis_X_Size)) sprintf("size = %.1f, ", input$Axis_X_Size) else "",
+                             if (input$Axis_X_Color != "") sprintf("colour = '%s', ", input$Axis_X_Color) else ""
+        )
       }
-
-
+      
+      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
     }
-
-
-
-
+    
+    
+    
+    
     ########## 3.4.8 Y Axis Lines ##########
     if (input$Axis_Y_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Size) || input$Axis_Y_Color != "") {
       # Create new Line in Theme-Code if needed
@@ -2357,7 +2416,7 @@ server <- function(input, output, session) {
         theme_code <- paste0(theme_code, "axis.line.y = element_blank(")
       } else {
         theme_code <- paste0(theme_code, "axis.line.y = element_line(")
-
+        
         theme_code <- paste0(theme_code,
                              if (input$Axis_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                   switch(input$Axis_Y_Linetype,
@@ -2372,8 +2431,8 @@ server <- function(input, output, session) {
                              if (input$Axis_Y_Color != "") sprintf("colour = '%s', ", input$Axis_Y_Color) else ""
         )
       }
-
-
+      
+      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2389,36 +2448,36 @@ server <- function(input, output, session) {
       }
       theme_code <- paste0(theme_code, sprintf("axis.ticks.length.x = unit('%.1f', 'pt')", input$Axis_X_Ticks_Length))
     }
-
+    
     if (input$Axis_X_Ticks_Linetype != "Gemäss Theme" || !is.na(input$Axis_X_Ticks_Size) || input$Axis_X_Ticks_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
       theme_code <- paste0(theme_code, "axis.ticks.x = element_line(")
-
+      
       theme_code <- paste0(theme_code,
                            if (input$Axis_X_Ticks_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
-                                                                                switch(input$Axis_X_Ticks_Linetype,
-                                                                                       "Solide" = "solid",
-                                                                                       "Gestrichelt" = "dashed",
-                                                                                       "Gepunkted" = "dotted",
-                                                                                       "Punktgestrichelt" = "dotdash",
-                                                                                       "Langgestrichen" = "longdash",
-                                                                                       "Doppelt gestrichelt" = "twodash"
-                                                                                )) else "",
+                                                                                      switch(input$Axis_X_Ticks_Linetype,
+                                                                                             "Solide" = "solid",
+                                                                                             "Gestrichelt" = "dashed",
+                                                                                             "Gepunkted" = "dotted",
+                                                                                             "Punktgestrichelt" = "dotdash",
+                                                                                             "Langgestrichen" = "longdash",
+                                                                                             "Doppelt gestrichelt" = "twodash"
+                                                                                      )) else "",
                            if (!is.na(input$Axis_X_Ticks_Size)) sprintf("size = %.1f, ", input$Axis_X_Ticks_Size) else "",
                            if (input$Axis_X_Ticks_Color != "") sprintf("colour = '%s', ", input$Axis_X_Ticks_Color) else ""
       )
-
+      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
     }
-
-
-
-
+    
+    
+    
+    
     ########## 3.4.10 Y Axis Ticks ##########
     if (!is.na(input$Axis_Y_Ticks_Length)) {
       if (theme_code!=""){
@@ -2426,15 +2485,15 @@ server <- function(input, output, session) {
       }
       theme_code <- paste0(theme_code, sprintf("axis.ticks.length.y = unit('%.1f', 'pt')", input$Axis_Y_Ticks_Length))
     }
-
-
+    
+    
     if (input$Axis_Y_Ticks_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Ticks_Size) || input$Axis_Y_Ticks_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
       theme_code <- paste0(theme_code, "axis.ticks.y = element_line(")
-
+      
       theme_code <- paste0(theme_code,
                            if (input$Axis_Y_Ticks_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                       switch(input$Axis_Y_Ticks_Linetype,
@@ -2448,8 +2507,8 @@ server <- function(input, output, session) {
                            if (!is.na(input$Axis_Y_Ticks_Size)) sprintf("size = %.1f, ", input$Axis_Y_Ticks_Size) else "",
                            if (input$Axis_Y_Ticks_Color != "") sprintf("colour = '%s', ", input$Axis_Y_Ticks_Color) else ""
       )
-
-
+      
+      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2472,14 +2531,14 @@ server <- function(input, output, session) {
         
         theme_code <- paste0(theme_code,
                              if (input$Major_Grid_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
-                                                                                  switch(input$Major_Grid_X_Linetype,
-                                                                                         "Solide" = "solid", 
-                                                                                         "Gestrichelt" = "dashed", 
-                                                                                         "Gepunkted" = "dotted", 
-                                                                                         "Punktgestrichelt" = "dotdash", 
-                                                                                         "Langgestrichen" = "longdash", 
-                                                                                         "Doppelt gestrichelt" = "twodash"
-                                                                                  )) else "",
+                                                                                        switch(input$Major_Grid_X_Linetype,
+                                                                                               "Solide" = "solid", 
+                                                                                               "Gestrichelt" = "dashed", 
+                                                                                               "Gepunkted" = "dotted", 
+                                                                                               "Punktgestrichelt" = "dotdash", 
+                                                                                               "Langgestrichen" = "longdash", 
+                                                                                               "Doppelt gestrichelt" = "twodash"
+                                                                                        )) else "",
                              if (!is.na(input$Major_Grid_X_Size)) sprintf("size = %.1f, ", input$Major_Grid_X_Size) else "",
                              if (input$Major_Grid_X_Color != "") sprintf("colour = '%s', ", input$Major_Grid_X_Color) else ""
         )
@@ -2614,14 +2673,14 @@ server <- function(input, output, session) {
       theme_code <- paste0(theme_code,
                            if (input$Plot_Background_Color != "") sprintf("fill = '%s', ", input$Plot_Background_Color) else "",
                            if (input$Plot_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
-                                                                                      switch(input$Plot_Background_Linetype,
-                                                                                             "Solide" = "solid", 
-                                                                                             "Gestrichelt" = "dashed", 
-                                                                                             "Gepunkted" = "dotted", 
-                                                                                             "Punktgestrichelt" = "dotdash", 
-                                                                                             "Langgestrichen" = "longdash", 
-                                                                                             "Doppelt gestrichelt" = "twodash"
-                                                                                      )) else "",
+                                                                                         switch(input$Plot_Background_Linetype,
+                                                                                                "Solide" = "solid", 
+                                                                                                "Gestrichelt" = "dashed", 
+                                                                                                "Gepunkted" = "dotted", 
+                                                                                                "Punktgestrichelt" = "dotdash", 
+                                                                                                "Langgestrichen" = "longdash", 
+                                                                                                "Doppelt gestrichelt" = "twodash"
+                                                                                         )) else "",
                            if (!is.na(input$Plot_Background_Size)) sprintf("linewidth = %.1f, ", input$Plot_Background_Size) else "",
                            if (input$Plot_Background_Line_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Line_Color) else ""
       )
@@ -2647,14 +2706,14 @@ server <- function(input, output, session) {
       theme_code <- paste0(theme_code,
                            if (input$Panel_Background_Color != "") sprintf("fill = '%s', ", input$Panel_Background_Color) else "",
                            if (input$Panel_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
-                                                                                         switch(input$Panel_Background_Linetype,
-                                                                                                "Solide" = "solid", 
-                                                                                                "Gestrichelt" = "dashed", 
-                                                                                                "Gepunkted" = "dotted", 
-                                                                                                "Punktgestrichelt" = "dotdash", 
-                                                                                                "Langgestrichen" = "longdash", 
-                                                                                                "Doppelt gestrichelt" = "twodash"
-                                                                                         )) else "",
+                                                                                          switch(input$Panel_Background_Linetype,
+                                                                                                 "Solide" = "solid", 
+                                                                                                 "Gestrichelt" = "dashed", 
+                                                                                                 "Gepunkted" = "dotted", 
+                                                                                                 "Punktgestrichelt" = "dotdash", 
+                                                                                                 "Langgestrichen" = "longdash", 
+                                                                                                 "Doppelt gestrichelt" = "twodash"
+                                                                                          )) else "",
                            if (!is.na(input$Panel_Background_Size)) sprintf("linewidth = %.1f, ", input$Panel_Background_Size) else "",
                            if (input$Panel_Background_Line_Color != "") sprintf("colour = '%s', ", input$Panel_Background_Line_Color) else ""
       )
@@ -2791,14 +2850,14 @@ server <- function(input, output, session) {
         theme_code <- paste0(theme_code, ",\n  ")
       }
       theme_code <- paste0(theme_code, sprintf("legend.position = '%s', ",
-                                                                     switch(input$Legend_Position,
-                                                                            "Keine" = "none", 
-                                                                            "Rechts" = "right", 
-                                                                            "Unten" = "bottom", 
-                                                                            "Links" = "left", 
-                                                                            "Oben" = "top", 
-                                                                            "Im Plot" = "inside", ")"
-                                                                     )))
+                                               switch(input$Legend_Position,
+                                                      "Keine" = "none", 
+                                                      "Rechts" = "right", 
+                                                      "Unten" = "bottom", 
+                                                      "Links" = "left", 
+                                                      "Oben" = "top", 
+                                                      "Im Plot" = "inside", ")"
+                                               )))
     }
     
     if (input$Legend_Title_Position != "Gemäss Theme"){
@@ -2895,14 +2954,14 @@ server <- function(input, output, session) {
       theme_code <- paste0(theme_code,
                            if (input$Stripe_X_Color != "") sprintf("fill = '%s', ", input$Stripe_X_Color) else "",
                            if (input$Stripe_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
-                                                                                         switch(input$Stripe_X_Linetype,
-                                                                                                "Solide" = "solid", 
-                                                                                                "Gestrichelt" = "dashed", 
-                                                                                                "Gepunkted" = "dotted", 
-                                                                                                "Punktgestrichelt" = "dotdash", 
-                                                                                                "Langgestrichen" = "longdash", 
-                                                                                                "Doppelt gestrichelt" = "twodash"
-                                                                                         )) else "",
+                                                                                  switch(input$Stripe_X_Linetype,
+                                                                                         "Solide" = "solid", 
+                                                                                         "Gestrichelt" = "dashed", 
+                                                                                         "Gepunkted" = "dotted", 
+                                                                                         "Punktgestrichelt" = "dotdash", 
+                                                                                         "Langgestrichen" = "longdash", 
+                                                                                         "Doppelt gestrichelt" = "twodash"
+                                                                                  )) else "",
                            if (!is.na(input$Stripe_X_Size)) sprintf("linewidth = %.1f, ", input$Stripe_X_Size) else "",
                            if (input$Stripe_X_Line_Color != "") sprintf("colour = '%s', ", input$Stripe_X_Line_Color) else ""
       )
@@ -2961,23 +3020,23 @@ server <- function(input, output, session) {
       
       theme_code <- paste0(theme_code,
                            if (input$Stripe_X_Font != "Gemäss Theme") sprintf("family = '%s', ", 
-                                                                                  switch(input$Stripe_X_Font,
-                                                                                         "Sans Serife" = "sans",
-                                                                                         "Serife" = "serif",
-                                                                                         "Monospace" = "mono")) else "",
+                                                                              switch(input$Stripe_X_Font,
+                                                                                     "Sans Serife" = "sans",
+                                                                                     "Serife" = "serif",
+                                                                                     "Monospace" = "mono")) else "",
                            if (input$Stripe_X_Face != "Gemäss Theme") sprintf("face = '%s', ", 
-                                                                                  switch(input$Stripe_X_Face,
-                                                                                         "Normal" = "plain",
-                                                                                         "Fett" = "bold",
-                                                                                         "Kursiv" = "italic",
-                                                                                         "Fett & Kursiv" = "bold.italic")) else "",
+                                                                              switch(input$Stripe_X_Face,
+                                                                                     "Normal" = "plain",
+                                                                                     "Fett" = "bold",
+                                                                                     "Kursiv" = "italic",
+                                                                                     "Fett & Kursiv" = "bold.italic")) else "",
                            if (!is.na(input$Stripe_X_Size)) sprintf("size = %.1f, ", input$Stripe_X_Size) else "",
                            if (input$Stripe_X_Color != "") sprintf("colour = '%s', ", input$Stripe_X_Color) else "",
                            if (input$Stripe_X_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
-                                                                                       switch(input$Stripe_X_Alignment,
-                                                                                              "Linksbündig" = 0,
-                                                                                              "Mittig" = 0.5,
-                                                                                              "Rechtsbündig" = 1)) else "")
+                                                                                   switch(input$Stripe_X_Alignment,
+                                                                                          "Linksbündig" = 0,
+                                                                                          "Mittig" = 0.5,
+                                                                                          "Rechtsbündig" = 1)) else "")
       
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
@@ -3067,8 +3126,8 @@ server <- function(input, output, session) {
   
   output$plot <- renderPlot({
     req(data(), r_code())
-
-
+    
+    
     df <- data()
     
     if (!is.null(factor_code()) && !identical(factor_code(), "")) {
@@ -3101,7 +3160,7 @@ server <- function(input, output, session) {
     # Define Code-Line for ggplot2
     full_code <- "library(ggplot2)"
     
-
+    
     # Define Code-Line for ggthemes if needed
     # Check if themes is by ggthemes
     if(input$plot_theme %in% c("Calc", "the Economist", "the Economist White", "Excel", "Few", "FiveThirtyEight", 
@@ -3128,7 +3187,7 @@ server <- function(input, output, session) {
     
     if (!is.null(factor_code()) && !identical(factor_code(), "")) {
       full_code <- paste0(full_code, "\n\n")
-
+      
       full_code <- paste0(full_code, factor_code())
     }
     
@@ -3183,7 +3242,7 @@ server <- function(input, output, session) {
       req(exists("q"))
       # Create Plot by evaluating r_code
       eval(parse(text = r_code()))
-
+      
       # Calculate the correct width and height for saving
       width_inch <- input$plot_width_px / 96
       height_inch <- input$plot_height_px / 96
