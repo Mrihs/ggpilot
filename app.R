@@ -205,7 +205,7 @@ ui <- fluidPage(
            actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i> Daten'), class = "custom-btn"),
            actionButton("btn_plottype", label = HTML('<i class="glyphicon glyphicon-stats"></i> Plot-Typ'), class = "custom-btn"),
            actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i> Variablen'), class = "custom-btn"),
-           actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i> Plot Optionen'), class = "custom-btn"),
+           actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i> Plot-Optionen'), class = "custom-btn"),
            actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i> Text'), class = "custom-btn"),
            actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i> Layout'), class = "custom-btn"),
            actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i> Download'), class = "custom-btn"),
@@ -591,7 +591,7 @@ ui <- fluidPage(
                                                )
                                              ),
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Achsen Überschrift"),
+                                               title = BSCollapseArrow("Achsen-Überschrift"),
                                                div(class = ".collapse_panel-settings", 
                                                    column(6,
                                                           h3("X-Achse"),
@@ -753,7 +753,7 @@ ui <- fluidPage(
                                                )
                                              ),
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Legenden Hintergrund"),
+                                               title = BSCollapseArrow("Legenden-Hintergrund"),
                                                div(class = ".collapse_panel-settings",
                                                    column(6,
                                                           h3("Legenden-Box"),
@@ -766,7 +766,7 @@ ui <- fluidPage(
                                                )
                                              ),
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Legenden Optionen"),
+                                               title = BSCollapseArrow("Legenden-Optionen"),
                                                div(class = ".collapse_panel-settings",
                                                    column(6,
                                                           h3("Anordnung"),
@@ -785,7 +785,7 @@ ui <- fluidPage(
                                                )
                                              ),
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Facetten Hintergrund"),
+                                               title = BSCollapseArrow("Facetten-Hintergrund"),
                                                div(class = ".collapse_panel-settings",
                                                    column(6,
                                                           h3("Zeilen"),
