@@ -273,7 +273,7 @@ ui <- fluidPage(
                  # Define Conditional-Panel for when Variables tab is selected
                  conditionalPanel(condition = "input.activeTab == 'variables'",
                                   # Set title
-                                  h3("X-Achsen Variable"),
+                                  h3("X-Achsen-Variable"),
                                   # X-Axis Variable
                                   selectInput("x_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -291,7 +291,7 @@ ui <- fluidPage(
                                                    )
                                   ),
                                   # Set title
-                                  h3("y-Achsen Variable"),
+                                  h3("Y-Achsen-Variable"),
                                   # Y-Axis Variable
                                   selectInput("y_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -452,7 +452,7 @@ ui <- fluidPage(
                                                      )
                                                    )                                
                                                ),
-                                               checkboxInput(inputId = "exact_axis_range", label = "Abstand zu Begrenzung", value = TRUE)
+                                               checkboxInput(inputId = "exact_axis_range", label = "Abstand bis zu Achsen-Ende", value = TRUE)
                                              ),
                                              
                                              # Create a Collapse-Panel for Errorbar-Settings
@@ -466,14 +466,14 @@ ui <- fluidPage(
                                                    # Numeric Input for the width of the Errorbar
                                                    numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
                                                    # Numeric Input for the width of the Errorbar
-                                                   numericInput(inputId = "error_width", label = "Grösse Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5)
+                                                   numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, max = 2, step = 0.1, value = 0.5)
                                                )
                                              ),
                                              
                                              # Create a Collapse-Panel for Group-Settings
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Abstand der Gruppierungsvariable"),
+                                               title = BSCollapseArrow("Abstände der Gruppierungs-Variable"),
                                                # Define CSS Settings
                                                div(class = ".collapse_panel-settings",
                                                    # Numeric Input for the position-dodge value
@@ -532,7 +532,7 @@ ui <- fluidPage(
                                                                     ),
                                                    
                                                    selectInput(inputId = "color_palette_target", label = "Farbelette anwenden auf...", 
-                                                               choices = c("Füllung", "Umrandung", "Füllung und Umrandung"), selected = "Füllung")
+                                                               choices = c("Füllung", "Linien", "Füllung und Linien"), selected = "Füllung")
                                                    )
                                                )
                                              )
@@ -777,8 +777,8 @@ ui <- fluidPage(
                                                    ),
                                                    column(6,
                                                           h3("Grösse & Abstände"),
-                                                          numericInput(inputId = "Legend_Key_Width", label = "Breite der Symbolen", min = 0, max = 50, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Legend_Key_Height", label = "Höhe der Symbolen", min = 0, max = 50, step = 0.1, value = NA),
+                                                          numericInput(inputId = "Legend_Key_Width", label = "Breite der Symbole", min = 0, max = 50, step = 0.1, value = NA),
+                                                          numericInput(inputId = "Legend_Key_Height", label = "Höhe der Symbole", min = 0, max = 50, step = 0.1, value = NA),
                                                           numericInput(inputId = "Legend_Key_Spacing", label = "Abstand der Symbole", min = 0, max = 50, step = 0.1, value = NA),
                                                           numericInput(inputId = "Legend_Box_Spacing", label = "Abstand zum Plot", min = 0, max = 50, step = 0.1, value = NA)
                                                    )
@@ -1612,10 +1612,10 @@ server <- function(input, output, session) {
       if(input$color_palette_target == "Füllung"){
         r_code <- paste0(r_code, sprintf(", fill = '%s'))", group_var))
       }
-      if(input$color_palette_target == "Umrandung"){
+      if(input$color_palette_target == "Linien"){
         r_code <- paste0(r_code, sprintf(", color = '%s'))", group_var))
       }
-      if(input$color_palette_target == "Füllung und Umrandung"){
+      if(input$color_palette_target == "Füllung und Linien"){
         r_code <- paste0(r_code, sprintf(", fill = '%s', color = '%s'))", group_var, group_var))
       }
       # Close first line of Plot-relevant Code if no Grouping Variable is selected
@@ -1853,7 +1853,7 @@ server <- function(input, output, session) {
     
     
     ########## 3.3.11 Color-Palette - Fill ##########
-    if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Füllung" | input$color_palette_target == "Füllung und Umrandung")) {
+    if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Füllung" | input$color_palette_target == "Füllung und Linien")) {
       # If manual color palette should be created
       if (palette_selected == "Eigene Farbpalette erstellen") {
         # Check if there is at least one value entered
@@ -1946,7 +1946,7 @@ server <- function(input, output, session) {
     
     
     ########## 3.3.11 Color-Palette - color ##########
-    if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Umrandung" | input$color_palette_target == "Füllung und Umrandung")) {
+    if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Linien" | input$color_palette_target == "Füllung und Linien")) {
       # If manual color palette should be created
       if (palette_selected == "Eigene Farbpalette erstellen") {
         # Check if there is at least one value entered
