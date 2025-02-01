@@ -532,6 +532,36 @@ ui <- fluidPage(
                                                    )
                                                    
                                   ),
+                                  conditionalPanel(condition = "output.show_barplot_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Errorbar-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Barplot-Optionen"),
+                                                                # Define CSS Settings
+                                                                div(class = ".collapse_panel-settings",
+                                                                    # Numeric Input for the width of the Errorbar
+                                                                    numericInput(inputId = "barplot_width", label = "Breite der Balken", min = 0, step = 0.1, value = "")
+                                                                )
+                                                              )
+                                                   )
+                                  ),
+                                  conditionalPanel(condition = "output.show_linepolot_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Lineplot-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Linienplot-Optionen"),
+                                                                # Define CSS Settings
+                                                                div(class = ".collapse_panel-settings",
+                                                                    # Select linetype
+                                                                    selectInput(inputId = "lineplot_line_type", label = "Linien-Art", choices = c("Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Solide"),                                                                    
+                                                                    # Numeric Input for the width of the Errorbar
+                                                                    numericInput(inputId = "lineplot_width", label = "Liniengrösse", min = 0, step = 0.1, value = "")                                                                
+                                                                    )
+                                                              )
+                                                   )
+                                  ),
                                   conditionalPanel(condition = "output.show_errorbar_options",
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               
@@ -1048,11 +1078,9 @@ server <- function(input, output, session) {
   
   observeEvent(input$group_var, {
     if(input$group_var == " "){
-      show_grouping_options(FALSE)
-      showNotification(show_grouping_options())}
+      show_grouping_options(FALSE)}
     else{
-      show_grouping_options(TRUE)
-      showNotification(show_grouping_options())}
+      show_grouping_options(TRUE)}
   })
   
   output$show_grouping_options <- reactive({ show_grouping_options() })
@@ -1063,11 +1091,9 @@ server <- function(input, output, session) {
   
   observeEvent(list(input$grid_col_var, input$grid_row_var), {
     if(input$grid_col_var == " " & input$grid_row_var == " "){
-      show_facet_options(FALSE)
-      showNotification(show_facet_options())}
+      show_facet_options(FALSE)}
     else{
-      show_facet_options(TRUE)
-      showNotification(show_facet_options())}
+      show_facet_options(TRUE)}
   })
   
   output$show_facet_options <- reactive({ show_facet_options() })
@@ -1079,33 +1105,62 @@ server <- function(input, output, session) {
   
   observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
     if(activePlot() == "Bar" | activePlot() == "Line"){
-      show_errorbar_options(TRUE)
-      show_scatter_options(FALSE)}
-    else if (activePlot() == "Scatter"){
-      show_scatter_options(TRUE)
-      show_errorbar_options(FALSE)
-    }
+      show_errorbar_options(TRUE)}
     else{
-      show_scatter_options(FALSE)
       show_errorbar_options(FALSE)}
   })
-  
-  output$show_scatter_options <- reactive({ show_scatter_options() })
-  outputOptions(output, "show_scatter_options", suspendWhenHidden = FALSE)
   
   output$show_errorbar_options <- reactive({ show_errorbar_options() })
   outputOptions(output, "show_errorbar_options", suspendWhenHidden = FALSE)
   
   
+  show_barplot_options <- reactiveVal(value = FALSE)
+
+  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
+    if(activePlot() == "Bar"){
+      show_barplot_options(TRUE)}
+    else{
+      show_barplot_options(FALSE)}
+  })
+  
+  output$show_barplot_options <- reactive({ show_barplot_options() })
+  outputOptions(output, "show_barplot_options", suspendWhenHidden = FALSE)
+  
+  
+  
+  show_linepolot_options <- reactiveVal(value = FALSE)
+  
+  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
+    if(activePlot() == "Line"){
+      show_linepolot_options(TRUE)}
+    else{
+      show_linepolot_options(FALSE)}
+  })
+  
+  output$show_linepolot_options <- reactive({ show_linepolot_options() })
+  outputOptions(output, "show_linepolot_options", suspendWhenHidden = FALSE)
+  
+  
+  
+  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
+    if (activePlot() == "Scatter"){
+      show_scatter_options(TRUE)
+    }
+    else{
+      show_scatter_options(FALSE)}
+  })
+  output$show_scatter_options <- reactive({ show_scatter_options() })
+  outputOptions(output, "show_scatter_options", suspendWhenHidden = FALSE)
+  
+
+  
   show_title_options <- reactiveVal(value = FALSE)
 
   observeEvent(list(input$plot_title, input$plot_subtitle), {
     if(input$plot_title == "" & input$plot_subtitle ==""){
-      show_title_options(FALSE)
-      showNotification(show_title_options())}
+      show_title_options(FALSE)}
     else{
-      show_title_options(TRUE)
-      showNotification(show_title_options())}
+      show_title_options(TRUE)}
   })
 
   output$show_title_options <- reactive({ show_title_options() })
@@ -1784,11 +1839,23 @@ server <- function(input, output, session) {
           # r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'line'")
           if (!is.null(group_var)) {
             r_code <- paste0(r_code, sprintf(" +\n  stat_summary(aes_string(group = '%s', color = '%s'), fun = mean, geom = 'line'", group_var, group_var))
-            # Close first line of Plot-relevant Code if no Grouping Variable is selected
+          # Close first line of Plot-relevant Code if no Grouping Variable is selected
           }
           if (is.null(group_var)) {
             r_code <- paste0(r_code, sprintf(" +\n  stat_summary(fun = mean, geom = 'line', group = 1"))
             # Close first line of Plot-relevant Code if no Grouping Variable is selected
+          }
+          if(!is.na(input$lineplot_width)){
+            r_code <- paste0(r_code, sprintf(", size = %.1f", input$lineplot_width))
+          }
+          if(input$lineplot_line_type!="Solide"){
+            r_code <- paste0(r_code, sprintf(", linetype = '%s'", switch(input$lineplot_line_type,
+                                                                         "Solide" = "solid",
+                                                                         "Gestrichelt" = "dashed",
+                                                                         "Gepunkted" = "dotted",
+                                                                         "Punktgestrichelt" = "dotdash",
+                                                                         "Langgestrichen" = "longdash",
+                                                                         "Doppelt gestrichelt" = "twodash")))
           }
           
         }
