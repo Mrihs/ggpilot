@@ -389,97 +389,10 @@ ui <- fluidPage(
                                                                            "Wall Street Journal"),
                                                                selected = "Gray")
                                                )
-                                             ),
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              
-                                             # Create a Collapse-Panel for Plot-Size
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Plot-Grösse"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   column(6,
-                                                          # Define Plot-Width
-                                                          numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
-                                                   ),
-                                                   column(6,
-                                                          # Define Plot-Height
-                                                          numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
-                                                   )
-                                               )
-                                             ),
-                                             
-                                             
-                                             # Create a Collapse-Panel for Axis-Range
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Achsen-Range definieren"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   # Set a HTML header for the Y-Axis Range Text
-                                                   HTML('<label class="control-label">X-Achse</label>'),
-                                                   # Define the min and max value next to each other
-                                                   div(
-                                                     # Define style
-                                                     style = "display: flex; justify-content: space-between; gap: 10px;",
-                                                     div(
-                                                       style = "flex: 1;",
-                                                       # Numeric Input field for the minimal X-Axis value
-                                                       numericInput(inputId = "x_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
-                                                     ),
-                                                     div(
-                                                       style = "flex: 1;",
-                                                       # Numeric Input field for the max X-Axis value
-                                                       numericInput(inputId = "x_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
-                                                     )
-                                                   ),
-                                                   
-                                                   # Set a HTML header for the X-Axis Range Text
-                                                   HTML('<label class="control-label">Y-Achse</label>'),
-                                                   
-                                                   # Define the min and max value next to each other
-                                                   div(
-                                                     # Define style
-                                                     style = "display: flex; justify-content: space-between; gap: 10px;",
-                                                     div(
-                                                       style = "flex: 1;",
-                                                       # Numeric Input field for the minimal Y-Axis value
-                                                       numericInput(inputId = "y_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
-                                                     ),
-                                                     div(
-                                                       style = "flex: 1;",
-                                                       # Numeric Input field for the max Y-Axis value
-                                                       numericInput(inputId = "y_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
-                                                     )
-                                                   )                                
-                                               ),
-                                               checkboxInput(inputId = "exact_axis_range", label = "Abstand bis zu Achsen-Ende", value = TRUE)
-                                             ),
-                                             
-                                             # Create a Collapse-Panel for Errorbar-Settings
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Fehlerbalken"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   # Dropdown to select the type of Errorbar
-                                                   selectInput(inputId = "error_type", label = "Einheit", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
-                                                   # Numeric Input for the width of the Errorbar
-                                                   numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
-                                                   # Numeric Input for the width of the Errorbar
-                                                   numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, max = 2, step = 0.1, value = "")
-                                               )
-                                             ),
-                                             
-                                             # Create a Collapse-Panel for Group-Settings
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Abstände der Gruppierungs-Variable"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   # Numeric Input for the position-dodge value
-                                                   numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = "")
-                                               )
-                                             ),
                                              
                                              # Create a Collapse-Panel for Color-Palette-Settings
                                              bsCollapsePanel(
@@ -533,6 +446,106 @@ ui <- fluidPage(
                                                    
                                                    selectInput(inputId = "color_palette_target", label = "Farbelette anwenden auf...", 
                                                                choices = c("Füllung", "Linien", "Füllung und Linien"), selected = "Füllung")
+                                               )
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                             
+                                             # Create a Collapse-Panel for Plot-Size
+                                             bsCollapsePanel(
+                                               # Define Title of Collapse-Panel
+                                               title = BSCollapseArrow("Plot-Grösse"),
+                                               # Define CSS Settings
+                                               div(class = ".collapse_panel-settings",
+                                                   column(6,
+                                                          # Define Plot-Width
+                                                          numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
+                                                   ),
+                                                   column(6,
+                                                          # Define Plot-Height
+                                                          numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
+                                                   )
+                                               )
+                                             )
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                             # Create a Collapse-Panel for Axis-Range
+                                             bsCollapsePanel(
+                                               # Define Title of Collapse-Panel
+                                               title = BSCollapseArrow("Achsen-Range definieren"),
+                                               # Define CSS Settings
+                                               div(class = ".collapse_panel-settings",
+                                                   # Set a HTML header for the Y-Axis Range Text
+                                                   HTML('<label class="control-label">X-Achse</label>'),
+                                                   # Define the min and max value next to each other
+                                                   div(
+                                                     # Define style
+                                                     style = "display: flex; justify-content: space-between; gap: 10px;",
+                                                     div(
+                                                       style = "flex: 1;",
+                                                       # Numeric Input field for the minimal X-Axis value
+                                                       numericInput(inputId = "x_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
+                                                     ),
+                                                     div(
+                                                       style = "flex: 1;",
+                                                       # Numeric Input field for the max X-Axis value
+                                                       numericInput(inputId = "x_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
+                                                     )
+                                                   ),
+                                                   
+                                                   # Set a HTML header for the X-Axis Range Text
+                                                   HTML('<label class="control-label">Y-Achse</label>'),
+                                                   
+                                                   # Define the min and max value next to each other
+                                                   div(
+                                                     # Define style
+                                                     style = "display: flex; justify-content: space-between; gap: 10px;",
+                                                     div(
+                                                       style = "flex: 1;",
+                                                       # Numeric Input field for the minimal Y-Axis value
+                                                       numericInput(inputId = "y_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
+                                                     ),
+                                                     div(
+                                                       style = "flex: 1;",
+                                                       # Numeric Input field for the max Y-Axis value
+                                                       numericInput(inputId = "y_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
+                                                     )
+                                                   )                                
+                                               ),
+                                               checkboxInput(inputId = "exact_axis_range", label = "Abstand bis zu Achsen-Ende", value = TRUE)
+                                             )
+                                  ),
+                                  conditionalPanel(condition = "output.show_grouping_options",
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              
+                                                              
+                                                              # Create a Collapse-Panel for Group-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Abstände der Gruppierungs-Variable"),
+                                                                # Define CSS Settings
+                                                                div(class = ".collapse_panel-settings",
+                                                                    # Numeric Input for the position-dodge value
+                                                                    numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = "")
+                                                                )
+                                                              )
+                                                   )
+                                                   
+                                  ),
+                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                             
+                                             # Create a Collapse-Panel for Errorbar-Settings
+                                             bsCollapsePanel(
+                                               # Define Title of Collapse-Panel
+                                               title = BSCollapseArrow("Fehlerbalken"),
+                                               # Define CSS Settings
+                                               div(class = ".collapse_panel-settings",
+                                                   # Dropdown to select the type of Errorbar
+                                                   selectInput(inputId = "error_type", label = "Einheit", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
+                                                   # Numeric Input for the width of the Errorbar
+                                                   numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
+                                                   # Numeric Input for the width of the Errorbar
+                                                   numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, max = 2, step = 0.1, value = "")
                                                )
                                              )
                                   )
@@ -744,7 +757,7 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
-                                  conditionalPanel(condition = "output.show_legend_options",
+                                  conditionalPanel(condition = "output.show_grouping_options",
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
                                                                 title = BSCollapseArrow("Legende"),
@@ -997,19 +1010,19 @@ server <- function(input, output, session) {
       }
     }})
   
-  show_legend_options <- reactiveVal(value = FALSE)
+  show_grouping_options <- reactiveVal(value = FALSE)
   
   observeEvent(input$group_var, {
     if(input$group_var == " "){
-      show_legend_options(FALSE)
-      showNotification(show_legend_options())}
+      show_grouping_options(FALSE)
+      showNotification(show_grouping_options())}
     else{
-      show_legend_options(TRUE)
-      showNotification(show_legend_options())}
+      show_grouping_options(TRUE)
+      showNotification(show_grouping_options())}
   })
   
-  output$show_legend_options <- reactive({ show_legend_options() })
-  outputOptions(output, "show_legend_options", suspendWhenHidden = FALSE)
+  output$show_grouping_options <- reactive({ show_grouping_options() })
+  outputOptions(output, "show_grouping_options", suspendWhenHidden = FALSE)
   
 
   show_facet_options <- reactiveVal(value = FALSE)
