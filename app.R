@@ -2842,14 +2842,22 @@ server <- function(input, output, session) {
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      theme_code <- paste0(theme_code, sprintf("legend.key.width = unit(%.1f, 'pt'", input$Stripe_X_Size))
+      theme_code <- paste0(theme_code, sprintf("legend.key.width = unit(%.1f, 'pt'", input$Legend_Key_Width))
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
     }
     
     if (!is.na(input$Legend_Key_Height)){
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      theme_code <- paste0(theme_code, sprintf("legend.key.height = unit(%.1f, 'pt'", input$Stripe_X_Size))
+      theme_code <- paste0(theme_code, sprintf("legend.key.height = unit(%.1f, 'pt'", input$Legend_Key_Height))
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
     }
     
     if (!is.na(input$Legend_Key_Spacing)){
@@ -2857,6 +2865,10 @@ server <- function(input, output, session) {
         theme_code <- paste0(theme_code, ",\n  ")
       }
       theme_code <- paste0(theme_code, sprintf("legend.key.spacing = unit(%.1f, 'pt'", input$Legend_Key_Spacing))
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
     }
     
     if (!is.na(input$Legend_Box_Spacing)){
@@ -2864,6 +2876,10 @@ server <- function(input, output, session) {
         theme_code <- paste0(theme_code, ",\n  ")
       }
       theme_code <- paste0(theme_code, sprintf("legend.box.spacing = unit(%.1f, 'pt'", input$Legend_Box_Spacing))
+      
+      # Remove trailing comma and close `element_text()`
+      theme_code <- sub(", $", "", theme_code)
+      theme_code <- paste0(theme_code, ")")
     }
     
     
