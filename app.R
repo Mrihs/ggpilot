@@ -1716,9 +1716,9 @@ server <- function(input, output, session) {
     if (!is.null(grid_col_var) & !is.null(grid_row_var)) {
       r_code <- paste0(r_code, sprintf(" +\n  facet_grid(rows = vars(%s), cols = vars(%s))", grid_row_var, grid_col_var))
     } else if (!is.null(grid_col_var)) {
-      r_code <- paste0(r_code, sprintf(" +\n  facet_wrap(vars(%s))", grid_col_var))
+      r_code <- paste0(r_code, sprintf(" +\n  facet_grid(rows = vars(%s))", grid_col_var))
     } else if (!is.null(grid_row_var)) {
-      r_code <- paste0(r_code, sprintf(" +\n  facet_wrap(vars(%s))", grid_row_var))
+      r_code <- paste0(r_code, sprintf(" +\n  facet_grid(cols = vars(%s))", grid_row_var))
     }
     
     
