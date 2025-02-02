@@ -49,8 +49,8 @@ library(sortable)
 
 
 
-############### 1.3 Define Panel-Function ###############
-# BSCollapse-Function is set using an arrow-down icon
+############### 1.3 Define Function2 ###############
+########## 1.3.1 BSCollapse-Function is set using an arrow-down icon ##########
 BSCollapseArrow <- function(text, icon_class = "glyphicon-menu-down") {
   HTML(sprintf(
     '<div class="panel-title-container">
@@ -65,14 +65,7 @@ BSCollapseArrow <- function(text, icon_class = "glyphicon-menu-down") {
 
 
 
-
-
-
-
-
-
-
-############### 1.4 Define Color Validation Function ###############
+########## 1.3.2 is_valid_colo-Function to validate color-inputs ##########
 is_valid_color <- function(color) {
   # empty colors are not invalid
   if (is.null(color) || color == "") return(FALSE)
@@ -104,10 +97,14 @@ is_valid_color <- function(color) {
 #################### 2. UI ####################
 ui <- fluidPage(
   ############### 2.1 General Settings ###############
-  # Define Theme
+  ########## 2.1.1 Define Theme ##########
   theme = shinytheme("cerulean"),
   
-  # Define custom CSS
+  
+  
+  
+  
+  ########## 2.1.2 Define custom CSS ##########
   tags$head(
     tags$style(HTML("
     
@@ -133,7 +130,6 @@ ui <- fluidPage(
     color: #000000 !important;
     }
     
-    
     /* Define Buttons */
     .custom-btn {
     font-size: 18px;
@@ -158,7 +154,6 @@ ui <- fluidPage(
     background-image: none;
     }
 
-
     /* Define Button for Plots */
     .plot-btn {
     font-size: 30px;
@@ -171,25 +166,32 @@ ui <- fluidPage(
     border-style: double;
     }
 
-
     /* Define Plot-Buttons when Selected/active */
     .active-plot {
     background-color: #e0e0e0;
     color: black;
     background-image: none;
     }    
-    
   "))
   ),
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 2.2 Set Title-Panel ###############
   # Define a fluid Row
   fluidRow(
     # Set a Column
     column(3, 
-           # Set the title panel
+           # Define logo and title
            titlePanel(title = span(img(src = "logo.png", height = 50), HTML('<span style="font-size: 1.95em;">ggpilot</span>')), windowTitle = "ggpilot")),
-    # Set a 
+    # Set a Column
     column(9, align = "center", 
            style = "margin-top: 15px;",
            tags$head(
@@ -202,6 +204,7 @@ ui <- fluidPage(
               $('#' + btnId).addClass('active-btn');
             });
          ")),
+           # Add action buttons in the title panel
            actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i> Daten'), class = "custom-btn"),
            actionButton("btn_plottype", label = HTML('<i class="glyphicon glyphicon-stats"></i> Plot-Typ'), class = "custom-btn"),
            actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i> Variablen'), class = "custom-btn"),
@@ -212,14 +215,23 @@ ui <- fluidPage(
     )
   ),
   
-  
-  # Hidden Input for the Active Tab
+  # Define Hidden Inputs for the Active Tab
   tags$div(
     textInput("activeTab", label = NULL, value = "data"),
     # Set the Input to be hidden
     style = "display: none;"
   ),  
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 2.3 Set Sidebar ###############
   # Define Sidebar-Layout
   sidebarLayout(
     
@@ -235,10 +247,10 @@ ui <- fluidPage(
                  
                  
                  
-                 ############### 2.2 Input Fields ###############
+                 ############### 2.4 Input Fields ###############
                  # Define Conditional-Panel for when data tab is selected
                  conditionalPanel(condition = "input.activeTab == 'data'",
-                                  ########## 2.2.1 Select Data ########## 
+                                  ########## 2.4.1 UI to Select Data ########## 
                                   # Add Button for File Input
                                   fileInput("file", "Datensatz auswählen",
                                             buttonLabel = "Durchsuchen", placeholder = "Keine Datei ausgewählt", 
@@ -248,7 +260,7 @@ ui <- fluidPage(
                  
                  
                  
-                 ########## 2.2.2 Select Plot-Type ##########
+                 ########## 2.4.2 UI for Plot-Type ##########
                  # Define HTML-Script for handling Plot-Types
                  tags$script(HTML("
                                   Shiny.addCustomMessageHandler('setActivePlot', function(btnId) {
@@ -269,7 +281,7 @@ ui <- fluidPage(
                  
                  
                  
-                 ########## 2.2.2 Select Variables ##########
+                 ########## 2.4.3 UI to Select Variables ##########
                  # Define Conditional-Panel for when Variables tab is selected
                  conditionalPanel(condition = "input.activeTab == 'variables'",
                                   # Set title
@@ -280,7 +292,6 @@ ui <- fluidPage(
                                   conditionalPanel(condition = "output.is_numeric_x == false",
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              
                                                               # Create a Collapse-Panel for Theme-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
@@ -296,10 +307,8 @@ ui <- fluidPage(
                                   selectInput("y_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
                                   conditionalPanel(condition = "output.is_numeric_y == false",
-                                                   
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              
                                                               # Create a Collapse-Panel for Theme-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
@@ -334,7 +343,6 @@ ui <- fluidPage(
                                   conditionalPanel(condition =  "output.is_numeric_col == false",
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              
                                                               # Create a Collapse-Panel for Theme-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
@@ -367,12 +375,11 @@ ui <- fluidPage(
                  
                  
                  
-                 ########## 2.2.3 Plot Options ##########
+                 ########## 2.4.4 UI for Plot Options ##########
                  # Define Conditional-Panel for when Plot-Options tab is selected
                  conditionalPanel(condition = "input.activeTab == 'plot_options'",
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             
                                              # Create a Collapse-Panel for Theme-Settings
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
@@ -391,9 +398,8 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             
-                                             
                                              # Create a Collapse-Panel for Color-Palette-Settings
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
@@ -412,27 +418,24 @@ ui <- fluidPage(
                                                                            "tron", "uchicago", "ucscgb", "jco", "calc", "canva", "colorblind", 
                                                                            "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
                                                                            "hc", "pander", "ptol", "solarized", 
-                                                                           "stata", "tableau", "wsj"), selected = "Gemäss Theme"),
-                                                   
+                                                                           "stata", "tableau", "wsj"),
+                                                               selected = "Gemäss Theme"),
                                                    # Set UI for individual color palette
                                                    conditionalPanel(condition = "input.Color_Palette =='Eigene Farbpalette erstellen'",
                                                                     # Add Button
                                                                     actionButton("add", "Farbe hinzufügen"),
                                                                     actionButton("remove_last", "Letzte Farbe entfernen"),
                                                                     tags$div(id = "input_container"),
-                                                                    
                                                                     # Create CSS for inavlid colors
                                                                     tags$style(HTML("
                                                                       .invalid { background-color: #ffcccc !important; }
                                                                       .error-message { color: red; font-size: 14px; margin-left: 10px; display: inline; }
                                                                     ")),
-                                                                    
                                                                     # JS to validate colors
                                                                     tags$script(HTML("
                                                                       Shiny.addCustomMessageHandler('validColor', function(data) {
                                                                         var inputField = document.getElementById(data.id);
                                                                         var errorText = document.getElementById(data.id + '_error');
-                                                                        
                                                                         if (data.valid) {
                                                                           inputField.classList.remove('invalid');
                                                                           if (errorText) errorText.style.display = 'none';
@@ -443,14 +446,13 @@ ui <- fluidPage(
                                                                       });
                                                                     "))
                                                    ),
-                                                   
                                                    selectInput(inputId = "color_palette_target", label = "Farbelette anwenden auf...", 
                                                                choices = c("Füllung", "Linien", "Füllung und Linien"), selected = "Füllung")
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             
                                              # Create a Collapse-Panel for Plot-Size
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
@@ -468,6 +470,7 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              # Create a Collapse-Panel for Axis-Range
                                              bsCollapsePanel(
@@ -492,10 +495,8 @@ ui <- fluidPage(
                                                        numericInput(inputId = "x_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
                                                      )
                                                    ),
-                                                   
                                                    # Set a HTML header for the X-Axis Range Text
                                                    HTML('<label class="control-label">Y-Achse</label>'),
-                                                   
                                                    # Define the min and max value next to each other
                                                    div(
                                                      # Define style
@@ -515,10 +516,9 @@ ui <- fluidPage(
                                                checkboxInput(inputId = "exact_axis_range", label = "Abstand bis zu Achsen-Ende", value = TRUE)
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   conditionalPanel(condition = "output.show_grouping_options",
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              
-                                                              
                                                               # Create a Collapse-Panel for Group-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
@@ -532,6 +532,7 @@ ui <- fluidPage(
                                                    )
                                                    
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   conditionalPanel(condition = "output.show_barplot_options",
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               # Create a Collapse-Panel for Errorbar-Settings
@@ -546,6 +547,7 @@ ui <- fluidPage(
                                                               )
                                                    )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   conditionalPanel(condition = "output.show_linepolot_options",
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               # Create a Collapse-Panel for Lineplot-Settings
@@ -562,9 +564,9 @@ ui <- fluidPage(
                                                               )
                                                    )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   conditionalPanel(condition = "output.show_errorbar_options",
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              
                                                               # Create a Collapse-Panel for Errorbar-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
@@ -583,6 +585,7 @@ ui <- fluidPage(
                                                               )
                                                    )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   conditionalPanel(condition = "output.show_scatter_options",
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               # Create a Collapse-Panel for Scatterplot-Settings
@@ -597,6 +600,7 @@ ui <- fluidPage(
                                                               )
                                                    )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   conditionalPanel(condition = "output.show_scatter_options",
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               # Create a Collapse-Panel for Scatterplot-Settings
@@ -620,7 +624,7 @@ ui <- fluidPage(
                  
                  
                  
-                 ########## 2.2.4 Text ##########
+                 ########## 2.4.5 UI for Text ##########
                  # Define Conditional-Panel for when text tab is selected
                  conditionalPanel(condition = "input.activeTab == 'text'",
                                   # Text-Input for the Title
@@ -639,10 +643,12 @@ ui <- fluidPage(
                  
                  
                  
-                 ########## 2.2.5 Layout ##########
+                 ########## 2.4.6 UI for Layout ##########
                  # Define Conditional-Panel for when layout tab is selected
                  conditionalPanel(condition = "input.activeTab == 'layout'",
+                                  # Create a conditionalPanel
                                   conditionalPanel(condition = "output.show_title_options",
+                                                   # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
                                                                 title = BSCollapseArrow("Überschrift"),
@@ -670,10 +676,12 @@ ui <- fluidPage(
                                                               )
                                                               )
                                              ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Achsen-Überschrift"),
                                                div(class = ".collapse_panel-settings", 
+                                                   # Create a column
                                                    column(6,
                                                           h3("X-Achse"),
                                                           # Text-Input for the X-Axis-Title
@@ -683,6 +691,7 @@ ui <- fluidPage(
                                                           numericInput(inputId = "X_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                                           selectInput(inputId = "X_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                                                    ),
+                                                   # Create a column
                                                    column(6, 
                                                           h3("Y-Achse"),
                                                           # Text-Input for the Y-Axis-Title
@@ -695,10 +704,12 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Achsen-Text"),
                                                div(class = ".collapse_panel-settings",
+                                                   # Create a column
                                                    column(6,
                                                           h3("X Achse"),
                                                           # Text-Input for the X-Axis Label
@@ -710,6 +721,7 @@ ui <- fluidPage(
                                                           selectInput(inputId = "Axis_X_Text_H_Alignment", label = "Vertikale Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme"),
                                                           selectInput(inputId = "Axis_X_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
                                                    ),
+                                                   # Create a column
                                                    column(6,
                                                           h3("Y Achse"),
                                                           # Text-Input for the Y-Axis Label
@@ -724,16 +736,19 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Achsen-Linien"),
                                                div(class = ".collapse_panel-settings",
+                                                   # Create a column
                                                    column(6,
                                                           h3("X-Achse"),
                                                           selectInput(inputId = "Axis_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Axis_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Axis_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
+                                                   # Create a column
                                                    column(6,
                                                           h3("Y-Achse"),
                                                           selectInput(inputId = "Axis_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
@@ -743,10 +758,12 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Achsen-Ticks"),
                                                div(class = ".collapse_panel-settings",
+                                                   # Create a column
                                                    column(6,
                                                           h3("X-Achse"),
                                                           selectInput(inputId = "Axis_X_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
@@ -754,6 +771,7 @@ ui <- fluidPage(
                                                           textInput(inputId = "Axis_X_Ticks_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           numericInput(inputId = "Axis_X_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA)
                                                    ),
+                                                   # Create a column
                                                    column(6,
                                                           h3("Y-Achse"),
                                                           selectInput(inputId = "Axis_Y_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
@@ -764,16 +782,19 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Haupt-Linien"),
                                                div(class = ".collapse_panel-settings",
+                                                   # Create a column
                                                    column(6,
                                                           h3("X-Achse"),
                                                           selectInput(inputId = "Major_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Major_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Major_Grid_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
+                                                   # Create a column
                                                    column(6,
                                                           h3("Y-Achse"),
                                                           selectInput(inputId = "Major_Grid_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
@@ -783,16 +804,19 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Minor-Linien"),
                                                div(class = ".collapse_panel-settings",
+                                                   # Create a column
                                                    column(6,
                                                           h3("X-Achse"),
                                                           selectInput(inputId = "Minor_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Minor_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Minor_Grid_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
+                                                   # Create a column
                                                    column(6,
                                                           h3("Y-Achse"),
                                                           selectInput(inputId = "Minor_Grid_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
@@ -802,10 +826,12 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
                                                title = BSCollapseArrow("Hintergrund"),
                                                div(class = ".collapse_panel-settings",
+                                                   # Create a column
                                                    column(6,
                                                           h3("Plot"),
                                                           textInput(inputId = "Plot_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
@@ -813,6 +839,7 @@ ui <- fluidPage(
                                                           numericInput(inputId = "Plot_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Plot_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
+                                                   # Create a column
                                                    column(6,
                                                           h3("Panel"),
                                                           textInput(inputId = "Panel_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
@@ -823,11 +850,14 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
+                                  # Create a conditional panel for group-variable settings
                                   conditionalPanel(condition = "output.show_grouping_options",
+                                                   # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
                                                                 title = BSCollapseArrow("Legende"),
                                                                 div(class = ".collapse_panel-settings",
+                                                                    # Crate a column
                                                                     column(6,
                                                                            h3("Titel"),
                                                                            # Text-Input for the Legend-Title
@@ -837,6 +867,7 @@ ui <- fluidPage(
                                                                            numericInput(inputId = "Legend_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                                                            selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                                                                     ),
+                                                                    # Create a column
                                                                     column(6,
                                                                            h3("Items"),
                                                                            # Text-Input for the X-Axis-Title
@@ -849,10 +880,12 @@ ui <- fluidPage(
                                                                 )
                                                               )
                                                    ),
+                                                   # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
                                                                 title = BSCollapseArrow("Legenden-Hintergrund"),
                                                                 div(class = ".collapse_panel-settings",
+                                                                    # Create a column
                                                                     column(6,
                                                                            h3("Legenden-Box"),
                                                                            title = BSCollapseArrow("Legenden-Hintergrund"),
@@ -864,10 +897,12 @@ ui <- fluidPage(
                                                                 )
                                                               )
                                                    ),
+                                                   # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
                                                                 title = BSCollapseArrow("Legenden-Optionen"),
                                                                 div(class = ".collapse_panel-settings",
+                                                                    # Create a column
                                                                     column(6,
                                                                            h3("Anordnung"),
                                                                            selectInput(inputId = "Legend_Position", label = "Position der Legende", choices = c("Gemäss Theme", "Keine", "Rechts", "Links", "Unten", "Oben", "Im Plot"), selected = "Gemäss Theme"),
@@ -875,6 +910,7 @@ ui <- fluidPage(
                                                                            selectInput(inputId = "Legend_Text_Position", label = "Position der Legenden-Items", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Legend_Text_Direktion", label = "Ausrichtung der Legenden-Items", choices = c("Gemäss Theme", "Vertikal", "Horizontal"), selected = "Gemäss Theme")
                                                                     ),
+                                                                    # Create a column
                                                                     column(6,
                                                                            h3("Grösse & Abstände"),
                                                                            numericInput(inputId = "Legend_Key_Width", label = "Breite der Symbole", min = 0, max = 50, step = 0.1, value = NA),
@@ -886,11 +922,14 @@ ui <- fluidPage(
                                                               )
                                                    )
                                   ),
+                                  # Create a conditional panel for facet-settings
                                   conditionalPanel(condition = "output.show_facet_options",
+                                                   # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
                                                                 title = BSCollapseArrow("Facetten-Hintergrund"),
                                                                 div(class = ".collapse_panel-settings",
+                                                                    # Create a column
                                                                     column(6,
                                                                            h3("Zeilen"),
                                                                            textInput(inputId = "Stripe_X_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
@@ -898,6 +937,7 @@ ui <- fluidPage(
                                                                            numericInput(inputId = "Stripe_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                                            textInput(inputId = "Stripe_X_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                                     ),
+                                                                    # Create a column
                                                                     column(6,
                                                                            h3("Spalten"),
                                                                            textInput(inputId = "Stripe_Y_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
@@ -908,10 +948,12 @@ ui <- fluidPage(
                                                                 )
                                                               )
                                                    ),
+                                                   # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
                                                                 title = BSCollapseArrow("Facetten-Beschriftung"),
                                                                 div(class = ".collapse_panel-settings",
+                                                                    # Create a column
                                                                     column(6,
                                                                            h3("Zeilen"),
                                                                            selectInput(inputId = "Stripe_X_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
@@ -920,6 +962,7 @@ ui <- fluidPage(
                                                                            numericInput(inputId = "Stripe_X_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                                                            selectInput(inputId = "Stripe_X_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                                                                     ),
+                                                                    # Create a column
                                                                     column(6,
                                                                            h3("Spalten"),
                                                                            selectInput(inputId = "Stripe_Y_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
@@ -939,10 +982,11 @@ ui <- fluidPage(
                  
                  
                  
-                 ########## 2.2.6 Download ##########
+                 ########## 2.4.7 Download ##########
                  # Define Conditional-Panel for when Download tab is selected
                  conditionalPanel(condition = "input.activeTab == 'download'",
                                   fluidRow(
+                                    # Create a column
                                     column(6,
                                            h3("Plot"),
                                            # create a Download-Button for Plot
@@ -951,6 +995,7 @@ ui <- fluidPage(
                                            selectInput("file_format", "Dateiformat:", 
                                                        choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
                                     ),
+                                    # Create a column
                                     column(6,
                                            h3("R-Code"),
                                            # create a Download-Button for RCode
@@ -967,8 +1012,8 @@ ui <- fluidPage(
     
     
     
-    ############### 2.3 Main Panel ###############
-    ########## 2.3.1 Plot-Output ##########
+    ############### 2.5 Main Panel ###############
+    ########## 2.5.1 Plot-Output ##########
     # Define the Main-Panel
     mainPanel(
       # Set the plot as output
@@ -977,12 +1022,15 @@ ui <- fluidPage(
       
       
       
-      ########## 2.3.2 Code-Output ##########
-      # Add TextOutput for rcode
+      ########## 2.5.2 Code-Output ##########
+      # Add a column
       column(11,
+             # Add TextOutput for rcode
              verbatimTextOutput("rcode"),
       ),
+      # Acc a column
       column(1,
+             # Add setup to copy rcode
              rclipboardSetup(),
              
              # UI output for copy-to-clipboard button
@@ -1013,169 +1061,70 @@ ui <- fluidPage(
 
 #################### 3. Server ####################
 server <- function(input, output, session) {
-  ############### 3. Define reactive Values ###############
-  X_Factors <- reactiveValues(values = NA)
-  is_numeric_x <- reactiveVal(NULL)
-  is_numeric_y <- reactiveVal(value = NA)
-  is_numeric_group <- reactiveVal(value = NA)
-  is_numeric_grid_col <- reactiveVal(value = NA)
-  is_numeric_grid_row <- reactiveVal(value = NA)
-  # Manual Colors for color palette
-  manual_colors <- reactiveValues(values = list(), count = 0)  # Zähler für IDs
-  
-  
-  ############### 3.1 Read Data ###############
-  # Create a reactive data with the loaded data
-  data <- reactive({
-    if (is.null(input$file)) {
-      # Rückgabe eines leeren Standard-Datensatzes, wenn keine Datei geladen wurde
-      return(data.frame(
-        Placeholder_X = numeric(0),
-        Placeholder_Y = numeric(0)
-      ))
-    } else {
-      # If input-file is selected
-      req(input$file)
-      # Get the type of selected file
-      file_ext <- tools::file_ext(input$file$name)
-      
-      # If file type is csv, read csv-File
-      if (file_ext == "csv") {
-        return(read.csv(input$file$datapath, header = TRUE))
-      }
-      # If file type is xlsx, read xlsx-File
-      else if (file_ext == "xlsx") {
-        return(readxl::read_excel(input$file$datapath))
-      }
-      # If file type is rds, load rds-File
-      else if (file_ext == "rds") {
-        return(readRDS(input$file$datapath))
-      }
-      # If file type is rds, load rds-File
-      else if (file_ext == "rdata") {
-        # Create new environment
-        env <- new.env()
-        
-        # Load file
-        load(input$file$datapath, envir = env)
-        
-        # List all files in environment
-        obj_names <- ls(env)
-        
-        # Select first object of .RData-File if there is only one object
-        if (length(obj_names) == 1) {
-          return(env[[obj_names[1]]])
-          # Give error-message if there are more objects in the .RData-File
-        } else {
-          stop("Das .RData-File beinhaltet mehrere Objekte. Bitte .RData-File mit nur einem Objekt verwenden.")
-        }
-      }
-      # If file is other type, stop
-      else {
-        stop("Unbekanntes Dateiformat. Bitte laden Sie eine CSV-, XLSX-, rdata oder RDS-Datei hoch.")
-      }
-    }})
-  
-  show_grouping_options <- reactiveVal(value = FALSE)
-  
-  observeEvent(input$group_var, {
-    if(input$group_var == " "){
-      show_grouping_options(FALSE)}
-    else{
-      show_grouping_options(TRUE)}
-  })
-  
-  output$show_grouping_options <- reactive({ show_grouping_options() })
-  outputOptions(output, "show_grouping_options", suspendWhenHidden = FALSE)
-  
-
-  show_facet_options <- reactiveVal(value = FALSE)
-  
-  observeEvent(list(input$grid_col_var, input$grid_row_var), {
-    if(input$grid_col_var == " " & input$grid_row_var == " "){
-      show_facet_options(FALSE)}
-    else{
-      show_facet_options(TRUE)}
-  })
-  
-  output$show_facet_options <- reactive({ show_facet_options() })
-  outputOptions(output, "show_facet_options", suspendWhenHidden = FALSE)
-  
-  
-  show_errorbar_options <- reactiveVal(value = FALSE)
-  show_scatter_options <- reactiveVal(value = FALSE)
-  
-  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    if(activePlot() == "Bar" | activePlot() == "Line"){
-      show_errorbar_options(TRUE)}
-    else{
-      show_errorbar_options(FALSE)}
-  })
-  
-  output$show_errorbar_options <- reactive({ show_errorbar_options() })
-  outputOptions(output, "show_errorbar_options", suspendWhenHidden = FALSE)
-  
-  
-  show_barplot_options <- reactiveVal(value = FALSE)
-
-  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    if(activePlot() == "Bar"){
-      show_barplot_options(TRUE)}
-    else{
-      show_barplot_options(FALSE)}
-  })
-  
-  output$show_barplot_options <- reactive({ show_barplot_options() })
-  outputOptions(output, "show_barplot_options", suspendWhenHidden = FALSE)
-  
-  
-  
-  show_linepolot_options <- reactiveVal(value = FALSE)
-  
-  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    if(activePlot() == "Line"){
-      show_linepolot_options(TRUE)}
-    else{
-      show_linepolot_options(FALSE)}
-  })
-  
-  output$show_linepolot_options <- reactive({ show_linepolot_options() })
-  outputOptions(output, "show_linepolot_options", suspendWhenHidden = FALSE)
-  
-  
-  
-  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    if (activePlot() == "Scatter"){
-      show_scatter_options(TRUE)
-    }
-    else{
-      show_scatter_options(FALSE)}
-  })
-  output$show_scatter_options <- reactive({ show_scatter_options() })
-  outputOptions(output, "show_scatter_options", suspendWhenHidden = FALSE)
-  
-
-  
-  show_title_options <- reactiveVal(value = FALSE)
-
-  observeEvent(list(input$plot_title, input$plot_subtitle), {
-    if(input$plot_title == "" & input$plot_subtitle ==""){
-      show_title_options(FALSE)}
-    else{
-      show_title_options(TRUE)}
-  })
-
-  output$show_title_options <- reactive({ show_title_options() })
-  outputOptions(output, "show_title_options", suspendWhenHidden = FALSE)
   
   
   
   
+  
+  ############### 3.1 Define reactive Values ###############
   # Create reactive Value for active Tab
   activeTab <- reactiveVal("data")
   # Create reactive Value for active Plot
   activePlot <- reactiveVal("data")
+  # Variable to observe whether options for barplots should be shown
+  show_barplot_options <- reactiveVal(value = FALSE)
+  # Variable to observe whether options for lineplots should be shown
+  show_linepolot_options <- reactiveVal(value = FALSE)
+  # Variable to observe whether options for errorbars should be shown
+  show_errorbar_options <- reactiveVal(value = FALSE)
+  # Variable to observe whether options for scatterplots should be shown
+  show_scatter_options <- reactiveVal(value = FALSE)
+  # Variable to check wether x-variable is numeric
+  is_numeric_x <- reactiveVal(NULL)
+  # Variable to check wether y-variable is numeric
+  is_numeric_y <- reactiveVal(value = NA)
+  # Variable to check wether grouping-variable is numeric
+  is_numeric_group <- reactiveVal(value = NA)
+  # Variable to check wether facet-column-variable is numeric
+  is_numeric_grid_col <- reactiveVal(value = NA)
+  # Variable to check wether facet-row-variable is numeric
+  is_numeric_grid_row <- reactiveVal(value = NA)
+  # Manual Colors for color palette
+  manual_colors <- reactiveValues(values = list(), count = 0)
+  # Variable to observe whether options for grouping variable should be shown
+  show_grouping_options <- reactiveVal(value = FALSE)
+  # Variable to observe whether options for facet variable should be shown
+  show_facet_options <- reactiveVal(value = FALSE)
+  # Variable to observe whether options for title should be shown
+  show_title_options <- reactiveVal(value = FALSE)
+  # Variable to contain all selected factor variables
+  Factors <- reactiveValues(values = c(""))
+  # Variable which includes code to change factors
+  factor_code <- reactiveVal(value = "")
+  # Variable which includes code to change x-axis factors
+  x_factor_code <- reactiveVal(value = "")
+  # Variable which includes code to change y-axis factors
+  y_factor_code <- reactiveVal(value = "")
+  # Variable which includes code to change grouping factors
+  group_factor_code <- reactiveVal(value = "")
+  # Variable which includes code to change facet-column factors
+  grid_col_factor_code <- reactiveVal(value = "")
+  # Variable which includes code to change facet-row factors
+  grid_row_factor_code <- reactiveVal(value = "")
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 3.2 Update UI ###############
+  ########## 3.2.1 Observe buttons for active tab ##########
   # Observe button-inputs for btn_data
   observeEvent(input$btn_data, {
     # Define the active Tab
@@ -1226,6 +1175,16 @@ server <- function(input, output, session) {
     session$sendCustomMessage("setActiveButton", "btn_download")
   })
   
+  
+  # Make active tab accessible in the UI
+  observe({
+    updateTextInput(session, "activeTab", value = activeTab())
+  })
+  
+  
+  
+  
+  ########## 3.2.2 Observe buttons for plot-type ##########
   # Observe button-inputs for plot_bar
   observeEvent(input$plot_bar, {
     # Define the active Plot
@@ -1257,19 +1216,116 @@ server <- function(input, output, session) {
   
   
   
-  # Observe the input buttons to observe the active tabs
-  observeEvent(input$btn_data, { activeTab("data") })
-  observeEvent(input$btn_plottype, { activeTab("plottype") })
-  observeEvent(input$btn_variables, { activeTab("variables") })
-  observeEvent(input$btn_plot_options, { activeTab("plot_options") })
-  observeEvent(input$btn_text, { activeTab("text") })
-  observeEvent(input$btn_layout, { activeTab("layout") })
-  observeEvent(input$btn_download, { activeTab("download") })
   
-  # Make active tab accessible
-  observe({
-    updateTextInput(session, "activeTab", value = activeTab())
+  
+  ########## 3.2.3 Update UI for barplot options ##########
+  # Check whether the current plot is a barplot
+  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
+    if(activePlot() == "Bar"){
+      show_barplot_options(TRUE)}
+    else{
+      show_barplot_options(FALSE)}
   })
+  # Update variable to control visibility of barplot options
+  output$show_barplot_options <- reactive({ show_barplot_options() })
+  outputOptions(output, "show_barplot_options", suspendWhenHidden = FALSE)
+  
+  
+  
+  
+  
+  ########## 3.2.4 Update UI for lineplot options ##########
+  # Check whether the current plot is a lineplot
+  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
+    if(activePlot() == "Line"){
+      show_linepolot_options(TRUE)}
+    else{
+      show_linepolot_options(FALSE)}
+  })
+  # Update variable to control visibility of lineplot options
+  output$show_linepolot_options <- reactive({ show_linepolot_options() })
+  outputOptions(output, "show_linepolot_options", suspendWhenHidden = FALSE)
+  
+  
+  
+  
+  
+  ########## 3.2.5 Update UI for errorbar options ##########
+  # Check whether the current plot uses an errorbar
+  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
+    if(activePlot() == "Bar" | activePlot() == "Line"){
+      show_errorbar_options(TRUE)}
+    else{
+      show_errorbar_options(FALSE)}
+  })
+  # Update variable to control visibility of errorbar options
+  output$show_errorbar_options <- reactive({ show_errorbar_options() })
+  outputOptions(output, "show_errorbar_options", suspendWhenHidden = FALSE)
+  
+  
+  
+  
+  
+  ########## 3.2.6 Update UI for scatterplot options ##########
+  # Check whether the current plot is a scatterplot
+  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
+    if (activePlot() == "Scatter"){
+      show_scatter_options(TRUE)
+    }
+    else{
+      show_scatter_options(FALSE)}
+  })
+  # Update variable to control visibility of scatterplot options
+  output$show_scatter_options <- reactive({ show_scatter_options() })
+  outputOptions(output, "show_scatter_options", suspendWhenHidden = FALSE)
+  
+  
+  
+  
+  
+  ########## 3.2.7 Update UI for grouping-variable options ##########
+  # Check whether grouping variable is defined
+  observeEvent(input$group_var, {
+    if(input$group_var == " "){
+      show_grouping_options(FALSE)}
+    else{
+      show_grouping_options(TRUE)}
+  })
+  # Update variable to control visibility of grouping-variable options
+  output$show_grouping_options <- reactive({ show_grouping_options() })
+  outputOptions(output, "show_grouping_options", suspendWhenHidden = FALSE)
+  
+  
+  
+  
+  
+  ########## 3.2.8 Update UI for facet-variable options ##########
+  # Check whether a facet variable is defined
+  observeEvent(list(input$grid_col_var, input$grid_row_var), {
+    if(input$grid_col_var == " " & input$grid_row_var == " "){
+      show_facet_options(FALSE)}
+    else{
+      show_facet_options(TRUE)}
+  })
+  # Update variable to control visibility of facet-variable options
+  output$show_facet_options <- reactive({ show_facet_options() })
+  outputOptions(output, "show_facet_options", suspendWhenHidden = FALSE)
+
+  
+  
+
+    
+  ########## 3.2.9 Update UI for title options ##########
+  # Check whether a title is defined
+  observeEvent(list(input$plot_title, input$plot_subtitle), {
+    if(input$plot_title == "" & input$plot_subtitle ==""){
+      show_title_options(FALSE)}
+    else{
+      show_title_options(TRUE)}
+  })
+  # Update variable to control visibility of title options
+  output$show_title_options <- reactive({ show_title_options() })
+  outputOptions(output, "show_title_options", suspendWhenHidden = FALSE)
   
   
   
@@ -1278,7 +1334,94 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.2 Update Variable Dropdown ###############
+  
+  
+  ############### 3.3 Read Data ###############
+  # Create a reactive data with the loaded data
+  data <- reactive({
+    
+    
+    
+    ########## 3.3.1 Default Data for missing data ##########
+    if (is.null(input$file)) {
+      # Return an empty standard dataset if no data is selected
+      return(data.frame(
+        Placeholder_X = numeric(0),
+        Placeholder_Y = numeric(0)
+      ))
+    } else {
+      # If input-file is selected
+      req(input$file)
+      # Get the type of selected file
+      file_ext <- tools::file_ext(input$file$name)
+      
+      
+      
+      
+      ########## 3.3.2 Read CSV ##########
+      # If file type is csv, read csv-File
+      if (file_ext == "csv") {
+        return(read.csv(input$file$datapath, header = TRUE))
+      }
+      
+      
+      
+      
+      ########## 3.3.3 Read XLSX ##########
+      # If file type is xlsx, read xlsx-File
+      else if (file_ext == "xlsx") {
+        return(readxl::read_excel(input$file$datapath))
+      }
+      
+      
+      
+      ########## 3.3.4 Read RDS ##########
+      # If file type is rds, load rds-File
+      else if (file_ext == "rds") {
+        return(readRDS(input$file$datapath))
+      }
+      
+      
+      
+      
+      ########## 3.3.5 Read RDATA ##########
+      # If file type is rds, load rds-File
+      else if (file_ext == "rdata") {
+        # Create new environment
+        env <- new.env()
+        
+        # Load file
+        load(input$file$datapath, envir = env)
+        
+        # List all files in environment
+        obj_names <- ls(env)
+        
+        # Select first object of .RData-File if there is only one object
+        if (length(obj_names) == 1) {
+          return(env[[obj_names[1]]])
+          # Give error-message if there are more objects in the .RData-File
+        } else {
+          stop("Das .RData-File beinhaltet mehrere Objekte. Bitte .RData-File mit nur einem Objekt verwenden.")
+        }
+      }
+      # If file is other type, stop
+      else {
+        stop("Unbekanntes Dateiformat. Bitte laden Sie eine CSV-, XLSX-, rdata oder RDS-Datei hoch.")
+      }
+    }
+    }
+    )
+
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 3.4 Update Variables ###############
+  ########## 3.4.1 Define list of variables ##########
   observeEvent(data(), {
     updateSelectInput(session, "x_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
     updateSelectInput(session, "y_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
@@ -1291,13 +1434,9 @@ server <- function(input, output, session) {
   
   
   
-  
-  
-  
-  ############### 3.X Update Variable Selection ###############
-  Factors <- reactiveValues(values = c(""))  # Reaktive Liste
-  
+  ########## 3.4.2 Observe selected variables ##########
   observeEvent(list(input$x_var, input$y_var, input$group_var, input$grid_col_var, input$grid_row_var), {
+    # Require additional variables
     req(data())  
     req(input$x_var)  
     req(input$y_var)  
@@ -1305,13 +1444,14 @@ server <- function(input, output, session) {
     req(input$grid_col_var)  
     req(input$grid_row_var)  
     
-    
+    # Define selected variables internally
     x_data <- data()[[input$x_var]]
     y_data <- data()[[input$y_var]]
     goup_data <- data()[[input$group_var]]
     grid_col_data <- data()[[input$grid_col_var]]
     grid_row_data <- data()[[input$grid_row_var]]
     
+    # Mark if x-axis variable is a factor or character
     if (is.factor(x_data)) {
       Factors$x_values <- levels(x_data)
       is_numeric_x(FALSE)
@@ -1323,6 +1463,7 @@ server <- function(input, output, session) {
       is_numeric_x(TRUE)
     }
     
+    # Mark if y-axis variable is a factor or character
     if (is.factor(y_data)) {
       Factors$y_values <- levels(y_data)
     } else if (is.character(y_data)) {
@@ -1331,6 +1472,7 @@ server <- function(input, output, session) {
       Factors$y_values <- c("")
     }
     
+    # Mark if grouping variable is a factor or character
     if (is.factor(goup_data)) {
       Factors$group_values <- levels(goup_data)
     } else if (is.character(goup_data)) {
@@ -1339,6 +1481,7 @@ server <- function(input, output, session) {
       Factors$group_values <- c("")
     }
     
+    # Mark if facet-column variable is a factor or character
     if (is.factor(grid_col_data)) {
       Factors$grid_cols_values <- levels(grid_col_data)
     } else if (is.character(grid_col_data)) {
@@ -1347,6 +1490,7 @@ server <- function(input, output, session) {
       Factors$grid_cols_values <- c("")
     }
     
+    # Mark if facet-row variable is a factor or character
     if (is.factor(grid_row_data)) {
       Factors$grid_row_values <- levels(grid_row_data)
     } else if (is.character(grid_row_data)) {
@@ -1356,71 +1500,93 @@ server <- function(input, output, session) {
     }
   })
   
+  
+  # Set variable to control whether x-axis variable is numeric
   output$is_numeric_x <- reactive({
-    req(input$x_var, data())  # Stelle sicher, dass x_var existiert
-    
+    # Require x_var and data()
+    req(input$x_var, data())
+    # save the selected x-axis variable
     x_data <- data()[[input$x_var]]
-    
+    # Check if it is factor/character
     if (is.factor(x_data) || is.character(x_data)) {
-      return(FALSE)  # Kein numerischer Wert
+      # Return FALSE if it is not numeric
+      return(FALSE)
     } else {
-      return(TRUE)  # Numerischer Wert
+      # Return TRUE if it is numeric
+      return(TRUE)
     }
   })
   
   
+  # Set variable to control whether y-axis variable is numeric
   output$is_numeric_y <- reactive({
-    req(input$y_var, data())  # Stelle sicher, dass x_var existiert
-    
+    # Require y_var and data()
+    req(input$y_var, data())
+    # save the selected y-axis variable
     y_data <- data()[[input$y_var]]
-    
+    # Check if it is factor/character
     if (is.factor(y_data) || is.character(y_data)) {
-      return(FALSE)  # Kein numerischer Wert
+      # Return FALSE if it is not numeric
+      return(FALSE)
     } else {
-      return(TRUE)  # Numerischer Wert
+      # Return TRUE if it is numeric
+      return(TRUE)
     }
   })
   
   
+  # Set variable to control whether grouping variable is numeric
   output$is_numeric_group <- reactive({
-    req(input$group_var, data())  # Stelle sicher, dass x_var existiert
-    
+    # Require group_var and data()
+    req(input$group_var, data())
+    # save the selected grouping variable
     group_data <- data()[[input$group_var]]
-    
+    # Check if it is factor/character
     if (is.factor(group_data) || is.character(group_data)) {
-      return(FALSE)  # Kein numerischer Wert
+      # Return FALSE if it is not numeric
+      return(FALSE)
     } else {
-      return(TRUE)  # Numerischer Wert
+      # Return TRUE if it is numeric
+      return(TRUE)
     }
   })
   
   
+  # Set variable to control whether facet-col variable is numeric
   output$is_numeric_col <- reactive({
-    req(input$grid_col_var, data())  # Stelle sicher, dass x_var existiert
-    
+    # Require grid_col_var and data()
+    req(input$grid_col_var, data())
+    # save the selected facet-col variable
     gridcol_data <- data()[[input$grid_col_var]]
-    
+    # Check if it is factor/character
     if (is.factor(gridcol_data) || is.character(gridcol_data)) {
-      return(FALSE)  # Kein numerischer Wert
+      # Return FALSE if it is not numeric
+      return(FALSE)
     } else {
-      return(TRUE)  # Numerischer Wert
+      # Return TRUE if it is numeric
+      return(TRUE)
     }
   })
   
   
+  # Set variable to control whether facet-row variable is numeric
   output$is_numeric_row <- reactive({
-    req(input$grid_row_var, data())  # Stelle sicher, dass x_var existiert
-    
+    # Require grid_row_var and data()
+    req(input$grid_row_var, data())
+    # save the selected facet-row variable
     grid_row <- data()[[input$grid_row_var]]
-    
+    # Check if it is factor/character
     if (is.factor(grid_row) || is.character(grid_row)) {
-      return(FALSE)  # Kein numerischer Wert
+      # Return FALSE if it is not numeric
+      return(FALSE)
     } else {
-      return(TRUE)  # Numerischer Wert
+      # Return TRUE if it is numeric
+      return(TRUE)
     }
   })
   
-  # Hide Output variables
+  
+  # Hide the defined output-variables
   outputOptions(output, "is_numeric_x", suspendWhenHidden = FALSE)
   outputOptions(output, "is_numeric_y", suspendWhenHidden = FALSE)
   outputOptions(output, "is_numeric_group", suspendWhenHidden = FALSE)
@@ -1428,56 +1594,53 @@ server <- function(input, output, session) {
   outputOptions(output, "is_numeric_row", suspendWhenHidden = FALSE)
   
   
-  # Reset factor codes
+  # Redefine factor code when there is a change in the factors
   observeEvent(input$x_var, {
     x_factor_code("")
     factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  
   observeEvent(input$y_var, {
     y_factor_code("")
     factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  
   observeEvent(input$group_var, {
     group_factor_code("")
     factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  
   observeEvent(input$grid_col_var, {
     grid_col_factor_code("")
     factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  
   observeEvent(input$grid_row_var, {
     grid_row_factor_code("")
     factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
   
-  # Create dynamic UI for rank_list()
+  
+  # Create dynamic UI for rank_list() of x-axis variable
   output$x_factor_rank_list <- renderUI({
     rank_list(input_id = "x_factor_Order", 
               labels = Factors$x_values,  
               options = sortable_options(swap = TRUE))
   })
   
-  # Create dynamic UI for rank_list()
+  # Create dynamic UI for rank_list() of y-axis variable
   output$y_factor_rank_list <- renderUI({
     rank_list(input_id = "y_factor_Order", 
               labels = Factors$y_values,  
               options = sortable_options(swap = TRUE))
   })
   
-  # Create dynamic UI for rank_list()
+  # Create dynamic UI for rank_list() of grouping variable
   output$group_factor_rank_list <- renderUI({
     rank_list(input_id = "group_factor_Order", 
               labels = Factors$group_values,  
               options = sortable_options(swap = TRUE))
   })
   
-  # Create dynamic UI for rank_list()
+  # Create dynamic UI for rank_list() of grid-col variable
   output$grid_col_factor_rank_list <- renderUI({
     rank_list(input_id = "grid_col_factor_Order", 
               labels = Factors$grid_cols_values,  
               options = sortable_options(swap = TRUE))
   })
   
-  # Create dynamic UI for rank_list()
+  # Create dynamic UI for rank_list() of grid-row variable
   output$grid_row_factor_rank_list <- renderUI({
     rank_list(input_id = "grid_row_factor_Order", 
               labels = Factors$grid_row_values,  
@@ -1486,187 +1649,144 @@ server <- function(input, output, session) {
   
   
   
+
   
-  
-  
-  
-  
-  
-  ############### 3.X Check for changes ###############
-  # Create reactive factor_code
-  factor_code <- reactiveVal(value = "")
-  x_factor_code <- reactiveVal(value = "")
-  y_factor_code <- reactiveVal(value = "")
-  group_factor_code <- reactiveVal(value = "")
-  grid_col_factor_code <- reactiveVal(value = "")
-  grid_row_factor_code <- reactiveVal(value = "")
-  
+  ########## 3.4.3 Check for changes in factor orders ##########
   # Check for Update on order of levels on x-factor
   observeEvent(input$x_factor_Order, {
     # Require data
     req(data(), input$x_factor_Order, input$x_var)
-    
     # Initate new_factor_code
     new_x_factor_code <- ""
-    
     # Check if order has changed
     if (!identical(Factors$x_values, input$x_factor_Order)) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$x_var]])) {
         new_x_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
                                      input$x_var, input$x_var, 
-                                     paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
-      } 
+                                     paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))} 
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$x_var]])) {
         new_x_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
                                      input$x_var, input$x_var, 
-                                     paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))
-      }
+                                     paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))}
     }
-    
     # Update reactive x-factor variable
     x_factor_code(new_x_factor_code)
-    
     # Create new factor-code
     new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    
     # Update factor_code
     factor_code(new_factor_code)
   })
+  
   
   # Check for Update on order of levels on y-factor
   observeEvent(input$y_factor_Order, {
     # Require data
     req(data(), input$y_factor_Order, input$y_var)
-    
     # Initate new_factor_code
     new_y_factor_code <- ""
-    
     # Check if order has changed
     if (!identical(Factors$y_values, input$y_factor_Order)) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$y_var]])) {
         new_y_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
                                      input$y_var, input$y_var, 
-                                     paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))
-      } 
+                                     paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))} 
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$y_var]])) {
         new_y_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
                                      input$y_var, input$y_var, 
-                                     paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))
-      }
+                                     paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))}
     }
-    
     # Update reactive y-factor variable
     y_factor_code(new_y_factor_code)
-    
     # Create new factor-code
     new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    
     # Update factor_code
     factor_code(new_factor_code)
   })
+  
   
   # Check for Update on order of levels on grouping-factor
   observeEvent(input$group_factor_Order, {
     # Require data
     req(data(), input$group_factor_Order, input$group_var)
-    
     # Initate new_factor_code
     new_group_factor_code <- ""
-    
     # Check if order has changed
     if (!identical(Factors$group_values, input$group_factor_Order)) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$group_var]])) {
         new_group_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
                                          input$group_var, input$group_var,
-                                         paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))
-      }
+                                         paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))}
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$group_var]])) {
         new_group_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
                                          input$group_var, input$group_var,
-                                         paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))
-      }
+                                         paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))}
     }
-    
     # Update reactive group-factor variable
     group_factor_code(new_group_factor_code)
-    
     # Create new factor-code
     new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    
     # Update factor_code
     factor_code(new_factor_code)
   })
+  
   
   # Check for Update on order of levels on grid-column-factor
   observeEvent(input$grid_col_factor_Order, {
     # Require data
     req(data(), input$grid_col_factor_Order, input$grid_col_var)
-    
     # Initate new_factor_code
     new_gridcol_factor_code <- ""
-    
     # Check if order has changed
-    if (!identical(Factors$group_values, input$grid_col_factor_Order)) {
+    if (!identical(Factors$grid_cols_values, input$grid_col_factor_Order)) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$grid_col_var]])) {
         new_gridcol_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
                                            input$grid_col_var, input$grid_col_var,
-                                           paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))
-      }
+                                           paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))}
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$grid_col_var]])) {
         new_gridcol_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
                                            input$grid_col_var, input$grid_col_var,
-                                           paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))
-      }
+                                           paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))}
     }
-    
     # Update reactive group-factor variable
     grid_col_factor_code(new_gridcol_factor_code)
-    
     # Create new factor-code
     new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    
     # Update factor_code
     factor_code(new_factor_code)
   })
+  
   
   # Check for Update on order of levels on grid-row-factor
   observeEvent(input$grid_row_factor_Order, {
     # Require data
     req(data(), input$grid_row_factor_Order, input$grid_row_var)
-    
     # Initate new_factor_code
     new_gridrow_factor_code <- ""
-    
     # Check if order has changed
     if (!identical(Factors$grid_row_values, input$grid_row_factor_Order)) {
       # Adjust factors if variable is factor
       if (is.factor(data()[[input$grid_row_var]])) {
         new_gridrow_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
                                            input$grid_row_var, input$grid_row_var,
-                                           paste(sprintf("'%s'", input$grid_row_factor_Order), collapse = ", "))
-      }
+                                           paste(sprintf("'%s'", input$grid_row_factor_Order), collapse = ", "))}
       # Make factor if variable is not a factor
       else if (is.character(data()[[input$grid_row_var]])) {
         new_gridrow_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
                                            input$grid_row_var, input$grid_row_var,
-                                           paste(sprintf("'%s'", input$grid_row_factor_Order), collapse = ", "))
-      }
+                                           paste(sprintf("'%s'", input$grid_row_factor_Order), collapse = ", "))}
     }
-    
     # Update reactive group-factor variable
     grid_row_factor_code(new_gridrow_factor_code)
-    
     # Create new factor-code
     new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    
     # Update factor_code
     factor_code(new_factor_code)
   })
@@ -1679,14 +1799,14 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.X Update Manual Color Palette ###############
+  ############### 3.5 Update Manual Color Palette ###############
+  ########## 3.5.1 Add new Colors ##########
   # When "Add" is Pressed
   observeEvent(input$add, {
     # Increase counter of ID's
-    manual_colors$count <- manual_colors$count + 1  # Erhöhe den Zähler für eine neue ID
+    manual_colors$count <- manual_colors$count + 1
     # Set new couner ID
     new_id <- manual_colors$count
-    
     # Insert new UI
     insertUI(
       selector = "#input_container",
@@ -1703,10 +1823,8 @@ server <- function(input, output, session) {
                   style = "display: none;")
       )
     )
-    
     # Create new entries using a standard-color
     manual_colors$values[[as.character(new_id)]] <- "gray"
-    
     # Observe all entries
     observe({for (id in names(manual_colors$values)) {
       color <- input[[paste0("vector_", id)]]
@@ -1723,6 +1841,10 @@ server <- function(input, output, session) {
     })
   })
   
+  
+  
+  
+  ########## 3.5.2 Remove colors ##########
   # When "Remove" is Pressed
   observeEvent(input$remove_last, {
     # If there is at least one color defined
@@ -1730,7 +1852,7 @@ server <- function(input, output, session) {
       # Remove last element of manual_colors
       last_id <- as.character(manual_colors$count)
       # Remove UI
-      removeUI(selector = paste0("#input_row_", last_id))  # UI entfernen
+      removeUI(selector = paste0("#input_row_", last_id))
       # Remove Value of manual_colors
       manual_colors$values[[last_id]] <- NULL
       # Reduce counter of manual_colors
@@ -1747,7 +1869,20 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.3 Generate Basic R-Code ###############
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 4. Generate Basic R-Code ###############
+  ############### 4.1 Set reactive R-Code ###############
   # Define Code-Text
   r_code <- reactive({
     req(data())
@@ -1756,7 +1891,11 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.1 Set Variables Based on Input-Data ##########
+    
+    
+    
+    
+    ############### 4.2 Set Variables Based on Input-Data ###############
     # X-Axis Variable
     x_var <- if (input$x_var == " ") "1" else input$x_var
     # Y-Axis Variable
@@ -1805,14 +1944,23 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.2 Generate Code-Output ##########
+    
+    
+    
+    
+    ############### 4.3 Define Code with X- and Y- Axis variable ###############
     # Define Code Lines
     r_code <- sprintf("q <- ggplot(df, aes_string(x = '%s', y = '%s'", x_var, y_var)
     
     
     
     
-    ########## 3.3.3 Add Grouping Variable ########## 
+    
+    
+    
+    
+    
+    ############### 4.4 Add Grouping Variable ###############
     # Define Grouping-variable if selected
     if (!is.null(group_var)) {
       if(input$color_palette_target == "Füllung"){
@@ -1833,7 +1981,12 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.4 Define Bar-Geoms ########## 
+    
+    
+    
+    
+    ############### 4.5 Define Geoms ###############
+    ########## 4.5.1 Bar or Line-Geoms ##########
     if (x_var != "1" && y_var != "1") {
       if (activePlot() == "Bar"|activePlot() == "Line"){
         if (activePlot() == "Bar"){
@@ -1863,7 +2016,6 @@ server <- function(input, output, session) {
           }
           
         }
-        
         if (!is.na(dodge_value)) {
           r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
         }
@@ -1872,7 +2024,8 @@ server <- function(input, output, session) {
         
         
         
-        ########## 3.3.5 Define Errorbar-Geom ##########       
+        
+        ########## 4.5.2 Errorbar-Geoms ##########
         if (input$error_type != "Keiner") {
           r_code <- paste0(r_code, sprintf(" +\n  stat_summary(fun.data = %s, geom = 'errorbar'",
                                            switch(
@@ -1902,6 +2055,9 @@ server <- function(input, output, session) {
     
     
     
+    
+    
+    ########## 4.5.3 Boxplot-Geoms ##########
     if (x_var != "1" && y_var != "1") {
       if (activePlot() == "Box"){
         r_code <- paste0(r_code, " +\n  geom_boxplot(")
@@ -1917,6 +2073,9 @@ server <- function(input, output, session) {
     
     
     
+    
+    
+    ########## 4.5.4 Scatterplot-Geoms ##########
     if (x_var != "1" && y_var != "1") {
       if (activePlot() == "Scatter"){
         r_code <- paste0(r_code, " +\n  geom_point(")
@@ -1930,6 +2089,11 @@ server <- function(input, output, session) {
         }
         r_code <- paste0(r_code, ")")
         
+        
+        
+        
+        
+        ########## 4.5.5 Regressionline-Geoms ##########
         if(input$show_line==TRUE){
           r_code <- paste0(r_code, " +\n  geom_smooth(method = 'lm'")
           if(input$scater_line_show_se==FALSE){
@@ -1958,7 +2122,13 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.6 Define Facets ##########  
+    
+    
+    
+    
+    
+    
+    ############### 4.6 Define Facets ############### 
     # Add Facets if defined
     if (!is.null(grid_col_var) & !is.null(grid_row_var)) {
       r_code <- paste0(r_code, sprintf(" +\n  facet_grid(rows = vars(%s), cols = vars(%s))", grid_row_var, grid_col_var))
@@ -1972,7 +2142,11 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.7 Set Themes ##########  
+    
+    
+    
+    
+    ############### 4.7 Set Themes ###############
     # Add themes if theme is not gray
     if (theme_selected != "Gray") {
       r_code <- paste0(r_code, sprintf(" +\n  %s",
@@ -2010,7 +2184,12 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.8 Set Labs ##########  
+    
+    
+    
+    
+    ############### 4.8 Set Labs ###############
+    # Define code-line for labs
     labs_code <- ""
     
     if (!is.null(input$plot_title) && input$plot_title != "") {
@@ -2044,7 +2223,6 @@ server <- function(input, output, session) {
         sprintf("fill = '%s'", input$legend_title)
       )
     }
-    
     # Add labs_code when labs were assigned
     if (labs_code != "") {
       r_code <- paste0(r_code, sprintf(" +\n  labs(%s)", labs_code))
@@ -2054,10 +2232,13 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.9 X and Y-Axis Range ##########  
+    
+    
+    
+    
+    ############### 4.9 X and Y-Axis Range ###############
     # Define empty Code for axis_code
     axis_code <- ""
-    
     # Adjust X-Axis range
     if (!is.na(x_axis_min) || !is.na(x_axis_max) ||! is.na(y_axis_min) || !is.na(y_axis_max) || !input$exact_axis_range) {
       axis_code <- "coord_cartesian("
@@ -2066,31 +2247,25 @@ server <- function(input, output, session) {
         axis_code <- paste0(axis_code, sprintf("xlim = c(%s, %s)", 
                                                if (!is.na(x_axis_min)) x_axis_min else "NA", 
                                                if (!is.na(x_axis_max)) x_axis_max else "NA"))
-        
         if(!is.na(y_axis_min) || !is.na(y_axis_max)){
-          axis_code <- paste0(axis_code, ", ")
-        }
+          axis_code <- paste0(axis_code, ", ")}
       }
-      
       if (!is.na(y_axis_min) || !is.na(y_axis_max)) {
         axis_code <- paste0(axis_code, sprintf("ylim = c(%s, %s)", 
                                                if (!is.na(y_axis_min)) y_axis_min else "NA", 
                                                if (!is.na(y_axis_max)) y_axis_max else "NA"))
       }
-      
       if (!input$exact_axis_range) {
         if(!is.na(y_axis_min) || !is.na(y_axis_max) || !is.na(x_axis_min) || !is.na(x_axis_max)){
-          axis_code <- paste0(axis_code, ", ")
-        }
-        
+          axis_code <- paste0(axis_code, ", ")}
         axis_code <- paste0(axis_code, "expand = FALSE")
       }
-      
+      # Close axis code
       axis_code <- paste0(axis_code, ")")
-      
-      r_code <- paste0(r_code, sprintf(" +\n  "), axis_code)
-      
+      # Paste axis code to r-code
+      r_code <- paste0(r_code, sprintf(" +\n  "), axis_code)#
     } else {
+      # Set empty axis-code if nothing is defined
       axis_code <- ""
     }
     
@@ -2099,7 +2274,10 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.11 Color-Palette - Fill ##########
+    
+    
+    
+    ############### 4.10 Color-Palette - Fill ###############
     if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Füllung" | input$color_palette_target == "Füllung und Linien")) {
       # If manual color palette should be created
       if (palette_selected == "Eigene Farbpalette erstellen") {
@@ -2109,13 +2287,11 @@ server <- function(input, output, session) {
             # Add values
             r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = rep(c(%s), length(unique(df$%s))))",
                                              paste0(sprintf("'%s'", manual_colors$values), collapse = ", "),
-                                             group_var))
-          }
+                                             group_var))}
           else{
             # Add values
             r_code <- paste0(r_code, sprintf(" +\n  scale_fill_manual(values = c(%s))",
-                                             paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))
-          }
+                                             paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))}
         }
       } else {
         r_code <- paste0(r_code, sprintf(" +\n  %s",
@@ -2182,9 +2358,10 @@ server <- function(input, output, session) {
                                                 "stata" = "scale_fill_stata()",
                                                 "tableau" = "scale_fill_tableau()",
                                                 "wsj" = "scale_fill_wsj()"
+                                                )
                                          )
-        )
-        )}
+                         )
+        }
     }
     
     
@@ -2192,7 +2369,10 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.3.11 Color-Palette - color ##########
+    
+    
+    
+    ############### 4.11 Color-Palette - Color ###############
     if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Linien" | input$color_palette_target == "Füllung und Linien")) {
       # If manual color palette should be created
       if (palette_selected == "Eigene Farbpalette erstellen") {
@@ -2202,13 +2382,11 @@ server <- function(input, output, session) {
             # Add values
             r_code <- paste0(r_code, sprintf(" +\n  scale_color_manual(values = rep(c(%s), length(unique(df$%s))))",
                                              paste0(sprintf("'%s'", manual_colors$values), collapse = ", "),
-                                             group_var))
-          }
+                                             group_var))}
           else{
             # Add values
             r_code <- paste0(r_code, sprintf(" +\n  scale_color_manual(values = c(%s))",
-                                             paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))
-          }
+                                             paste0(sprintf("'%s'", manual_colors$values), collapse = ", ")))}
         }
       } else {
         r_code <- paste0(r_code, sprintf(" +\n  %s",
@@ -2275,9 +2453,10 @@ server <- function(input, output, session) {
                                                 "stata" = "scale_color_stata()",
                                                 "tableau" = "scale_color_tableau()",
                                                 "wsj" = "scale_color_wsj()"
+                                                )
                                          )
-        )
-        )}
+                         )
+        }
     }    
     
     
@@ -2285,7 +2464,24 @@ server <- function(input, output, session) {
     
     
     
-    ############### 3.4 Generate Theme-Code ###############
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 5. Generate Basic Theme-Code ###############
+    ############### 5.1 Generate Theme-Code ###############
     # Create Variable for Theme Code
     theme_code <- ""
     
@@ -2293,18 +2489,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.1 Title ##########
+    
+    
+    
+    
+    ############### 5.2 Title-Theme ###############
+    # Check if theme for title should be adjusted
     if (input$Title_Font != "Gemäss Theme" || input$Title_Face != "Gemäss Theme" ||
         input$Title_Color != "" || !is.na(input$Title_Size) || input$Title_Alignment != "Gemäss Theme") {
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
+      # Set start of code for plot-title-theme
       theme_code <- paste0(theme_code, "plot.title = element_text(")
-      
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Title_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                            switch(input$Title_Font,
@@ -2324,7 +2523,6 @@ server <- function(input, output, session) {
                                                                                        "Linksbündig" = 0,
                                                                                        "Mittig" = 0.5,
                                                                                        "Rechtsbündig" = 1)) else "")
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2334,17 +2532,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.2 Subtitle ##########
+    
+    
+    
+    
+    ############### 5.3 Subtitle-Theme ###############
+    # Check if theme for subtitle should be adjusted
     if (input$Subtitle_Font != "Gemäss Theme" || input$Subtitle_Face != "Gemäss Theme" ||
         input$Subtitle_Color != "" || !is.na(input$Subtitle_Size) || input$Subtitle_Alignment != "Gemäss Theme") {
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
+      # Set start of code for plot-subtitle-theme
       theme_code <- paste0(theme_code, "plot.subtitle = element_text(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Subtitle_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                               switch(input$Subtitle_Font,
@@ -2364,7 +2566,6 @@ server <- function(input, output, session) {
                                                                                           "Linksbündig" = 0,
                                                                                           "Mittig" = 0.5,
                                                                                           "Rechtsbündig" = 1)) else "")
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2374,18 +2575,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.3 X-Axis Title ##########
+    
+    
+    
+    
+    ############### 5.4 X-Axis Title Theme ###############
+    # Check if X-Axis Title Theme should be adjusted
     if (input$X_Axis_Title_Font != "Gemäss Theme" || input$X_Axis_Title_Face != "Gemäss Theme" ||
         input$X_Axis_Title_Color != "" || !is.na(input$X_Axis_Title_Size) || input$X_Axis_Title_Alignment != "Gemäss Theme") {
-      
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
+      # Set start of code for X-Axis Title Theme
       theme_code <- paste0(theme_code, "axis.title.x = element_text(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$X_Axis_Title_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                                   switch(input$X_Axis_Title_Font,
@@ -2405,7 +2609,6 @@ server <- function(input, output, session) {
                                                                                               "Linksbündig" = 0,
                                                                                               "Mittig" = 0.5,
                                                                                               "Rechtsbündig" = 1)) else "")
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2415,17 +2618,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.4 Y-Axis Title ##########
+    
+    
+    
+    
+    ############### 5.5 Y-Axis TitleTheme ###############
+    # Check if Y-Axis Title theme should be adjusted
     if (input$Y_Axis_Title_Font != "Gemäss Theme" || input$Y_Axis_Title_Face != "Gemäss Theme" ||
         input$Y_Axis_Title_Color != "" || !is.na(input$Y_Axis_Title_Size) || input$Y_Axis_Title_Alignment != "Gemäss Theme") {
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
+      # Set start of code for plot-title-theme
       theme_code <- paste0(theme_code, "axis.title.y = element_text(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Y_Axis_Title_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                                   switch(input$Y_Axis_Title_Font,
@@ -2445,7 +2652,6 @@ server <- function(input, output, session) {
                                                                                               "Linksbündig" = 0,
                                                                                               "Mittig" = 0.5,
                                                                                               "Rechtsbündig" = 1)) else "")
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2455,21 +2661,22 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.5 X-Axis-Labels ##########
+    
+    
+    
+    
+    ############### 5.6 X-Axis-Labels ###############
+    # Check if theme for X-Axis-Labels should be adjusted
     if (input$Axis_X_Text_Font != "Gemäss Theme" || input$Axis_X_Text_Face != "Gemäss Theme" ||
         input$Axis_X_Text_Color != "" || !is.na(input$Axis_X_Text_Size) || input$Axis_X_Text_H_Alignment != "Gemäss Theme"
         || input$Axis_X_Text_V_Alignment != "Gemäss Theme" || !is.na(input$Axis_X_Text_Rotation)) {
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
-      
-      
+      # Set start of code for X-Axis-Labels theme
       theme_code <- paste0(theme_code, "axis.text.x = element_text(")
-      
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Axis_X_Text_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                                  switch(input$Axis_X_Text_Font,
@@ -2494,10 +2701,7 @@ server <- function(input, output, session) {
                                                                                                "Unten" = 0,
                                                                                                "Mittig" = 0.5,
                                                                                                "Oben" = 1)) else "",
-                           if (!is.na(input$Axis_X_Text_Rotation)) sprintf("angle = %.0f, ", input$Axis_X_Text_Rotation) else ""
-      )
-      
-      
+                           if (!is.na(input$Axis_X_Text_Rotation)) sprintf("angle = %.0f, ", input$Axis_X_Text_Rotation) else "")
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2507,21 +2711,22 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.6 Y-Axis-Labels ##########
+    
+    
+    
+    
+    ############### 5.7 Y-Axis-Labels Theme ###############
+    # Check if theme for Y-Axis-Labels should be adjusted
     if (input$Axis_Y_Text_Font != "Gemäss Theme" || input$Axis_Y_Text_Face != "Gemäss Theme" ||
         input$Axis_Y_Text_Color != "" || !is.na(input$Axis_Y_Text_Size) || input$Axis_Y_Text_H_Alignment != "Gemäss Theme"
         || input$Axis_Y_Text_V_Alignment != "Gemäss Theme" || !is.na(input$Axis_Y_Text_Rotation)) {
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
-      
-      
+      # Set start of code for Y-Axis-Labels Theme
       theme_code <- paste0(theme_code, "axis.text.y = element_text(")
-      
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Axis_Y_Text_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                                  switch(input$Axis_Y_Text_Font,
@@ -2546,10 +2751,7 @@ server <- function(input, output, session) {
                                                                                                "Unten" = 0,
                                                                                                "Mittig" = 0.5,
                                                                                                "Oben" = 1)) else "",
-                           if (!is.na(input$Axis_Y_Text_Rotation)) sprintf("angle = %.0f, ", input$Axis_Y_Text_Rotation) else ""
-      )
-      
-      
+                           if (!is.na(input$Axis_Y_Text_Rotation)) sprintf("angle = %.0f, ", input$Axis_Y_Text_Rotation) else "")
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2559,17 +2761,23 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.7 X Axis Lines ##########
+    
+    
+    
+    
+    ############### 5.8 X Axis Lines Theme ###############
+    # Check if theme should be adjusted for X Axis Lines
     if (input$Axis_X_Linetype != "Gemäss Theme" || !is.na(input$Axis_X_Size) || input$Axis_X_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for X Axis Lines Theme
       if (input$Axis_X_Linetype == "Keine"){
         theme_code <- paste0(theme_code, "axis.line.x = element_blank(")
       } else {
         theme_code <- paste0(theme_code, "axis.line.x = element_line(")
-        
+        # Paste theme settings from UI
         theme_code <- paste0(theme_code,
                              if (input$Axis_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                   switch(input$Axis_X_Linetype,
@@ -2581,11 +2789,8 @@ server <- function(input, output, session) {
                                                                                          "Doppelt gestrichelt" = "twodash"
                                                                                   )) else "",
                              if (!is.na(input$Axis_X_Size)) sprintf("size = %.1f, ", input$Axis_X_Size) else "",
-                             if (input$Axis_X_Color != "") sprintf("colour = '%s', ", input$Axis_X_Color) else ""
-        )
+                             if (input$Axis_X_Color != "") sprintf("colour = '%s', ", input$Axis_X_Color) else "")
       }
-      
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2594,17 +2799,24 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.8 Y Axis Lines ##########
+    
+    
+    
+    
+    
+    ############### 5.9 Y Axis Lines Theme ###############
+    # Check if theme should be adjusted for Y Axis Lines
     if (input$Axis_Y_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Size) || input$Axis_Y_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for Y Axis Lines Theme
       if (input$Axis_Y_Linetype == "Keine"){
         theme_code <- paste0(theme_code, "axis.line.y = element_blank(")
       } else {
         theme_code <- paste0(theme_code, "axis.line.y = element_line(")
-        
+        # Paste theme settings from UI
         theme_code <- paste0(theme_code,
                              if (input$Axis_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                   switch(input$Axis_Y_Linetype,
@@ -2616,11 +2828,8 @@ server <- function(input, output, session) {
                                                                                          "Doppelt gestrichelt" = "twodash"
                                                                                   )) else "",
                              if (!is.na(input$Axis_Y_Size)) sprintf("size = %.1f, ", input$Axis_Y_Size) else "",
-                             if (input$Axis_Y_Color != "") sprintf("colour = '%s', ", input$Axis_Y_Color) else ""
-        )
+                             if (input$Axis_Y_Color != "") sprintf("colour = '%s', ", input$Axis_Y_Color) else "")
       }
-      
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2629,21 +2838,29 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.9 X Axis Ticks ##########
+    
+    
+    
+    
+    
+    ############### 5.10 X Axis Ticks Theme ###############
+    # Check if theme should be adjusted for X Axis Ticks length
     if (!is.na(input$Axis_X_Ticks_Length)) {
+      # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
       theme_code <- paste0(theme_code, sprintf("axis.ticks.length.x = unit('%.1f', 'pt')", input$Axis_X_Ticks_Length))
     }
-    
+    # Check if theme should be adjusted for X Axis Ticks
     if (input$Axis_X_Ticks_Linetype != "Gemäss Theme" || !is.na(input$Axis_X_Ticks_Size) || input$Axis_X_Ticks_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for X Axis Ticks theme
       theme_code <- paste0(theme_code, "axis.ticks.x = element_line(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Axis_X_Ticks_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                       switch(input$Axis_X_Ticks_Linetype,
@@ -2655,9 +2872,7 @@ server <- function(input, output, session) {
                                                                                              "Doppelt gestrichelt" = "twodash"
                                                                                       )) else "",
                            if (!is.na(input$Axis_X_Ticks_Size)) sprintf("size = %.1f, ", input$Axis_X_Ticks_Size) else "",
-                           if (input$Axis_X_Ticks_Color != "") sprintf("colour = '%s', ", input$Axis_X_Ticks_Color) else ""
-      )
-      
+                           if (input$Axis_X_Ticks_Color != "") sprintf("colour = '%s', ", input$Axis_X_Ticks_Color) else "")
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2666,22 +2881,29 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.10 Y Axis Ticks ##########
+    
+    
+    
+    
+    
+    ############### 5.11 Y Axis Ticks Theme ###############
+    # Check if theme should be adjusted for Y Axis Ticks length
     if (!is.na(input$Axis_Y_Ticks_Length)) {
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
       theme_code <- paste0(theme_code, sprintf("axis.ticks.length.y = unit('%.1f', 'pt')", input$Axis_Y_Ticks_Length))
     }
-    
-    
+    # Check if theme should be adjusted for Y Axis Ticks
     if (input$Axis_Y_Ticks_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Ticks_Size) || input$Axis_Y_Ticks_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for Y Axis Ticks theme
       theme_code <- paste0(theme_code, "axis.ticks.y = element_line(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Axis_Y_Ticks_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                       switch(input$Axis_Y_Ticks_Linetype,
@@ -2693,10 +2915,7 @@ server <- function(input, output, session) {
                                                                                              "Doppelt gestrichelt" = "twodash"
                                                                                       )) else "",
                            if (!is.na(input$Axis_Y_Ticks_Size)) sprintf("size = %.1f, ", input$Axis_Y_Ticks_Size) else "",
-                           if (input$Axis_Y_Ticks_Color != "") sprintf("colour = '%s', ", input$Axis_Y_Ticks_Color) else ""
-      )
-      
-      
+                           if (input$Axis_Y_Ticks_Color != "") sprintf("colour = '%s', ", input$Axis_Y_Ticks_Color) else "")
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2706,17 +2925,25 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.11 Major Gridlines X ##########
+    
+    
+    
+    
+    ############### 5.12 Major Gridlines X Theme ###############
+    # Check if theme should be adjusted
     if (input$Major_Grid_X_Linetype != "Gemäss Theme" || !is.na(input$Major_Grid_X_Size) || input$Major_Grid_X_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Check if lines are wished
       if (input$Major_Grid_X_Linetype == "Keine"){
+        # Set start of code for panel.grid.major.x
         theme_code <- paste0(theme_code, "panel.grid.major.x = element_blank(")
       } else {
+        # Set start of code for panel.grid.major.x
         theme_code <- paste0(theme_code, "panel.grid.major.x = element_line(")
-        
+        # Paste theme settings from UI
         theme_code <- paste0(theme_code,
                              if (input$Major_Grid_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                         switch(input$Major_Grid_X_Linetype,
@@ -2728,11 +2955,8 @@ server <- function(input, output, session) {
                                                                                                "Doppelt gestrichelt" = "twodash"
                                                                                         )) else "",
                              if (!is.na(input$Major_Grid_X_Size)) sprintf("size = %.1f, ", input$Major_Grid_X_Size) else "",
-                             if (input$Major_Grid_X_Color != "") sprintf("colour = '%s', ", input$Major_Grid_X_Color) else ""
-        )
+                             if (input$Major_Grid_X_Color != "") sprintf("colour = '%s', ", input$Major_Grid_X_Color) else "")
       }
-      
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2742,17 +2966,24 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.12 Major Gridlines Y ##########
+    
+    
+    
+    
+    ############### 5.13 Major Gridlines Y Theme ###############
+    # Check if theme should be adjusted
     if (input$Major_Grid_Y_Linetype != "Gemäss Theme" || !is.na(input$Major_Grid_Y_Size) || input$Major_Grid_Y_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Check if lines are wished
       if (input$Major_Grid_Y_Linetype == "Keine"){
         theme_code <- paste0(theme_code, "panel.grid.major.y = element_blank(")
       } else {
+        # Set start of code for panel.grid.major.y
         theme_code <- paste0(theme_code, "panel.grid.major.y = element_line(")
-        
+        # Paste theme settings from UI
         theme_code <- paste0(theme_code,
                              if (input$Major_Grid_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                         switch(input$Major_Grid_Y_Linetype,
@@ -2764,11 +2995,8 @@ server <- function(input, output, session) {
                                                                                                "Doppelt gestrichelt" = "twodash"
                                                                                         )) else "",
                              if (!is.na(input$Major_Grid_Y_Size)) sprintf("size = %.1f, ", input$Major_Grid_Y_Size) else "",
-                             if (input$Major_Grid_Y_Color != "") sprintf("colour = '%s', ", input$Major_Grid_Y_Color) else ""
-        )
+                             if (input$Major_Grid_Y_Color != "") sprintf("colour = '%s', ", input$Major_Grid_Y_Color) else "")
       }
-      
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2778,17 +3006,24 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.13 Minor Gridlines X ##########
+    
+    
+    
+    
+    ############### 5.14 Minor Gridlines X Theme ###############
+    # Check if theme should be adjusted
     if (input$Minor_Grid_X_Linetype != "Gemäss Theme" || !is.na(input$Minor_Grid_X_Size) || input$Minor_Grid_X_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Check if lines are wished
       if (input$Minor_Grid_X_Linetype == "Keine"){
         theme_code <- paste0(theme_code, "panel.grid.minor.x = element_blank(")
       } else {
+        # Set start of code for panel.grid.minor.x
         theme_code <- paste0(theme_code, "panel.grid.minor.x = element_line(")
-        
+        # Paste theme settings from UI
         theme_code <- paste0(theme_code,
                              if (input$Minor_Grid_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                         switch(input$Minor_Grid_X_Linetype,
@@ -2800,11 +3035,8 @@ server <- function(input, output, session) {
                                                                                                "Doppelt gestrichelt" = "twodash"
                                                                                         )) else "",
                              if (!is.na(input$Minor_Grid_X_Size)) sprintf("size = %.1f, ", input$Minor_Grid_X_Size) else "",
-                             if (input$Minor_Grid_X_Color != "") sprintf("colour = '%s', ", input$Minor_Grid_X_Color) else ""
-        )
+                             if (input$Minor_Grid_X_Color != "") sprintf("colour = '%s', ", input$Minor_Grid_X_Color) else "")
       }
-      
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2813,17 +3045,25 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.14 Minor Gridlines Y ##########
+    
+    
+    
+    
+    
+    ############### 5.15 Major Gridlines Y Theme ###############
+    # Check if theme should be adjusted
     if (input$Minor_Grid_Y_Linetype != "Gemäss Theme" || !is.na(input$Minor_Grid_Y_Size) || input$Minor_Grid_Y_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Check if lines are wished
       if (input$Minor_Grid_Y_Linetype == "Keine"){
         theme_code <- paste0(theme_code, "panel.grid.minor.y = element_blank(")
       } else {
+        # Set start of code for panel.grid.minor.y
         theme_code <- paste0(theme_code, "panel.grid.minor.y = element_line(")
-        
+        # Paste theme settings from UI
         theme_code <- paste0(theme_code,
                              if (input$Minor_Grid_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                         switch(input$Minor_Grid_Y_Linetype,
@@ -2835,11 +3075,8 @@ server <- function(input, output, session) {
                                                                                                "Doppelt gestrichelt" = "twodash"
                                                                                         )) else "",
                              if (!is.na(input$Minor_Grid_Y_Size)) sprintf("size = %.1f, ", input$Minor_Grid_Y_Size) else "",
-                             if (input$Minor_Grid_Y_Color != "") sprintf("colour = '%s', ", input$Minor_Grid_Y_Color) else ""
-        )
+                             if (input$Minor_Grid_Y_Color != "") sprintf("colour = '%s', ", input$Minor_Grid_Y_Color) else "")
       }
-      
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2849,15 +3086,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.15 Plot Background ##########
+    
+    
+    
+    
+    ############### 5.16 Plot Background Theme ###############
+    # Check if theme should be adjusted
     if (input$Plot_Background_Color != "" || input$Plot_Background_Linetype != "Gemäss Theme" 
         || !is.na(input$Plot_Background_Size) || input$Plot_Background_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for plot.background
       theme_code <- paste0(theme_code, "plot.background = element_rect(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Plot_Background_Color != "") sprintf("fill = '%s', ", input$Plot_Background_Color) else "",
                            if (input$Plot_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
@@ -2870,9 +3113,7 @@ server <- function(input, output, session) {
                                                                                                 "Doppelt gestrichelt" = "twodash"
                                                                                          )) else "",
                            if (!is.na(input$Plot_Background_Size)) sprintf("linewidth = %.1f, ", input$Plot_Background_Size) else "",
-                           if (input$Plot_Background_Line_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Line_Color) else ""
-      )
-      
+                           if (input$Plot_Background_Line_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Line_Color) else "")
       # Remove trailing comma and close the element-function
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2882,15 +3123,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.16 Plot Background ##########
+    
+    
+    
+    
+    ############### 5.17 Panel Background Theme ###############
+    # Check if theme should be adjusted
     if (input$Panel_Background_Color != "" || input$Panel_Background_Linetype != "Gemäss Theme" 
         || !is.na(input$Panel_Background_Size) || input$Panel_Background_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for panel.background
       theme_code <- paste0(theme_code, "panel.background = element_rect(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Panel_Background_Color != "") sprintf("fill = '%s', ", input$Panel_Background_Color) else "",
                            if (input$Panel_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
@@ -2903,9 +3150,7 @@ server <- function(input, output, session) {
                                                                                                  "Doppelt gestrichelt" = "twodash"
                                                                                           )) else "",
                            if (!is.na(input$Panel_Background_Size)) sprintf("linewidth = %.1f, ", input$Panel_Background_Size) else "",
-                           if (input$Panel_Background_Line_Color != "") sprintf("colour = '%s', ", input$Panel_Background_Line_Color) else ""
-      )
-      
+                           if (input$Panel_Background_Line_Color != "") sprintf("colour = '%s', ", input$Panel_Background_Line_Color) else "")
       # Remove trailing comma and close the element-function
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2916,19 +3161,20 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.17 Legend-Title ##########
+    
+    
+    
+    ############### 5.18 Legend-Title Theme ###############
+    # Check if theme should be adjusted
     if (input$Legend_Title_Font != "Gemäss Theme" || input$Legend_Title_Face != "Gemäss Theme" ||
         input$Legend_Title_Color != "" || !is.na(input$Legend_Title_Size) || input$Legend_Title_Alignment != "Gemäss Theme") {
-      
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
+      # Set start of code for legend.title
       theme_code <- paste0(theme_code, "legend.title = element_text(")
-      
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Legend_Title_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                                   switch(input$Legend_Title_Font,
@@ -2948,7 +3194,6 @@ server <- function(input, output, session) {
                                                                                               "Linksbündig" = 0,
                                                                                               "Mittig" = 0.5,
                                                                                               "Rechtsbündig" = 1)) else "")
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2958,18 +3203,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.18 Legend-Text ##########
+    
+    
+    
+    
+    ############### 5.19 Legend-Text Theme ###############
+    # Check if theme should be adjusted
     if (input$Legend_Text_Font != "Gemäss Theme" || input$Legend_Text_Face != "Gemäss Theme" ||
         input$Legend_Text_Color != "" || !is.na(input$Legend_Text_Size) || input$Legend_Text_Alignment != "Gemäss Theme") {
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
+      # Set start of code for legend.text
       theme_code <- paste0(theme_code, "legend.text = element_text(")
-      
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Legend_Text_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                                  switch(input$Legend_Text_Font,
@@ -2989,7 +3237,6 @@ server <- function(input, output, session) {
                                                                                              "Linksbündig" = 0,
                                                                                              "Mittig" = 0.5,
                                                                                              "Rechtsbündig" = 1)) else "")
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -2999,15 +3246,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.19 Legend Background ##########
+    
+    
+    
+    
+    ############### 5.20 Legend Background Theme ###############
+    # Check if theme should be adjusted
     if (input$Plot_Background_Color != "" || input$Plot_Background_Linetype != "Gemäss Theme" 
         || !is.na(input$Plot_Background_Size) || input$Plot_Background_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for legend.background
       theme_code <- paste0(theme_code, "legend.background = element_rect(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Plot_Background_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Color) else "",
                            if (input$Plot_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
@@ -3020,9 +3273,7 @@ server <- function(input, output, session) {
                                                                                                 "Doppelt gestrichelt" = "twodash"
                                                                                          )) else "",
                            if (!is.na(input$Plot_Background_Size)) sprintf("linewidth = %.1f, ", input$Plot_Background_Size) else "",
-                           if (input$Plot_Background_Line_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Line_Color) else ""
-      )
-      
+                           if (input$Plot_Background_Line_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Line_Color) else "")
       # Remove trailing comma and close the element-function
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -3032,11 +3283,18 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.20 Legend Options ##########
+    
+    
+    
+    
+    ############### 5.21 Legend Options Theme ###############
+    # Check if legend position should be adjusted
     if (input$Legend_Position != "Gemäss Theme"){
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for legend.position
       theme_code <- paste0(theme_code, sprintf("legend.position = '%s', ",
                                                switch(input$Legend_Position,
                                                       "Keine" = "none", 
@@ -3044,101 +3302,130 @@ server <- function(input, output, session) {
                                                       "Unten" = "bottom", 
                                                       "Links" = "left", 
                                                       "Oben" = "top", 
-                                                      "Im Plot" = "inside", ")"
-                                               )))
+                                                      "Im Plot" = "inside", ")")))
     }
     
+    
+    # Check if Legend_Title_Position position should be adjusted
     if (input$Legend_Title_Position != "Gemäss Theme"){
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for legend.title.position
       theme_code <- paste0(theme_code, sprintf("legend.title.position = '%s', ",
                                                switch(input$Legend_Title_Position,
                                                       "Oben" = "top", 
                                                       "Rechts" = "right", 
                                                       "Unten" = "bottom", 
-                                                      "Links" = "left", ")"
-                                               )))
+                                                      "Links" = "left", ")")))
     }
     
+    
+    # Check if Legend_Text_Position should be adjusted
     if (input$Legend_Text_Position != "Gemäss Theme"){
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for legend.text.position
       theme_code <- paste0(theme_code, sprintf("legend.text.position = '%s', ",
                                                switch(input$Legend_Text_Position,
                                                       "Oben" = "top", 
                                                       "Rechts" = "right", 
                                                       "Unten" = "bottom", 
-                                                      "Links" = "left", ")"
-                                               )))
+                                                      "Links" = "left", ")")))
     }
     
+    
+    # Check if Legend_Text_Direktion should be adjusted
     if (input$Legend_Text_Direktion != "Gemäss Theme"){
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Create code for legend.direction
       theme_code <- paste0(theme_code, sprintf("legend.direction = '%s', ",
                                                switch(input$Legend_Text_Direktion,
                                                       "Vertikal" = "vertical",
-                                                      "Horizontal" = "horizontal", ")"
-                                               )))
+                                                      "Horizontal" = "horizontal", ")")))
     }
     
+    
+    # Check if Legend_Key_Width should be adjusted
     if (!is.na(input$Legend_Key_Width)){
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Create code for legend.key.width
       theme_code <- paste0(theme_code, sprintf("legend.key.width = unit(%.1f, 'pt'", input$Legend_Key_Width))
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
     }
     
+    
+    # Check if Legend_Key_Height should be adjusted
     if (!is.na(input$Legend_Key_Height)){
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Create code for legend.key.height
       theme_code <- paste0(theme_code, sprintf("legend.key.height = unit(%.1f, 'pt'", input$Legend_Key_Height))
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
     }
     
+    
+    # Check if Legend_Key_Spacing should be adjusted
     if (!is.na(input$Legend_Key_Spacing)){
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Create code for legend.key.spacing
       theme_code <- paste0(theme_code, sprintf("legend.key.spacing = unit(%.1f, 'pt'", input$Legend_Key_Spacing))
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
     }
     
+    
+    # Check if Legend_Box_Spacing should be adjusted
     if (!is.na(input$Legend_Box_Spacing)){
       if (theme_code!=""){
+        # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Create code for legend.box.spacing
       theme_code <- paste0(theme_code, sprintf("legend.box.spacing = unit(%.1f, 'pt'", input$Legend_Box_Spacing))
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
     }
     
     
-    ########## 3.4.21 Facet-Row Background ##########
+    
+    
+    
+    
+    
+    
+    
+    ############### 5.22 Facet-Row Background Theme ###############
+    # Check if theme should be adjusted
     if (input$Stripe_X_Color != "" || input$Stripe_X_Linetype != "Gemäss Theme" 
         || !is.na(input$Stripe_X_Size) || input$Stripe_X_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for strip.background.x
       theme_code <- paste0(theme_code, "strip.background.x = element_rect(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Stripe_X_Color != "") sprintf("fill = '%s', ", input$Stripe_X_Color) else "",
                            if (input$Stripe_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
@@ -3151,9 +3438,7 @@ server <- function(input, output, session) {
                                                                                          "Doppelt gestrichelt" = "twodash"
                                                                                   )) else "",
                            if (!is.na(input$Stripe_X_Size)) sprintf("linewidth = %.1f, ", input$Stripe_X_Size) else "",
-                           if (input$Stripe_X_Line_Color != "") sprintf("colour = '%s', ", input$Stripe_X_Line_Color) else ""
-      )
-      
+                           if (input$Stripe_X_Line_Color != "") sprintf("colour = '%s', ", input$Stripe_X_Line_Color) else "")
       # Remove trailing comma and close the element-function
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -3162,15 +3447,22 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.22 Facet-Column Background ##########
+    
+    
+    
+    
+    
+    ############### 5.23 Facet-Column Background Theme ###############
+    # Check if theme should be adjusted
     if (input$Stripe_Y_Color != "" || input$Stripe_Y_Linetype != "Gemäss Theme" 
         || !is.na(input$Stripe_Y_Size) || input$Stripe_Y_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
+      # Set start of code for strip.background.y
       theme_code <- paste0(theme_code, "strip.background.y = element_rect(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Stripe_Y_Color != "") sprintf("fill = '%s', ", input$Stripe_Y_Color) else "",
                            if (input$Stripe_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
@@ -3183,9 +3475,7 @@ server <- function(input, output, session) {
                                                                                          "Doppelt gestrichelt" = "twodash"
                                                                                   )) else "",
                            if (!is.na(input$Stripe_Y_Size)) sprintf("linewidth = %.1f, ", input$Stripe_Y_Size) else "",
-                           if (input$Stripe_Y_Line_Color != "") sprintf("colour = '%s', ", input$Stripe_Y_Line_Color) else ""
-      )
-      
+                           if (input$Stripe_Y_Line_Color != "") sprintf("colour = '%s', ", input$Stripe_Y_Line_Color) else "")
       # Remove trailing comma and close the element-function
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -3194,18 +3484,22 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.23 Facet-Row Text ##########
+    
+    
+    
+    
+    
+    ############### 5.24 Facet-Row Text Theme ###############
+    # Check if theme should be adjusted
     if (input$Stripe_X_Font != "Gemäss Theme" || input$Stripe_X_Face != "Gemäss Theme" ||
         input$Stripe_X_Color != "" || !is.na(input$Stripe_X_Size) || input$Stripe_X_Alignment != "Gemäss Theme") {
-      
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
+      # Set start of code for strip.text.x
       theme_code <- paste0(theme_code, "strip.text.x = element_text(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Stripe_X_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                               switch(input$Stripe_X_Font,
@@ -3225,7 +3519,6 @@ server <- function(input, output, session) {
                                                                                           "Linksbündig" = 0,
                                                                                           "Mittig" = 0.5,
                                                                                           "Rechtsbündig" = 1)) else "")
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -3235,18 +3528,21 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.24 Facet-Column Text ##########
+    
+    
+    
+    
+    ############### 5.25 Facet-Column Theme ###############
+    # Check if theme should be adjusted
     if (input$Stripe_Y_Font != "Gemäss Theme" || input$Stripe_Y_Face != "Gemäss Theme" ||
         input$Stripe_Y_Color != "" || !is.na(input$Stripe_Y_Size) || input$Stripe_Y_Alignment != "Gemäss Theme") {
-      
-      
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
       }
-      
+      # Set start of code for strip.text.y
       theme_code <- paste0(theme_code, "strip.text.y = element_text(")
-      
+      # Paste theme settings from UI
       theme_code <- paste0(theme_code,
                            if (input$Stripe_Y_Font != "Gemäss Theme") sprintf("family = '%s', ", 
                                                                               switch(input$Stripe_Y_Font,
@@ -3266,7 +3562,6 @@ server <- function(input, output, session) {
                                                                                           "Linksbündig" = 0,
                                                                                           "Mittig" = 0.5,
                                                                                           "Rechtsbündig" = 1)) else "")
-      
       # Remove trailing comma and close `element_text()`
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -3277,9 +3572,15 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.4.20 Adjust Theme C ##########
+    
+    
+    
+    ############### 5.26 Append Theme-Code ###############
+    # Check if theme-code was created
     if (theme_code!=""){
+      # set beginning of theme code
       theme_code <- paste0(" +\n  theme(", sprintf(theme_code), ")")
+      # Append theme-code to r-code
       r_code <- paste0(r_code, sprintf(theme_code))
     }
     
@@ -3288,7 +3589,23 @@ server <- function(input, output, session) {
     
     
     
-    ########## 3.5 Return R-Code ##########
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 6. Return R-Code ###############
     r_code
   }
   )  
@@ -3300,34 +3617,59 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.6 Generate Plot ###############
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 7. Set Output ###############
+  ############### 7.1 Generate Plot ###############
+  # Define Plot-Output
   output$dynamic_plot <- renderUI({
-    scaled_width <- input$plot_width_px * (72 / 96) #dpi is 96
-    scaled_height <- input$plot_height_px * (72 / 96) #dpi is 96
+    # Calculate dpi of plot-width
+    scaled_width <- input$plot_width_px * (72 / 96)
+    # Calculate dpi of plot-height
+    scaled_height <- input$plot_height_px * (72 / 96)
     
+    #Set Plot-Output
     plotOutput(
       "plot",
+      # Set dpi of plot-width
       width = paste0(input$plot_width_px, "px"),
+      # Set dpi of plot-height
       height = paste0(input$plot_height_px, "px")
     )
   })
   
+  # Render plot
   output$plot <- renderPlot({
+    # Require data() and r_code()
     req(data(), r_code())
     
-    
+    # Save data as dataframe df
     df <- data()
     
+    # Check if factor code is defined
     if (!is.null(factor_code()) && !identical(factor_code(), "")) {
+      # Run factor code
       eval(parse(text = factor_code()))
     }
     
-    
-    # Code ausführen und 'q' erstellen
+    # Run r_code to create the plot
     eval(parse(text = r_code()))
     
-    # Den erstellten Plot (nicht den String) zurückgeben
+    # Return Plot
     return(q)
+    # Set plot-resolution
   }, res = 96)
   
   
@@ -3337,20 +3679,28 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.7 Execute Code ###############
+  
+  ############### 7.2 Generate Code ###############
+  ########## 7.2.1 Set variables ##########
   # Create reactive full code
   reactive_full_code <- reactive({
+    
+    # Save data as dataframe df
     df <- data()
     
-    # Require that r_code exists
+    # Require r_code exists
     req(r_code())
     
+    
+    
+    
+    
+    ########## 7.2.2 Set Code for packages ##########
     # Define Code-Line for ggplot2
     full_code <- "library(ggplot2)"
     
-    
     # Define Code-Line for ggthemes if needed
-    # Check if themes is by ggthemes
+    # Check if theme is by ggthemes
     if(input$plot_theme %in% c("Calc", "the Economist", "the Economist White", "Excel", "Few", "FiveThirtyEight", 
                                "Google Docs", "Highcharts JS", "Inversed Gray", "Solarized", "Solarized 2", "Solid", 
                                "Stata", "Tufte", "Wall Street Journal") |
@@ -3359,7 +3709,7 @@ server <- function(input, output, session) {
                                   "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
                                   "hc", "pander", "ptol", "solarized", 
                                   "stata", "tableau", "wsj")) {
-      # Add line for loading ggthemes
+      # Add line to load ggthemes
       full_code <- paste0(full_code, "\nlibrary(ggthemes)")
     }
     
@@ -3369,37 +3719,86 @@ server <- function(input, output, session) {
                                   "frontiers", "futurama", "igv", "jama", "lancet", "locuszoom", 
                                   "material", "nejm", "npg", "observable", "rickandmorty", "simpsons", "startrek", 
                                   "tron", "uchicago", "ucscgb", "jco")) {
-      # Add line for loading ggsci
+      # Add line to load ggsci
       full_code <- paste0(full_code, "\nlibrary(ggsci)")
     }
     
+    
+    
+    
+    
+    ########## 7.2.3 Set Code to adjust Factors ##########
+    # Check if factor_code exists
     if (!is.null(factor_code()) && !identical(factor_code(), "")) {
-      full_code <- paste0(full_code, "\n\n")
+      # Paste additional lines
+      full_code <- paste0(full_code, "\n")
       
+      # Paste factor-code
       full_code <- paste0(full_code, factor_code())
     }
     
     
+    
+    
+    
+    ########## 7.2.4 Add r_code ##########
     # Add empty lines in code
     full_code <- paste0(full_code, "\n\n", r_code())
     
+    
+    
+    
+    
+    ########## 7.2.5 Prepare final code ##########
     # Replace data() with data
     full_code <- gsub("data\\(\\)", "data", full_code)
-    
-    # Replace aes_string with aes
-    # full_code <- gsub("aes_string", "aes", full_code)
     
     # Return full_code
     full_code
   })
   
   
+  
+  
+  
+  ########## 7.2.6 Print Code ##########
   # Print the reactive r_code
   output$rcode <- renderText({
     reactive_full_code()
   })
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 8. Copy/Download ###############
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 8.1 Add Code to clipboad ###############
   # Add clipboard buttons
   output$clip <- renderUI({
     rclipButton(
@@ -3416,7 +3815,11 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.8 Download Plot ###############
+  
+  
+  
+  
+  ############### 8.2 Download Plot ###############
   # Function to download Plot
   output$downloadPlot <- downloadHandler(
     filename = function() {
@@ -3459,7 +3862,9 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.9 Download Code ###############
+  
+  
+  ############### 8.3 Download Code ###############
   # Function to download r-code
   output$downloadCode <- downloadHandler(
     filename = function() {
@@ -3494,5 +3899,5 @@ server <- function(input, output, session) {
 
 
 
-#################### 4. Run App ####################
+#################### 9. Run App ####################
 shinyApp(ui = ui, server = server)
