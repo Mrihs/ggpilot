@@ -288,6 +288,39 @@ ui <- fluidPage(
                                   h3("X-Achsen-Variable"),
                                   # X-Axis Variable
                                   selectInput("x_var", NULL, choices = c(""), selected = ""),
+                                  # Create a conditional panel for when multiple variables are chosen
+                                  conditionalPanel(condition = "output.multiple_var_x == true",
+                                                   # Create a Layout for CollapsePanels
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Variablen auswählen, um sie zusammenzufassen"),
+                                                                fluidRow(
+                                                                  column(width = 12,
+                                                                         # Placeholder for the ranking-UI
+                                                                         uiOutput("x_factor_mult_var_list")
+                                                                         # bucket_list(
+                                                                         #   header = NULL,
+                                                                         #   group_name = "bucket_list_x_var",
+                                                                         #   orientation = "horizontal",
+                                                                         #   # Placeholder for the ranking-UI
+                                                                         #   # uiOutput("x_factor_multiple_vars")
+                                                                         #   add_rank_list(
+                                                                         #     text = "Drag from here",
+                                                                         #     labels = list("on", "two", "three")
+                                                                         #   ),
+                                                                         #   add_rank_list(
+                                                                         #     text = "to here",
+                                                                         #     labels = NULL
+                                                                         #   )
+                                                                         # )
+                                                                         
+                                                                    )
+                                                                  )
+                                                                )
+                                                              )
+                                  ),
                                   # Create a conditionl-panel for when a variable is selected
                                   conditionalPanel(condition = "output.is_numeric_x == false",
                                                    # Create a Layout for CollapsePanels
@@ -1081,6 +1114,8 @@ server <- function(input, output, session) {
   show_scatter_options <- reactiveVal(value = FALSE)
   # Variable to check wether x-variable is numeric
   is_numeric_x <- reactiveVal(NULL)
+  # Variable to check whether multiple x-variables are selected
+  multiple_var_x <- reactiveVal(NULL)
   # Variable to check wether y-variable is numeric
   is_numeric_y <- reactiveVal(value = NA)
   # Variable to check wether grouping-variable is numeric
@@ -1423,7 +1458,7 @@ server <- function(input, output, session) {
   ############### 3.4 Update Variables ###############
   ########## 3.4.1 Define list of variables ##########
   observeEvent(data(), {
-    updateSelectInput(session, "x_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
+    updateSelectInput(session, "x_var", choices = c("Keine Variable" = " ", names(data()), "Mehrere Variablen zusammenfassen"), selected = " ")
     updateSelectInput(session, "y_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
     updateSelectInput(session, "group_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
     updateSelectInput(session, "grid_col_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
@@ -1463,6 +1498,11 @@ server <- function(input, output, session) {
       is_numeric_x(TRUE)
     }
     
+    if (input$x_var=="Mehrere Variablen zusammenfassen"){
+      multiple_var_x(TRUE)
+    } else {
+      multiple_var_x(FALSE)
+    }
     # Mark if y-axis variable is a factor or character
     if (is.factor(y_data)) {
       Factors$y_values <- levels(y_data)
@@ -1514,6 +1554,22 @@ server <- function(input, output, session) {
     } else {
       # Return TRUE if it is numeric
       return(TRUE)
+    }
+  })
+  
+  
+  
+  # Set variable to control whether x-axis variable is numeric
+  output$multiple_var_x <- reactive({
+    # Require x_var and data()
+    req(input$x_var, data())
+    # Check if it is factor/character
+    if (input$x_var == "Mehrere Variablen zusammenfassen") {
+      # Return TRUE if multiple variables
+      return(TRUE)
+    } else {
+      # Return FALSE if not
+      return(FALSE)
     }
   })
   
@@ -1588,6 +1644,7 @@ server <- function(input, output, session) {
   
   # Hide the defined output-variables
   outputOptions(output, "is_numeric_x", suspendWhenHidden = FALSE)
+  outputOptions(output, "multiple_var_x", suspendWhenHidden = FALSE)
   outputOptions(output, "is_numeric_y", suspendWhenHidden = FALSE)
   outputOptions(output, "is_numeric_group", suspendWhenHidden = FALSE)
   outputOptions(output, "is_numeric_col", suspendWhenHidden = FALSE)
@@ -1617,6 +1674,29 @@ server <- function(input, output, session) {
     rank_list(input_id = "x_factor_Order", 
               labels = Factors$x_values,  
               options = sortable_options(swap = TRUE))
+  })
+  
+  
+  # Create dynamic UI for rank_list() of x-axis variable
+  output$x_factor_mult_var_list <- renderUI({
+    rank_list(input_id = "x_factor_multiple_vars",
+              labels = names(data()),
+              options = sortable_options(swap = TRUE))
+    bucket_list(
+      header = NULL,
+      group_name = "bucket_list_x_var",
+      orientation = "horizontal",
+      # Placeholder for the ranking-UI
+      # uiOutput("x_factor_multiple_vars")
+      add_rank_list(
+        text = "Variable von hier auswählen",
+        labels = names(data())
+      ),
+      add_rank_list(
+        text = "und hier ablegen",
+        labels = NULL
+      )
+    )
   })
   
   # Create dynamic UI for rank_list() of y-axis variable
@@ -1950,8 +2030,11 @@ server <- function(input, output, session) {
     
     ############### 4.3 Define Code with X- and Y- Axis variable ###############
     # Define Code Lines
-    r_code <- sprintf("q <- ggplot(df, aes_string(x = '%s', y = '%s'", x_var, y_var)
-    
+    if (x_var!="Mehrere Variablen zusammenfassen"){
+      r_code <- sprintf("q <- ggplot(df, aes_string(x = '%s', y = '%s'", x_var, y_var)
+    } else {
+      r_code <- sprintf("q <- ggplot(df, aes_string(x = 1, y = '%s'", y_var)
+    }
     
     
     
