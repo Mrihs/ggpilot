@@ -1711,7 +1711,7 @@ server <- function(input, output, session) {
   
   
   # Create dynamic UI for rank_list() of x-axis variable
-  output$x_factor_mult_var_list <- renderUI({
+  output$pivot_longer_rank_list <- renderUI({
     rank_list(input_id = "x_factor_multiple_vars",
               labels = names(data()),
               options = sortable_options(swap = TRUE))
@@ -1720,13 +1720,23 @@ server <- function(input, output, session) {
       group_name = "bucket_list_x_var",
       orientation = "horizontal",
       add_rank_list(
-        text = "Variable von hier auswählen",
+        text = "Variablen",
         labels = names(data())
       ),
       add_rank_list(
-        text = "und hier ablegen",
+        text = "Zusammenfassen zu...",
         labels = NULL, 
-        input_id = "rank_list_x_var"
+        input_id = "rank_list_var_1"
+      ),
+      add_rank_list(
+        text = "Zusammenfassen zu...",
+        labels = NULL, 
+        input_id = "rank_list_var_2"
+      ),
+      add_rank_list(
+        text = "Zusammenfassen zu...",
+        labels = NULL, 
+        input_id = "rank_list_var_3"
       )
       )
   })
