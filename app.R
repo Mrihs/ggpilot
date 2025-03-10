@@ -12,6 +12,8 @@ if (!require("ggsci")) install.packages("ggsci")
 if (!require("ggthemes")) install.packages("ggthemes")
 if (!require("rclipboard")) install.packages("rclipboard")
 if (!require("sortable")) install.packages("sortable")
+if (!require("tidyverse")) install.packages("tidyverse")
+
 
 
 
@@ -37,6 +39,7 @@ library(ggsci)
 library(ggthemes)
 library(rclipboard)
 library(sortable)
+library(tidyverse)
 
 
 
@@ -300,24 +303,12 @@ ui <- fluidPage(
                                                                   column(width = 12,
                                                                          # Placeholder for the ranking-UI
                                                                          uiOutput("x_factor_mult_var_list")
-                                                                         # bucket_list(
-                                                                         #   header = NULL,
-                                                                         #   group_name = "bucket_list_x_var",
-                                                                         #   orientation = "horizontal",
-                                                                         #   # Placeholder for the ranking-UI
-                                                                         #   # uiOutput("x_factor_multiple_vars")
-                                                                         #   add_rank_list(
-                                                                         #     text = "Drag from here",
-                                                                         #     labels = list("on", "two", "three")
-                                                                         #   ),
-                                                                         #   add_rank_list(
-                                                                         #     text = "to here",
-                                                                         #     labels = NULL
-                                                                         #   )
-                                                                         # )
-                                                                         
                                                                     )
-                                                                  )
+                                                                  ),
+                                                                textInput(inputId = "x_multiple_var_label", 
+                                                                          label = "Bezeichnung der zusammengefassten x-Achsen Variablen", 
+                                                                          value = "", 
+                                                                          placeholder = "Name eingeben zum Anpassen")
                                                                 )
                                                               )
                                   ),
@@ -1146,6 +1137,9 @@ server <- function(input, output, session) {
   grid_col_factor_code <- reactiveVal(value = "")
   # Variable which includes code to change facet-row factors
   grid_row_factor_code <- reactiveVal(value = "")
+  # Variable to name pivot_longer
+  pivot_x_name <- reactiveVal(value = "X")
+
   
   
   
@@ -1503,6 +1497,16 @@ server <- function(input, output, session) {
     } else {
       multiple_var_x(FALSE)
     }
+    
+    observeEvent(input$x_multiple_var_label, {
+      if(input$x_multiple_var_label!=""){
+        pivot_x_name(input$x_multiple_var_label)
+      } else {
+        pivot_x_name("X")
+      }
+    })
+    
+
     # Mark if y-axis variable is a factor or character
     if (is.factor(y_data)) {
       Factors$y_values <- levels(y_data)
@@ -1557,6 +1561,9 @@ server <- function(input, output, session) {
     }
   })
   
+  output$results_swap <- renderPrint({
+    input$rank_list_swap # This matches the input_id of the rank list
+  })
   
   
   # Set variable to control whether x-axis variable is numeric
@@ -1686,19 +1693,20 @@ server <- function(input, output, session) {
       header = NULL,
       group_name = "bucket_list_x_var",
       orientation = "horizontal",
-      # Placeholder for the ranking-UI
-      # uiOutput("x_factor_multiple_vars")
       add_rank_list(
         text = "Variable von hier auswählen",
         labels = names(data())
       ),
       add_rank_list(
         text = "und hier ablegen",
-        labels = NULL
+        labels = NULL, 
+        input_id = "rank_list_x_var"
       )
-    )
+      )
   })
+
   
+
   # Create dynamic UI for rank_list() of y-axis variable
   output$y_factor_rank_list <- renderUI({
     rank_list(input_id = "y_factor_Order", 
@@ -1762,6 +1770,7 @@ server <- function(input, output, session) {
   
   # Check for Update on order of levels on y-factor
   observeEvent(input$y_factor_Order, {
+    print(input$rank_list_x_var)
     # Require data
     req(data(), input$y_factor_Order, input$y_var)
     # Initate new_factor_code
@@ -2019,7 +2028,7 @@ server <- function(input, output, session) {
     theme_selected <- input$plot_theme
     # Selected Color-Palette
     palette_selected <- input$Color_Palette
-    
+
     
     
     
@@ -2033,7 +2042,15 @@ server <- function(input, output, session) {
     if (x_var!="Mehrere Variablen zusammenfassen"){
       r_code <- sprintf("q <- ggplot(df, aes_string(x = '%s', y = '%s'", x_var, y_var)
     } else {
-      r_code <- sprintf("q <- ggplot(df, aes_string(x = 1, y = '%s'", y_var)
+      print("Q ist!")
+      print(q)
+      
+      x_cols_vector <- paste0("c('", paste(input$rank_list_x_var, collapse = "', '"), "')")
+      
+      r_code <- sprintf("df <- pivot_longer(df, cols = %s, names_to = '%s') \n\n", 
+                                             x_cols_vector, pivot_x_name())
+      
+      r_code <- paste(r_code, sprintf("q <- ggplot(df, aes_string(x = '%s', y = '%s'", pivot_x_name()[1], y_var))
     }
     
     
@@ -3806,7 +3823,12 @@ server <- function(input, output, session) {
       full_code <- paste0(full_code, "\nlibrary(ggsci)")
     }
     
-    
+    # Define Code-Line for tidyverse if needed
+    # Check if pivot-longer is needed
+    if(input$x_var == "Mehrere Variablen zusammenfassen"){
+      full_code <- paste0(full_code, "\nlibrary(tidyverse)")
+    }
+
     
     
     
