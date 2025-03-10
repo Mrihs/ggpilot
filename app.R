@@ -225,6 +225,13 @@ ui <- fluidPage(
     style = "display: none;"
   ),  
   
+  # Define Hidden Inputs for whether Data exists
+  tags$div(
+    textInput("is_data", label = NULL, value = "no"),
+    # Set the Input to be hidden
+    style = "display: none;"
+  ),  
+  
   
   
   
@@ -257,7 +264,20 @@ ui <- fluidPage(
                                   # Add Button for File Input
                                   fileInput("file", "Datensatz auswählen",
                                             buttonLabel = "Durchsuchen", placeholder = "Keine Datei ausgewählt", 
-                                            accept = c(".csv", ".xlsx", ".rds", ".RData"))),
+                                            accept = c(".csv", ".xlsx", ".rds", ".RData")),
+                                  # Create a conditionl-panel for when data is available
+                                  conditionalPanel(condition = "input.is_data == 'yes'",
+                                                   # Create a Layout for CollapsePanels
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Wide-zu-Long-Transformation"),
+                                                                # Placeholder for the ranking-UI
+                                                                uiOutput("pivot_longer_rank_list")
+                                                              )
+                                                   )
+                                  )),
                  
                  
                  
@@ -1093,6 +1113,7 @@ server <- function(input, output, session) {
   ############### 3.1 Define reactive Values ###############
   # Create reactive Value for active Tab
   activeTab <- reactiveVal("data")
+  is_data <- reactiveVal("no")
   # Create reactive Value for active Plot
   activePlot <- reactiveVal("data")
   # Variable to observe whether options for barplots should be shown
@@ -1210,6 +1231,9 @@ server <- function(input, output, session) {
     updateTextInput(session, "activeTab", value = activeTab())
   })
   
+  observe({
+    updateTextInput(session, "is_data", value = is_data())
+  })
   
   
   
@@ -1373,12 +1397,14 @@ server <- function(input, output, session) {
     
     ########## 3.3.1 Default Data for missing data ##########
     if (is.null(input$file)) {
+      is_data("no")
       # Return an empty standard dataset if no data is selected
       return(data.frame(
         Placeholder_X = numeric(0),
         Placeholder_Y = numeric(0)
       ))
     } else {
+      is_data("yes")
       # If input-file is selected
       req(input$file)
       # Get the type of selected file
