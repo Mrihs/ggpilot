@@ -1950,7 +1950,7 @@ server <- function(input, output, session) {
     
     ############### 4.3 Define Code with X- and Y- Axis variable ###############
     # Define Code Lines
-    r_code <- sprintf("q <- ggplot(df, aes_string(x = '%s', y = '%s'", x_var, y_var)
+    r_code <- sprintf("q <- ggplot(df, aes(x = %s, y = %s", x_var, y_var)
     
     
     
@@ -1964,13 +1964,13 @@ server <- function(input, output, session) {
     # Define Grouping-variable if selected
     if (!is.null(group_var)) {
       if(input$color_palette_target == "Füllung"){
-        r_code <- paste0(r_code, sprintf(", fill = '%s'))", group_var))
+        r_code <- paste0(r_code, sprintf(", fill = %s))", group_var))
       }
       if(input$color_palette_target == "Linien"){
-        r_code <- paste0(r_code, sprintf(", color = '%s'))", group_var))
+        r_code <- paste0(r_code, sprintf(", color = %s))", group_var))
       }
       if(input$color_palette_target == "Füllung und Linien"){
-        r_code <- paste0(r_code, sprintf(", fill = '%s', color = '%s'))", group_var, group_var))
+        r_code <- paste0(r_code, sprintf(", fill = %s, color = %s))", group_var, group_var))
       }
       # Close first line of Plot-relevant Code if no Grouping Variable is selected
     } else {
@@ -1998,7 +1998,7 @@ server <- function(input, output, session) {
         if (activePlot() == "Line"){
           # r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'line'")
           if (!is.null(group_var)) {
-            r_code <- paste0(r_code, sprintf(" +\n  stat_summary(aes_string(group = '%s', color = '%s'), fun = mean, geom = 'line'", group_var, group_var))
+            r_code <- paste0(r_code, sprintf(" +\n  stat_summary(aes(group = %s, color = %s), fun = mean, geom = 'line'", group_var, group_var))
           # Close first line of Plot-relevant Code if no Grouping Variable is selected
           }
           if (is.null(group_var)) {
