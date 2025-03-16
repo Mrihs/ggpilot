@@ -1991,6 +1991,9 @@ server <- function(input, output, session) {
       if (activePlot() == "Bar"|activePlot() == "Line"){
         if (activePlot() == "Bar"){
           r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'bar'")
+          if (!is.na(input$barplot_width)){
+            r_code <- paste0(r_code, sprintf(", width = %.1f", input$barplot_width))
+          }
         }
         if (activePlot() == "Line"){
           # r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'line'")
