@@ -1035,24 +1035,23 @@ ui <- fluidPage(
              
              # UI output for copy-to-clipboard button
              uiOutput("clip"),
-      ),
-      tags$footer(
-        tags$a(
-          href = "https://github.com/Mrihs/ggpilot",
-          "View on GitHub",
-          target = "_blank"  # Öffnet den Link in neuem Tab
-        ),
-        align = "right",
-        style = "
-                 position:fixed;
+      )
+    )
+  ),
+  tags$footer(
+    tags$a(
+      href = "https://github.com/Mrihs/ggpilot",
+      "View on GitHub",
+      target = "_blank"  # Öffnet den Link in neuem Tab
+    ),
+    align = "left",
+    style = "
                  bottom:11.5px;
-                 width:65%;
+                 width:100%;
                  height:20px;
                  padding: 0px;
                  z-index: 100;
                 ")
-    )
-  )
 )
 
 
