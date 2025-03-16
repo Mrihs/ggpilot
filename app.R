@@ -2220,12 +2220,29 @@ server <- function(input, output, session) {
       )
     }
     if (!is.null(input$legend_title) && input$legend_title != "") {
-      labs_code <- paste0(
-        labs_code, 
-        if (labs_code != "") ", " else "",
-        sprintf("fill = '%s'", input$legend_title)
-      )
+        labs_code <- paste0(
+          labs_code,
+          if (labs_code != "") 
+            ", " 
+          else 
+            "",
+          if (input$color_palette_target == "Füllung") 
+            sprintf("fill = '%s'", input$legend_title)
+          else if (input$color_palette_target == "Linien") 
+            sprintf("color = '%s'", input$legend_title)
+          else if (input$color_palette_target == "Füllung und Linien") 
+            sprintf("fill = '%s', color = '%s'", input$legend_title, input$legend_title)
+        )
+              
     }
+    
+    # if (!is.null(input$legend_title) && input$legend_title != "") {
+    #   labs_code <- paste0(
+    #     labs_code, 
+    #     if (labs_code != "") ", " else "",
+    #     sprintf("fill = '%s'", input$legend_title)
+    #   )
+    # }
     # Add labs_code when labs were assigned
     if (labs_code != "") {
       r_code <- paste0(r_code, sprintf(" +\n  labs(%s)", labs_code))
