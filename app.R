@@ -3252,8 +3252,8 @@ server <- function(input, output, session) {
     
     ############### 5.20 Legend Background Theme ###############
     # Check if theme should be adjusted
-    if (input$Plot_Background_Color != "" || input$Plot_Background_Linetype != "Gemäss Theme" 
-        || !is.na(input$Plot_Background_Size) || input$Plot_Background_Line_Color != "") {
+    if (input$Legend_Background_Color != "" || input$Legend_Background_Linetype != "Gemäss Theme" 
+        || !is.na(input$Legend_Background_Size) || input$Legend_Background_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
@@ -3262,9 +3262,9 @@ server <- function(input, output, session) {
       theme_code <- paste0(theme_code, "legend.background = element_rect(")
       # Paste theme settings from UI
       theme_code <- paste0(theme_code,
-                           if (input$Plot_Background_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Color) else "",
-                           if (input$Plot_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
-                                                                                         switch(input$Plot_Background_Linetype,
+                           if (input$Legend_Background_Color != "") sprintf("fill = '%s', ", input$Legend_Background_Color) else "",
+                           if (input$Legend_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
+                                                                                         switch(input$Legend_Background_Linetype,
                                                                                                 "Solide" = "solid", 
                                                                                                 "Gestrichelt" = "dashed", 
                                                                                                 "Gepunkted" = "dotted", 
@@ -3272,8 +3272,8 @@ server <- function(input, output, session) {
                                                                                                 "Langgestrichen" = "longdash", 
                                                                                                 "Doppelt gestrichelt" = "twodash"
                                                                                          )) else "",
-                           if (!is.na(input$Plot_Background_Size)) sprintf("linewidth = %.1f, ", input$Plot_Background_Size) else "",
-                           if (input$Plot_Background_Line_Color != "") sprintf("colour = '%s', ", input$Plot_Background_Line_Color) else "")
+                           if (!is.na(input$Legend_Background_Size)) sprintf("linewidth = %.1f, ", input$Legend_Background_Size) else "",
+                           if (input$Legend_Background_Line_Color != "") sprintf("colour = '%s', ", input$Legend_Background_Line_Color) else "")
       # Remove trailing comma and close the element-function
       theme_code <- sub(", $", "", theme_code)
       theme_code <- paste0(theme_code, ")")
@@ -3295,7 +3295,7 @@ server <- function(input, output, session) {
         theme_code <- paste0(theme_code, ",\n  ")
       }
       # Set start of code for legend.position
-      theme_code <- paste0(theme_code, sprintf("legend.position = '%s', ",
+      theme_code <- paste0(theme_code, sprintf("legend.position = '%s'",
                                                switch(input$Legend_Position,
                                                       "Keine" = "none", 
                                                       "Rechts" = "right", 
@@ -3313,7 +3313,7 @@ server <- function(input, output, session) {
         theme_code <- paste0(theme_code, ",\n  ")
       }
       # Set start of code for legend.title.position
-      theme_code <- paste0(theme_code, sprintf("legend.title.position = '%s', ",
+      theme_code <- paste0(theme_code, sprintf("legend.title.position = '%s'",
                                                switch(input$Legend_Title_Position,
                                                       "Oben" = "top", 
                                                       "Rechts" = "right", 
@@ -3329,7 +3329,7 @@ server <- function(input, output, session) {
         theme_code <- paste0(theme_code, ",\n  ")
       }
       # Set start of code for legend.text.position
-      theme_code <- paste0(theme_code, sprintf("legend.text.position = '%s', ",
+      theme_code <- paste0(theme_code, sprintf("legend.text.position = '%s'",
                                                switch(input$Legend_Text_Position,
                                                       "Oben" = "top", 
                                                       "Rechts" = "right", 
@@ -3345,7 +3345,7 @@ server <- function(input, output, session) {
         theme_code <- paste0(theme_code, ",\n  ")
       }
       # Create code for legend.direction
-      theme_code <- paste0(theme_code, sprintf("legend.direction = '%s', ",
+      theme_code <- paste0(theme_code, sprintf("legend.direction = '%s'",
                                                switch(input$Legend_Text_Direktion,
                                                       "Vertikal" = "vertical",
                                                       "Horizontal" = "horizontal", ")")))
