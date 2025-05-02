@@ -398,41 +398,42 @@ ui <- fluidPage(
                                                )
                                              )
                                   ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             # Create a Collapse-Panel for Color-Palette-Settings
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Farbpalletten"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   # Dropdown with options for color-palette
-                                                   selectInput(inputId = "Color_Palette", label = "Farbpalette", 
-                                                               choices = c("Gemäss Theme", "Eigene Farbpalette erstellen", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
-                                                                           "viridis - cividis", "viridis - mako", "viridis - rocket", "viridis - turbo",
-                                                                           "Accent", "Blues", "Greens", "Greys", "Oranges", "Paired", "Pastel1", 
-                                                                           "Pastel2", "Purples", "Reds", "Set1", "Set2", "Set3", "Spectral", 
-                                                                           "grey", "hue", "ordinal", "aas", "bmj", "cosmic", "d3", "flatui", 
-                                                                           "frontiers", "futurama", "igv", "jama", "lancet", "locuszoom", 
-                                                                           "material", "nejm", "npg", "observable", "rickandmorty", "simpsons", "startrek", 
-                                                                           "tron", "uchicago", "ucscgb", "jco", "calc", "canva", "colorblind", 
-                                                                           "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
-                                                                           "hc", "pander", "ptol", "solarized", 
-                                                                           "stata", "tableau", "wsj"),
-                                                               selected = "Gemäss Theme"),
-                                                   # Set UI for individual color palette
-                                                   conditionalPanel(condition = "input.Color_Palette =='Eigene Farbpalette erstellen'",
-                                                                    # Add Button
-                                                                    actionButton("add", "Farbe hinzufügen"),
-                                                                    actionButton("remove_last", "Letzte Farbe entfernen"),
-                                                                    tags$div(id = "input_container"),
-                                                                    # Create CSS for inavlid colors
-                                                                    tags$style(HTML("
+                                  conditionalPanel(condition = "output.show_grouping_options",
+                                                   # Create a Layout for CollapsePanels
+                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                              # Create a Collapse-Panel for Color-Palette-Settings
+                                                              bsCollapsePanel(
+                                                                # Define Title of Collapse-Panel
+                                                                title = BSCollapseArrow("Farbpalletten"),
+                                                                # Define CSS Settings
+                                                                div(class = ".collapse_panel-settings",
+                                                                    # Dropdown with options for color-palette
+                                                                    selectInput(inputId = "Color_Palette", label = "Farbpalette", 
+                                                                                choices = c("Gemäss Theme", "Eigene Farbpalette erstellen", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
+                                                                                            "viridis - cividis", "viridis - mako", "viridis - rocket", "viridis - turbo",
+                                                                                            "Accent", "Blues", "Greens", "Greys", "Oranges", "Paired", "Pastel1", 
+                                                                                            "Pastel2", "Purples", "Reds", "Set1", "Set2", "Set3", "Spectral", 
+                                                                                            "grey", "hue", "ordinal", "aas", "bmj", "cosmic", "d3", "flatui", 
+                                                                                            "frontiers", "futurama", "igv", "jama", "lancet", "locuszoom", 
+                                                                                            "material", "nejm", "npg", "observable", "rickandmorty", "simpsons", "startrek", 
+                                                                                            "tron", "uchicago", "ucscgb", "jco", "calc", "canva", "colorblind", 
+                                                                                            "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
+                                                                                            "hc", "pander", "ptol", "solarized", 
+                                                                                            "stata", "tableau", "wsj"),
+                                                                                selected = "Gemäss Theme"),
+                                                                    # Set UI for individual color palette
+                                                                    conditionalPanel(condition = "input.Color_Palette =='Eigene Farbpalette erstellen'",
+                                                                                     # Add Button
+                                                                                     actionButton("add", "Farbe hinzufügen"),
+                                                                                     actionButton("remove_last", "Letzte Farbe entfernen"),
+                                                                                     tags$div(id = "input_container"),
+                                                                                     # Create CSS for inavlid colors
+                                                                                     tags$style(HTML("
                                                                       .invalid { background-color: #ffcccc !important; }
                                                                       .error-message { color: red; font-size: 14px; margin-left: 10px; display: inline; }
                                                                     ")),
-                                                                    # JS to validate colors
-                                                                    tags$script(HTML("
+                                                                                     # JS to validate colors
+                                                                                     tags$script(HTML("
                                                                       Shiny.addCustomMessageHandler('validColor', function(data) {
                                                                         var inputField = document.getElementById(data.id);
                                                                         var errorText = document.getElementById(data.id + '_error');
@@ -445,11 +446,12 @@ ui <- fluidPage(
                                                                         }
                                                                       });
                                                                     "))
-                                                   ),
-                                                   selectInput(inputId = "color_palette_target", label = "Farbelette anwenden auf...", 
-                                                               choices = c("Füllung", "Linien", "Füllung und Linien"), selected = "Füllung")
-                                               )
-                                             )
+                                                                    ),
+                                                                    selectInput(inputId = "color_palette_target", label = "Farbelette anwenden auf...", 
+                                                                                choices = c("Füllung", "Linien", "Füllung und Linien"), selected = "Füllung")
+                                                                )
+                                                              )
+                                                   )
                                   ),
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
