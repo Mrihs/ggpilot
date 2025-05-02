@@ -931,7 +931,7 @@ ui <- fluidPage(
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Zeilen"),
+                                                                           h3("Spalten"),
                                                                            textInput(inputId = "Stripe_X_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                                            selectInput(inputId = "Stripe_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                                            numericInput(inputId = "Stripe_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
@@ -939,7 +939,7 @@ ui <- fluidPage(
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Spalten"),
+                                                                           h3("Zeilen"),
                                                                            textInput(inputId = "Stripe_Y_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                                            selectInput(inputId = "Stripe_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                                            numericInput(inputId = "Stripe_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
@@ -955,20 +955,20 @@ ui <- fluidPage(
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Zeilen"),
+                                                                           h3("Spalten"),
                                                                            selectInput(inputId = "Stripe_X_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Stripe_X_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Stripe_X_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           numericInput(inputId = "Stripe_X_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                           textInput(inputId = "Stripe_X_Textcolor", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           numericInput(inputId = "Stripe_X_Textsize", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                                                            selectInput(inputId = "Stripe_X_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Spalten"),
+                                                                           h3("Zeilen"),
                                                                            selectInput(inputId = "Stripe_Y_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Stripe_Y_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Stripe_Y_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           numericInput(inputId = "Stripe_Y_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                           textInput(inputId = "Stripe_Y_Textcolor", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                           numericInput(inputId = "Stripe_Y_Textsize", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
                                                                            selectInput(inputId = "Stripe_Y_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
                                                                     )
                                                                 )
@@ -2056,7 +2056,7 @@ server <- function(input, output, session) {
             r_code <- paste0(r_code, sprintf(", width = %.1f", error_width))
           }
           if (!is.null(error_size)) {
-            r_code <- paste0(r_code, sprintf(", size = %.1f", error_size))
+            r_code <- paste0(r_code, sprintf(", linewidth = %.1f", error_size))
           }
           if (!is.na(dodge_value)) {
             r_code <- paste0(r_code, sprintf(", position = position_dodge(width = %s)", dodge_value))
@@ -3526,7 +3526,7 @@ server <- function(input, output, session) {
     ############### 5.24 Facet-Row Text Theme ###############
     # Check if theme should be adjusted
     if (input$Stripe_X_Font != "Gemäss Theme" || input$Stripe_X_Face != "Gemäss Theme" ||
-        input$Stripe_X_Color != "" || !is.na(input$Stripe_X_Size) || input$Stripe_X_Alignment != "Gemäss Theme") {
+        input$Stripe_X_Textcolor != "" || !is.na(input$Stripe_X_Textsize) || input$Stripe_X_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
@@ -3546,8 +3546,8 @@ server <- function(input, output, session) {
                                                                                      "Fett" = "bold",
                                                                                      "Kursiv" = "italic",
                                                                                      "Fett & Kursiv" = "bold.italic")) else "",
-                           if (!is.na(input$Stripe_X_Size)) sprintf("size = %.1f, ", input$Stripe_X_Size) else "",
-                           if (input$Stripe_X_Color != "") sprintf("colour = '%s', ", input$Stripe_X_Color) else "",
+                           if (!is.na(input$Stripe_X_Textsize)) sprintf("size = %.1f, ", input$Stripe_X_Textsize) else "",
+                           if (input$Stripe_X_Textcolor != "") sprintf("colour = '%s', ", input$Stripe_X_Textcolor) else "",
                            if (input$Stripe_X_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
                                                                                    switch(input$Stripe_X_Alignment,
                                                                                           "Linksbündig" = 0,
@@ -3569,7 +3569,7 @@ server <- function(input, output, session) {
     ############### 5.25 Facet-Column Theme ###############
     # Check if theme should be adjusted
     if (input$Stripe_Y_Font != "Gemäss Theme" || input$Stripe_Y_Face != "Gemäss Theme" ||
-        input$Stripe_Y_Color != "" || !is.na(input$Stripe_Y_Size) || input$Stripe_Y_Alignment != "Gemäss Theme") {
+        input$Stripe_Y_Textcolor != "" || !is.na(input$Stripe_Y_Textsize) || input$Stripe_Y_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
         theme_code <- paste0(theme_code, ",\n  ")
@@ -3589,8 +3589,8 @@ server <- function(input, output, session) {
                                                                                      "Fett" = "bold",
                                                                                      "Kursiv" = "italic",
                                                                                      "Fett & Kursiv" = "bold.italic")) else "",
-                           if (!is.na(input$Stripe_Y_Size)) sprintf("size = %.1f, ", input$Stripe_Y_Size) else "",
-                           if (input$Stripe_Y_Color != "") sprintf("colour = '%s', ", input$Stripe_Y_Color) else "",
+                           if (!is.na(input$Stripe_Y_Textsize)) sprintf("size = %.1f, ", input$Stripe_Y_Textsize) else "",
+                           if (input$Stripe_Y_Textcolor != "") sprintf("colour = '%s', ", input$Stripe_Y_Textcolor) else "",
                            if (input$Stripe_Y_Alignment != "Gemäss Theme") sprintf("hjust = %s, ", 
                                                                                    switch(input$Stripe_Y_Alignment,
                                                                                           "Linksbündig" = 0,
