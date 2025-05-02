@@ -2533,7 +2533,7 @@ server <- function(input, output, session) {
         input$Title_Color != "" || !is.na(input$Title_Size) || input$Title_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for plot-title-theme
       theme_code <- paste0(theme_code, "plot.title = element_text(")
@@ -2576,7 +2576,7 @@ server <- function(input, output, session) {
         input$Subtitle_Color != "" || !is.na(input$Subtitle_Size) || input$Subtitle_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for plot-subtitle-theme
       theme_code <- paste0(theme_code, "plot.subtitle = element_text(")
@@ -2619,7 +2619,7 @@ server <- function(input, output, session) {
         input$X_Axis_Title_Color != "" || !is.na(input$X_Axis_Title_Size) || input$X_Axis_Title_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for X-Axis Title Theme
       theme_code <- paste0(theme_code, "axis.title.x = element_text(")
@@ -2662,7 +2662,7 @@ server <- function(input, output, session) {
         input$Y_Axis_Title_Color != "" || !is.na(input$Y_Axis_Title_Size) || input$Y_Axis_Title_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for plot-title-theme
       theme_code <- paste0(theme_code, "axis.title.y = element_text(")
@@ -2706,7 +2706,7 @@ server <- function(input, output, session) {
         || input$Axis_X_Text_V_Alignment != "Gemäss Theme" || !is.na(input$Axis_X_Text_Rotation)) {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for X-Axis-Labels theme
       theme_code <- paste0(theme_code, "axis.text.x = element_text(")
@@ -2756,7 +2756,7 @@ server <- function(input, output, session) {
         || input$Axis_Y_Text_V_Alignment != "Gemäss Theme" || !is.na(input$Axis_Y_Text_Rotation)) {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for Y-Axis-Labels Theme
       theme_code <- paste0(theme_code, "axis.text.y = element_text(")
@@ -2804,7 +2804,7 @@ server <- function(input, output, session) {
     if (input$Axis_X_Linetype != "Gemäss Theme" || !is.na(input$Axis_X_Size) || input$Axis_X_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for X Axis Lines Theme
       if (input$Axis_X_Linetype == "Keine"){
@@ -2843,7 +2843,7 @@ server <- function(input, output, session) {
     if (input$Axis_Y_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Size) || input$Axis_Y_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for Y Axis Lines Theme
       if (input$Axis_Y_Linetype == "Keine"){
@@ -2882,7 +2882,7 @@ server <- function(input, output, session) {
     if (!is.na(input$Axis_X_Ticks_Length)) {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       theme_code <- paste0(theme_code, sprintf("axis.ticks.length.x = unit('%.1f', 'pt')", input$Axis_X_Ticks_Length))
     }
@@ -2890,7 +2890,7 @@ server <- function(input, output, session) {
     if (input$Axis_X_Ticks_Linetype != "Gemäss Theme" || !is.na(input$Axis_X_Ticks_Size) || input$Axis_X_Ticks_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for X Axis Ticks theme
       theme_code <- paste0(theme_code, "axis.ticks.x = element_line(")
@@ -2925,7 +2925,7 @@ server <- function(input, output, session) {
     if (!is.na(input$Axis_Y_Ticks_Length)) {
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       theme_code <- paste0(theme_code, sprintf("axis.ticks.length.y = unit('%.1f', 'pt')", input$Axis_Y_Ticks_Length))
     }
@@ -2933,7 +2933,7 @@ server <- function(input, output, session) {
     if (input$Axis_Y_Ticks_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Ticks_Size) || input$Axis_Y_Ticks_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for Y Axis Ticks theme
       theme_code <- paste0(theme_code, "axis.ticks.y = element_line(")
@@ -2968,7 +2968,7 @@ server <- function(input, output, session) {
     if (input$Major_Grid_X_Linetype != "Gemäss Theme" || !is.na(input$Major_Grid_X_Size) || input$Major_Grid_X_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Check if lines are wished
       if (input$Major_Grid_X_Linetype == "Keine"){
@@ -3009,7 +3009,7 @@ server <- function(input, output, session) {
     if (input$Major_Grid_Y_Linetype != "Gemäss Theme" || !is.na(input$Major_Grid_Y_Size) || input$Major_Grid_Y_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Check if lines are wished
       if (input$Major_Grid_Y_Linetype == "Keine"){
@@ -3049,7 +3049,7 @@ server <- function(input, output, session) {
     if (input$Minor_Grid_X_Linetype != "Gemäss Theme" || !is.na(input$Minor_Grid_X_Size) || input$Minor_Grid_X_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Check if lines are wished
       if (input$Minor_Grid_X_Linetype == "Keine"){
@@ -3089,7 +3089,7 @@ server <- function(input, output, session) {
     if (input$Minor_Grid_Y_Linetype != "Gemäss Theme" || !is.na(input$Minor_Grid_Y_Size) || input$Minor_Grid_Y_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Check if lines are wished
       if (input$Minor_Grid_Y_Linetype == "Keine"){
@@ -3130,7 +3130,7 @@ server <- function(input, output, session) {
         || !is.na(input$Plot_Background_Size) || input$Plot_Background_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for plot.background
       theme_code <- paste0(theme_code, "plot.background = element_rect(")
@@ -3167,7 +3167,7 @@ server <- function(input, output, session) {
         || !is.na(input$Panel_Background_Size) || input$Panel_Background_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for panel.background
       theme_code <- paste0(theme_code, "panel.background = element_rect(")
@@ -3204,7 +3204,7 @@ server <- function(input, output, session) {
         input$Legend_Title_Color != "" || !is.na(input$Legend_Title_Size) || input$Legend_Title_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for legend.title
       theme_code <- paste0(theme_code, "legend.title = element_text(")
@@ -3247,7 +3247,7 @@ server <- function(input, output, session) {
         input$Legend_Text_Color != "" || !is.na(input$Legend_Text_Size) || input$Legend_Text_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for legend.text
       theme_code <- paste0(theme_code, "legend.text = element_text(")
@@ -3290,7 +3290,7 @@ server <- function(input, output, session) {
         || !is.na(input$Legend_Background_Size) || input$Legend_Background_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for legend.background
       theme_code <- paste0(theme_code, "legend.background = element_rect(")
@@ -3326,7 +3326,7 @@ server <- function(input, output, session) {
     if (input$Legend_Position != "Gemäss Theme"){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for legend.position
       theme_code <- paste0(theme_code, sprintf("legend.position = '%s'",
@@ -3344,7 +3344,7 @@ server <- function(input, output, session) {
     if (input$Legend_Title_Position != "Gemäss Theme"){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for legend.title.position
       theme_code <- paste0(theme_code, sprintf("legend.title.position = '%s'",
@@ -3360,7 +3360,7 @@ server <- function(input, output, session) {
     if (input$Legend_Text_Position != "Gemäss Theme"){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for legend.text.position
       theme_code <- paste0(theme_code, sprintf("legend.text.position = '%s'",
@@ -3376,7 +3376,7 @@ server <- function(input, output, session) {
     if (input$Legend_Text_Direktion != "Gemäss Theme"){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Create code for legend.direction
       theme_code <- paste0(theme_code, sprintf("legend.direction = '%s'",
@@ -3390,7 +3390,7 @@ server <- function(input, output, session) {
     if (!is.na(input$Legend_Key_Width)){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Create code for legend.key.width
       theme_code <- paste0(theme_code, sprintf("legend.key.width = unit(%.1f, 'pt'", input$Legend_Key_Width))
@@ -3404,7 +3404,7 @@ server <- function(input, output, session) {
     if (!is.na(input$Legend_Key_Height)){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Create code for legend.key.height
       theme_code <- paste0(theme_code, sprintf("legend.key.height = unit(%.1f, 'pt'", input$Legend_Key_Height))
@@ -3418,7 +3418,7 @@ server <- function(input, output, session) {
     if (!is.na(input$Legend_Key_Spacing)){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Create code for legend.key.spacing
       theme_code <- paste0(theme_code, sprintf("legend.key.spacing = unit(%.1f, 'pt'", input$Legend_Key_Spacing))
@@ -3432,7 +3432,7 @@ server <- function(input, output, session) {
     if (!is.na(input$Legend_Box_Spacing)){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Create code for legend.box.spacing
       theme_code <- paste0(theme_code, sprintf("legend.box.spacing = unit(%.1f, 'pt'", input$Legend_Box_Spacing))
@@ -3455,7 +3455,7 @@ server <- function(input, output, session) {
         || !is.na(input$Stripe_X_Size) || input$Stripe_X_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for strip.background.x
       theme_code <- paste0(theme_code, "strip.background.x = element_rect(")
@@ -3492,7 +3492,7 @@ server <- function(input, output, session) {
         || !is.na(input$Stripe_Y_Size) || input$Stripe_Y_Line_Color != "") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for strip.background.y
       theme_code <- paste0(theme_code, "strip.background.y = element_rect(")
@@ -3529,7 +3529,7 @@ server <- function(input, output, session) {
         input$Stripe_X_Textcolor != "" || !is.na(input$Stripe_X_Textsize) || input$Stripe_X_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for strip.text.x
       theme_code <- paste0(theme_code, "strip.text.x = element_text(")
@@ -3572,7 +3572,7 @@ server <- function(input, output, session) {
         input$Stripe_Y_Textcolor != "" || !is.na(input$Stripe_Y_Textsize) || input$Stripe_Y_Alignment != "Gemäss Theme") {
       # Create new Line in Theme-Code if needed
       if (theme_code!=""){
-        theme_code <- paste0(theme_code, ",\n  ")
+        theme_code <- paste0(theme_code, ",\n        ")
       }
       # Set start of code for strip.text.y
       theme_code <- paste0(theme_code, "strip.text.y = element_text(")
@@ -3865,6 +3865,16 @@ server <- function(input, output, session) {
       req(r_code())
       # Require that q exists
       req(exists("q"))
+      # Require data
+      req(df)
+      # Save df for creating plot
+      df <- data()
+      
+      # Rund factor code if defined
+      if (!is.null(factor_code()) && factor_code() != "") {
+        eval(parse(text = factor_code()))
+      }
+      
       # Create Plot by evaluating r_code
       eval(parse(text = r_code()))
       
