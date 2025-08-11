@@ -13,6 +13,8 @@ if (!require("ggthemes")) install.packages("ggthemes")
 if (!require("rclipboard")) install.packages("rclipboard")
 if (!require("sortable")) install.packages("sortable")
 if (!require("svglite")) install.packages("svglite")
+if (!require("shiny.i18n")) install.packages("shiny.i18n")
+
 
 
 
@@ -39,6 +41,7 @@ library(ggthemes)
 library(rclipboard)
 library(sortable)
 library(svglite)
+library(shiny.i18n)
 
 
 
@@ -51,8 +54,24 @@ library(svglite)
 
 
 
-############### 1.3 Define Function2 ###############
-########## 1.3.1 BSCollapse-Function is set using an arrow-down icon ##########
+############### 1.3 Load Translator ###############
+# Create Translator
+i18n <- Translator$new(translation_csvs_path = "i18n", translation_csv_config = "www/i18n.config.yaml")
+# Set Default language
+i18n$set_translation_language("en")
+
+
+
+
+
+
+
+
+
+
+
+############### 1.4 Define Function ###############
+########## 1.4.1 BSCollapse-Function is set using an arrow-down icon ##########
 BSCollapseArrow <- function(text, icon_class = "glyphicon-menu-down") {
   HTML(sprintf(
     '<div class="panel-title-container">
@@ -67,7 +86,7 @@ BSCollapseArrow <- function(text, icon_class = "glyphicon-menu-down") {
 
 
 
-########## 1.3.2 is_valid_colo-Function to validate color-inputs ##########
+########## 1.4.2 is_valid_colo-Function to validate color-inputs ##########
 is_valid_color <- function(color) {
   # empty colors are not invalid
   if (is.null(color) || color == "") return(FALSE)
@@ -106,7 +125,13 @@ ui <- fluidPage(
   
   
   
-  ########## 2.1.2 Define custom CSS ##########
+  ########## 2.1.2 Use i18n ##########  
+  usei18n(i18n),
+  
+  
+  
+  
+  ########## 2.1.3 Define custom CSS ##########
   tags$head(
     tags$style(HTML("
     
@@ -190,11 +215,21 @@ ui <- fluidPage(
   # Define a fluid Row
   fluidRow(
     # Set a Column
-    column(3, 
+    column(3, style = "min-width: 350px;",
            # Define logo and title
-           titlePanel(title = span(img(src = "logo.png", height = 50), HTML('<span style="font-size: 1.95em;">ggpilot</span>')), windowTitle = "ggpilot")),
+           titlePanel(title = span(
+             # Add image
+             img(src = "logo.png", 
+                 height = 90, 
+                 style = "position: relative; top: -15px; margin-left: 15px;"
+                 ), 
+             # Define HTML
+             HTML('<span style="font-size: 64px;; margin-left: 20px;">ggpilot</span>'),
+             style = "white-space: nowrap;" # kein Zeilenumbruch
+             ),
+             windowTitle = "ggpilot")),
     # Set a Column
-    column(9, align = "center", 
+    column(8, align = "center", 
            style = "margin-top: 15px;",
            tags$head(
              tags$style(HTML("
@@ -214,6 +249,17 @@ ui <- fluidPage(
            actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i> Text'), class = "custom-btn"),
            actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i> Layout'), class = "custom-btn"),
            actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i> Download'), class = "custom-btn"),
+    ),
+    # Set a column
+    column(
+      1, align = "left", style = "margin-top: 15px;min-width: 120px;",
+      # Add Input to select Language
+      selectInput(
+        inputId = "language",
+        label = "Sprache",
+        choices = c("Deutsch" = "de", "English" = "en"),
+        selected = "en"
+      )
     )
   ),
   
