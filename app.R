@@ -101,6 +101,13 @@ is_valid_color <- function(color) {
 
 
 
+########## 1.4.3 tr-Function to Help Translate ##########
+tr <- function(key) as.character(i18n$t(key))[1]
+
+
+
+
+
 
 
 
@@ -256,8 +263,8 @@ ui <- fluidPage(
       # Add Input to select Language
       selectInput(
         inputId = "language",
-        label = "Sprache",
-        choices = c("Deutsch" = "de", "English" = "en"),
+        label   = i18n$t("ui.language"),
+        choices = setNames(c("en","de"), c(tr("lang.en"), tr("lang.de"))),
         selected = "en"
       )
     )
@@ -3981,7 +3988,48 @@ server <- function(input, output, session) {
       # Write the Code
       writeLines(code, file)
     }
-  )    
+  )
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  #################### 9. Language Localization ####################
+  ############### 9.1 Update Language ###############
+  observeEvent(input$language, {
+    req(input$language)
+    i18n$set_translation_language(input$language)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 9.2 Update Language Selection ###############
+    updateSelectInput(
+      session, "language",
+      label   = tr("ui.language"),
+      choices = setNames(c("en","de"), c(tr("lang.en"), tr("lang.de"))),
+      selected = input$language
+    )
+  })
 }
 
 
