@@ -12,6 +12,7 @@ if (!require("ggsci")) install.packages("ggsci")
 if (!require("ggthemes")) install.packages("ggthemes")
 if (!require("rclipboard")) install.packages("rclipboard")
 if (!require("sortable")) install.packages("sortable")
+if (!require("svglite")) install.packages("svglite")
 
 
 
@@ -37,6 +38,7 @@ library(ggsci)
 library(ggthemes)
 library(rclipboard)
 library(sortable)
+library(svglite)
 
 
 
@@ -3886,21 +3888,29 @@ server <- function(input, output, session) {
       width_inch <- input$plot_width_px / 96
       height_inch <- input$plot_height_px / 96
       
-      # Save Plot
-      ggsave(
-        # Save under the defined Name
-        filename = file,
-        # Get plot (q) and save it
-        plot = q,
-        # Save in the Calculated Width
-        width = width_inch,
-        # Save in the Calculated Height
-        height = height_inch,
-        # DPI is set to 96
-        dpi = 96, # DPI is set to 96
-        # Save in the requested file format
-        device = input$file_format
-      )
+      # If Plot should be downloaded as SVG image
+      if (input$file_format == "svg") {
+        svglite::svglite(file, width = width_inch, height = height_inch)
+        on.exit(grDevices::dev.off(), add = TRUE)
+        print(q)
+      # If Plot should be downloaded as JPEG or PNG image
+      } else {
+        # Save Plot
+        ggsave(
+          # Save under the defined Name
+          filename = file,
+          # Get plot (q) and save it
+          plot = q,
+          # Save in the Calculated Width
+          width = width_inch,
+          # Save in the Calculated Height
+          height = height_inch,
+          # DPI is set to 96
+          dpi = 96, # DPI is set to 96
+          # Save in the requested file format
+          device = input$file_format
+        )
+      }
     }
   )
   
