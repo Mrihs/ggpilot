@@ -235,7 +235,7 @@ ui <- fluidPage(
   # Define Sidebar-Layout
   sidebarLayout(
     
-    # Define Panel in Sidebar with width of 3
+    # Define Panel in Sidebar with width of 4
     sidebarPanel(width = 4,
                  
                  
@@ -3466,6 +3466,7 @@ server <- function(input, output, session) {
                            if (input$Stripe_X_Color != "") sprintf("fill = '%s', ", input$Stripe_X_Color) else "",
                            if (input$Stripe_X_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                   switch(input$Stripe_X_Linetype,
+                                                                                         "Keine" = "blank", 
                                                                                          "Solide" = "solid", 
                                                                                          "Gestrichelt" = "dashed", 
                                                                                          "Gepunkted" = "dotted", 
@@ -3503,6 +3504,7 @@ server <- function(input, output, session) {
                            if (input$Stripe_Y_Color != "") sprintf("fill = '%s', ", input$Stripe_Y_Color) else "",
                            if (input$Stripe_Y_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
                                                                                   switch(input$Stripe_Y_Linetype,
+                                                                                         "Keine" = "blank",
                                                                                          "Solide" = "solid", 
                                                                                          "Gestrichelt" = "dashed", 
                                                                                          "Gepunkted" = "dotted", 
