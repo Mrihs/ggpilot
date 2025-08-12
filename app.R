@@ -1050,23 +1050,8 @@ ui <- fluidPage(
                  ########## 2.4.7 Download ##########
                  # Define Conditional-Panel for when Download tab is selected
                  conditionalPanel(condition = "input.activeTab == 'download'",
-                                  fluidRow(
-                                    # Create a column
-                                    column(6,
-                                           h3("Plot"),
-                                           # create a Download-Button for Plot
-                                           downloadButton("downloadPlot", "Plot herunterladen"),
-                                           # Define File-format
-                                           selectInput("file_format", "Dateiformat:", 
-                                                       choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
-                                    ),
-                                    # Create a column
-                                    column(6,
-                                           h3("R-Code"),
-                                           # create a Download-Button for RCode
-                                           downloadButton("downloadCode", "Code herunterladen")
-                                    ),
-                                  )
+                                  # Create a UI-Element
+                                  uiOutput("download_ui")
                  )
     ),
     
@@ -3710,6 +3695,52 @@ server <- function(input, output, session) {
     r_code
   }
   )  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 7. Create Download-Page ###############
+  output$download_ui <- renderUI({
+    # Set the selected language
+    i18n$set_translation_language(input$language)
+    
+    fluidRow(
+      # Create a column
+      column(6,
+             h3(tr("download.plot")),
+             # create a Download-Button for Plot
+             downloadButton("downloadPlot", tr("download.download_plot")),
+             # Define File-format
+             selectInput("file_format", 
+                         tr("download.file_format"), 
+                         choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
+      ),
+      # Create a column
+      column(6,
+             h3(tr("download.r_code")),
+             # create a Download-Button for RCode
+             downloadButton("downloadCode", tr("download.download_code"))
+      ),
+    )
+  })
   
   
   

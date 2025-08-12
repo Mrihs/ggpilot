@@ -16,3 +16,9 @@ plot.bar,Bar,Balken
 plot.line,Line,Linien
 plot.box,Boxplot,Boxplot
 plot.scatter,Scatter,Scatter
+
+download.plot,Plot,Plot
+download.download_plot,Download Plot,Plot herunterladen
+download.file_format,File Format:,Dateiformat:
+download.r_code,R Code,R-Code
+download.download_code,Download Code,Code herunterladen
