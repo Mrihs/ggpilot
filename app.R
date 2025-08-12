@@ -72,13 +72,15 @@ i18n$set_translation_language("en")
 
 ############### 1.4 Define Function ###############
 ########## 1.4.1 BSCollapse-Function is set using an arrow-down icon ##########
-BSCollapseArrow <- function(text, icon_class = "glyphicon-menu-down") {
+BSCollapseArrow <- function(text, id = NULL, icon_class = "glyphicon-menu-down") {
   HTML(sprintf(
     '<div class="panel-title-container">
        <i class="glyphicon %s"></i>
-       <span>%s</span>
-     </div>', 
-    icon_class, text
+       <span %s>%s</span>
+     </div>',
+    icon_class,
+    if (is.null(id)) "" else sprintf('id="%s"', id),
+    text
   ))
 }
 
@@ -345,11 +347,18 @@ ui <- fluidPage(
                  
                  
                  ########## 2.4.3 UI to Select Variables ##########
+                 tags$script(HTML("
+                                   Shiny.addCustomMessageHandler('setText', function(x) {
+                                   var el = document.getElementById(x.id);
+                                   if (el) { el.textContent = x.text; }
+                                   });
+                                  ")),
+
                  # Define Conditional-Panel for when Variables tab is selected
                  conditionalPanel(condition = "input.activeTab == 'variables'",
                                   # Set title
-                                  h3("X-Achsen-Variable"),
-                                  # X-Axis Variable
+                                  h3(span(id = "x_title", HTML(tr("variables.x_title")))),
+                                  # X-xis Variable
                                   selectInput("x_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
                                   conditionalPanel(condition = "output.is_numeric_x == false",
@@ -358,14 +367,14 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Theme-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "x_reorder_title"),
                                                                 # Placeholder for the ranking-UI
                                                                 uiOutput("x_factor_rank_list")
                                                               )
                                                    )
                                   ),
                                   # Set title
-                                  h3("Y-Achsen-Variable"),
+                                  h3(span(id = "y_title", HTML(tr("variables.y_title")))),
                                   # Y-Axis Variable
                                   selectInput("y_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -375,14 +384,14 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Theme-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "y_reorder_title"),
                                                                 # Placeholder for the ranking-UI
                                                                 uiOutput("y_factor_rank_list")
                                                               )
                                                    )
                                   ),
                                   # Set title
-                                  h3("Gruppierungs-Variable"),
+                                  h3(span(id = "group_title", HTML(tr("variables.group_title")))),
                                   # Grouping Variable
                                   selectInput("group_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -392,14 +401,14 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Theme-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "group_reorder_title"),
                                                                 # Placeholder for the ranking-UI
                                                                 uiOutput("group_factor_rank_list")
                                                               )
                                                    )
                                   ),
                                   # Set title
-                                  h3("Variable für Spalten-Facettierung"),
+                                  h3(span(id = "grid_col_title", HTML(tr("variables.grid_col_title")))),
                                   # Facet Grid - Columns
                                   selectInput("grid_col_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -409,14 +418,14 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Theme-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_col_reorder_title"),
                                                                 # Placeholder for the ranking-UI
                                                                 uiOutput("grid_col_factor_rank_list")
                                                               )
                                                    )
                                   ),
                                   # Set title
-                                  h3("Variable für Zeilen-Facettierung"),
+                                  h3(span(id = "grid_row_title", HTML(tr("variables.grid_row_title")))),
                                   # Facet Grid - Rows
                                   selectInput("grid_row_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -426,7 +435,7 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Theme-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Reihenfolge der Stufen anpassen"),
+                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_row_reorder_title"),
                                                                 # Placeholder for the ranking-UI
                                                                 uiOutput("grid_row_factor_rank_list")
                                                               )
@@ -1866,7 +1875,7 @@ server <- function(input, output, session) {
       ui = tags$div(
         id = paste0("input_row_", new_id),
         style = "display: flex; align-items: center;",
-        textInput(paste0("vector_", new_id), 
+        textInput(paste0("vector_", new_id),
                   label = paste("Color", new_id), 
                   placeholder = "z.B. 'red', 'grey', '#F00F1F'"),
         tags$span(id = paste0("vector_", new_id, "_error"), 
@@ -4177,10 +4186,39 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.3 Update Buttons for Plot-Type ###############
-
+    ############### 11.4 Update Variables Sidebar ###############
+    # Create Helper function to change text
+    setTxt <- function(id, key) {
+      session$sendCustomMessage('setText', list(id = id, text = tr(key)))
+    }
     
+    # Headers
+    setTxt("x_title",        "variables.x_title")
+    setTxt("y_title",        "variables.y_title")
+    setTxt("group_title",    "variables.group_title")
+    setTxt("grid_col_title", "variables.grid_col_title")
+    setTxt("grid_row_title", "variables.grid_row_title")
+    
+    # Instructions to reorder levels
+    setTxt("x_reorder_title",        "variables.reorder_levels")
+    setTxt("y_reorder_title",        "variables.reorder_levels")
+    setTxt("group_reorder_title",    "variables.reorder_levels")
+    setTxt("grid_col_reorder_title", "variables.reorder_levels")
+    setTxt("grid_row_reorder_title", "variables.reorder_levels")
+    
+    
+    req(data())
+    sel <- function(x) if (is.null(x)) " " else x
+    updateSelectInput(session, "x_var",        choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$x_var))
+    updateSelectInput(session, "y_var",        choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$y_var))
+    updateSelectInput(session, "group_var",    choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$group_var))
+    updateSelectInput(session, "grid_col_var", choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$grid_col_var))
+    updateSelectInput(session, "grid_row_var", choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$grid_row_var))
   })
+  
+  
+  
+  
 }
 
 

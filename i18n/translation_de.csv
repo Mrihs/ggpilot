@@ -23,6 +23,14 @@ plot.line,Line,Linien
 plot.box,Boxplot,Boxplot
 plot.scatter,Scatter,Scatter
 
+variables.x_title,X Variable,X-Achsen-Variable
+variables.y_title,Y Variable,Y-Achsen-Variable
+variables.group_title,Grouping Variable,Gruppierungs-Variable
+variables.grid_col_title,Facet Variable (Columns),Variable für Spalten-Facettierung
+variables.grid_row_title,Facet Variable (Rows),Variable für Zeilen-Facettierung
+variables.reorder_levels,Reorder Levels,Reihenfolge der Stufen anpassen
+variables.none,No Variable,Keine Variable
+
 download.plot,Plot,Plot
 download.download_plot,Download Plot,Plot herunterladen
 download.file_format,File Format:,Dateiformat:
