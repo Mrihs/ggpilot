@@ -1088,20 +1088,8 @@ ui <- fluidPage(
       )
     )
   ),
-  tags$footer(
-    tags$a(
-      href = "https://github.com/Mrihs/ggpilot",
-      "View on GitHub",
-      target = "_blank"  # Öffnet den Link in neuem Tab
-    ),
-    align = "left",
-    style = "
-                 bottom:11.5px;
-                 width:100%;
-                 height:20px;
-                 padding: 0px;
-                 z-index: 100;
-                ")
+  # Create a UI-element for the footer
+  uiOutput("app_footer")
 )
 
 
@@ -3719,7 +3707,7 @@ server <- function(input, output, session) {
   
   ############### 7. Create Download-Page ###############
   output$download_ui <- renderUI({
-    # Set the selected language
+    # Get the selected language
     i18n$set_translation_language(input$language)
     
     fluidRow(
@@ -3763,8 +3751,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 7. Set Output ###############
-  ############### 7.1 Generate Plot ###############
+  ############### 8. Set Output ###############
+  ############### 8.1 Generate Plot ###############
   # Define Plot-Output
   output$dynamic_plot <- renderUI({
     # Calculate dpi of plot-width
@@ -3812,8 +3800,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 7.2 Generate Code ###############
-  ########## 7.2.1 Set variables ##########
+  ############### 8.2 Generate Code ###############
+  ########## 8.2.1 Set variables ##########
   # Create reactive full code
   reactive_full_code <- reactive({
     
@@ -3827,7 +3815,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 7.2.2 Set Code for packages ##########
+    ########## 8.2.2 Set Code for packages ##########
     # Define Code-Line for ggplot2
     full_code <- "library(ggplot2)"
     
@@ -3859,7 +3847,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 7.2.3 Set Code to adjust Factors ##########
+    ########## 8.2.3 Set Code to adjust Factors ##########
     # Check if factor_code exists
     if (!is.null(factor_code()) && !identical(factor_code(), "")) {
       # Paste additional lines
@@ -3873,7 +3861,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 7.2.4 Add r_code ##########
+    ########## 8.2.4 Add r_code ##########
     # Add empty lines in code
     full_code <- paste0(full_code, "\n\n", r_code())
     
@@ -3881,7 +3869,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 7.2.5 Prepare final code ##########
+    ########## 8.2.5 Prepare final code ##########
     # Replace data() with data
     full_code <- gsub("data\\(\\)", "data", full_code)
     
@@ -3893,7 +3881,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 7.2.6 Print Code ##########
+  ########## 8.2.6 Print Code ##########
   # Print the reactive r_code
   output$rcode <- renderText({
     reactive_full_code()
@@ -3920,7 +3908,7 @@ server <- function(input, output, session) {
   
   
   
-  ############### 8. Copy/Download ###############
+  ############### 9. Copy/Download ###############
   
   
   
@@ -3930,7 +3918,7 @@ server <- function(input, output, session) {
   
   
   
-  ############### 8.1 Add Code to clipboad ###############
+  ############### 9.1 Add Code to clipboad ###############
   # Add clipboard buttons
   output$clip <- renderUI({
     rclipButton(
@@ -3951,7 +3939,7 @@ server <- function(input, output, session) {
   
   
   
-  ############### 8.2 Download Plot ###############
+  ############### 9.2 Download Plot ###############
   # Function to download Plot
   output$downloadPlot <- downloadHandler(
     filename = function() {
@@ -4014,7 +4002,7 @@ server <- function(input, output, session) {
   
   
   
-  ############### 8.3 Download Code ###############
+  ############### 9.3 Download Code ###############
   # Function to download r-code
   output$downloadCode <- downloadHandler(
     filename = function() {
@@ -4047,8 +4035,54 @@ server <- function(input, output, session) {
   
   
   
-  #################### 9. Language Localization ####################
-  ############### 9.1 Update Language ###############
+  
+  
+  
+  ############### 10. Set Footer ###############
+  output$app_footer <- renderUI({
+    # Get the selected language
+    i18n$set_translation_language(input$language)
+    
+    # Set Footer
+    tags$footer(
+      # Add Hyperlink
+      tags$a(
+        # Set link
+        href   = "https://github.com/Mrihs/ggpilot",
+        tr("footer.github"),
+        # Open in new window
+        target = "_blank"
+      ),
+      # Set style
+      align = "left",
+      style = "
+      bottom:11.5px;
+      width:100%;
+      height:20px;
+      padding: 0px;
+      z-index: 100;
+    "
+    )
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  #################### 11. Language Localization ####################
+  ############### 11.1 Update Language ###############
   observeEvent(input$language, {
     req(input$language)
     i18n$set_translation_language(input$language)
@@ -4061,7 +4095,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 9.2 Update Language Selection ###############
+    ############### 11.2 Update Language Selection ###############
     updateSelectInput(
       session, "language",
       label   = tr("ui.language"),
@@ -4077,7 +4111,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 9.4 Update Navigation-Buttons ###############
+    ############### 11.4 Update Navigation-Buttons ###############
     updateActionButton(session, "btn_data",
                        label = HTML(tr("nav.data")))
     updateActionButton(session, "btn_plottype",
@@ -4101,7 +4135,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 9.3 Update Buttons for Plot-Type ###############
+    ############### 11.3 Update Buttons for Plot-Type ###############
     updateActionButton(session, "plot_bar",
                        label = HTML(sprintf('<img src="Icon_Bar.png" height="100px"> <br> %s', tr("plot.bar"))))
     updateActionButton(session, "plot_line",
@@ -4119,7 +4153,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 9.3 Update Buttons for Plot-Type ###############
+    ############### 11.3 Update Buttons for Plot-Type ###############
 
     
   })
@@ -4144,5 +4178,5 @@ server <- function(input, output, session) {
 
 
 
-#################### 9. Run App ####################
+#################### 12. Run App ####################
 shinyApp(ui = ui, server = server)
