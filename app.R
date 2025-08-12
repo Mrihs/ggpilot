@@ -306,10 +306,10 @@ ui <- fluidPage(
                  # Define Conditional-Panel for when data tab is selected
                  conditionalPanel(condition = "input.activeTab == 'data'",
                                   ########## 2.4.1 UI to Select Data ########## 
-                                  # Add Button for File Input
-                                  fileInput("file", "Datensatz auswählen",
-                                            buttonLabel = "Durchsuchen", placeholder = "Keine Datei ausgewählt", 
-                                            accept = c(".csv", ".xlsx", ".rds", ".RData"))),
+                                  # Add UI-Object for the Data Input page
+                                  uiOutput("file_input_ui")
+                                  ),
+                                  
                  
                  
                  
@@ -1453,12 +1453,12 @@ server <- function(input, output, session) {
           return(env[[obj_names[1]]])
           # Give error-message if there are more objects in the .RData-File
         } else {
-          stop("Das .RData-File beinhaltet mehrere Objekte. Bitte .RData-File mit nur einem Objekt verwenden.")
+          stop(tr("error.rdata_multiple"))
         }
       }
       # If file is other type, stop
       else {
-        stop("Unbekanntes Dateiformat. Bitte laden Sie eine CSV-, XLSX-, rdata oder RDS-Datei hoch.")
+        stop(tr("error.unknown_format"))
       }
     }
     }
@@ -3705,7 +3705,31 @@ server <- function(input, output, session) {
   
   
   
-  ############### 7. Create Download-Page ###############
+  ############### 7. Create UI ###############
+  ############### 7.1 Data Panel ###############
+  output$file_input_ui <- renderUI({
+    # Get the selected language
+    i18n$set_translation_language(input$language)
+    
+    # Add Button for File Input
+    fileInput(
+      "file",
+      label        = tr("data.select_dataset"),
+      buttonLabel  = tr("data.browse"),
+      placeholder  = tr("data.no_file"),
+      accept       = c(".csv", ".xlsx", ".rds", ".RData")
+    )
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 7.2 Download Panel ###############
   output$download_ui <- renderUI({
     # Get the selected language
     i18n$set_translation_language(input$language)
