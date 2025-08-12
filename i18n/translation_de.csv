@@ -4,6 +4,14 @@ ui.language,Language,Sprache
 lang.en,English,Englisch
 lang.de,German,Deutsch
 
+nav.data,Data,Daten
+nav.plottype,Plot Type,Plot-Typ
+nav.variables,Variables,Variablen
+nav.options,Plot Options,Plot-Optionen
+nav.text,Text,Text
+nav.layout,Layout,Layout
+nav.download,Download,Download
+
 plot.bar,Bar,Balken
 plot.line,Line,Linien
 plot.box,Boxplot,Boxplot

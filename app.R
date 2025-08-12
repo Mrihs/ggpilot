@@ -249,13 +249,13 @@ ui <- fluidPage(
             });
          ")),
            # Add action buttons in the title panel
-           actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i> Daten'), class = "custom-btn"),
-           actionButton("btn_plottype", label = HTML('<i class="glyphicon glyphicon-stats"></i> Plot-Typ'), class = "custom-btn"),
-           actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i> Variablen'), class = "custom-btn"),
-           actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i> Plot-Optionen'), class = "custom-btn"),
-           actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i> Text'), class = "custom-btn"),
-           actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i> Layout'), class = "custom-btn"),
-           actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i> Download'), class = "custom-btn"),
+           actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i>'), class = "custom-btn"),
+           actionButton("btn_plottype", label = HTML('<i class="glyphicon glyphicon-stats"></i>'), class = "custom-btn"),
+           actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i>'), class = "custom-btn"),
+           actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i>'), class = "custom-btn"),
+           actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i>'), class = "custom-btn"),
+           actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i>'), class = "custom-btn"),
+           actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i>'), class = "custom-btn"),
     ),
     # Set a column
     column(
@@ -4046,6 +4046,30 @@ server <- function(input, output, session) {
     
     
     
+    ############### 9.4 Update Navigation-Buttons ###############
+    updateActionButton(session, "btn_data",
+                       label = HTML(tr("nav.data")))
+    updateActionButton(session, "btn_plottype",
+                       label = HTML(tr("nav.plottype")))
+    updateActionButton(session, "btn_variables",
+                       label = HTML(tr("nav.variables")))
+    updateActionButton(session, "btn_plot_options",
+                       label = HTML(tr("nav.options")))
+    updateActionButton(session, "btn_text",
+                       label = HTML(tr("nav.text")))
+    updateActionButton(session, "btn_layout",
+                       label = HTML(tr("nav.layout")))
+    updateActionButton(session, "btn_download",
+                       label = HTML(tr("nav.download")))
+    
+    
+    
+    
+    
+    
+    
+    
+    
     ############### 9.3 Update Buttons for Plot-Type ###############
     updateActionButton(session, "plot_bar",
                        label = HTML(sprintf('<img src="Icon_Bar.png" height="100px"> <br> %s', tr("plot.bar"))))
@@ -4055,7 +4079,17 @@ server <- function(input, output, session) {
                        label = HTML(sprintf('<img src="Icon_Box.png" height="100px"> <br> %s', tr("plot.box"))))
     updateActionButton(session, "plot_scatter",
                        label = HTML(sprintf('<img src="Icon_Scatter.png" height="100px"> <br> %s', tr("plot.scatter"))))
+        
     
+    
+    
+    
+    
+    
+    
+    
+    ############### 9.3 Update Buttons for Plot-Type ###############
+
     
   })
 }
