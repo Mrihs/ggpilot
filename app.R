@@ -326,11 +326,19 @@ ui <- fluidPage(
                  
                  # Define Conditional-Panel for when plottype tab is selected
                  conditionalPanel(condition = "input.activeTab == 'plottype'",
-                                  actionButton("plot_bar", label = HTML('<img src="Icon_Bar.png" height="100px" style="horizontal-align: middle;"> <br> Balken'), class = "plot-btn"),
-                                  actionButton("plot_line", label = HTML('<img src="Icon_Line.png" height="100px" style="horizontal-align: middle;"> <br> Linien'), class = "plot-btn"),
-                                  actionButton("plot_box", label = HTML('<img src="Icon_Box.png" height="100px" style="horizontal-align: middle;"> <br> Boxplot'), class = "plot-btn"),
-                                  actionButton("plot_scatter", label = HTML('<img src="Icon_Scatter.png" height="100px" style="horizontal-align: middle;"> <br> Scatter'), class = "plot-btn")
-                 ),
+                                  actionButton("plot_bar", 
+                                               label = HTML(sprintf('<img src="Icon_Bar.png" height="100px"> <br> %s', tr("plot.bar"))), 
+                                               class = "plot-btn"),
+                                  actionButton("plot_line", 
+                                               label = HTML(sprintf('<img src="Icon_Line.png" height="100px"> <br> %s', tr("plot.line"))), 
+                                               class = "plot-btn"),
+                                  actionButton("plot_box", 
+                                               label = HTML(sprintf('<img src="Icon_Box.png" height="100px"> <br> %s', tr("plot.box"))), 
+                                               class = "plot-btn"),
+                                  actionButton("plot_scatter", 
+                                               label = HTML(sprintf('<img src="Icon_Scatter.png" height="100px"> <br> %s', tr("plot.scatter"))), 
+                                               class = "plot-btn")
+                                  ),
                  
                  
                  
@@ -4029,6 +4037,26 @@ server <- function(input, output, session) {
       choices = setNames(c("en","de"), c(tr("lang.en"), tr("lang.de"))),
       selected = input$language
     )
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 9.3 Update Buttons for Plot-Type ###############
+    updateActionButton(session, "plot_bar",
+                       label = HTML(sprintf('<img src="Icon_Bar.png" height="100px"> <br> %s', tr("plot.bar"))))
+    updateActionButton(session, "plot_line",
+                       label = HTML(sprintf('<img src="Icon_Line.png" height="100px"> <br> %s', tr("plot.line"))))
+    updateActionButton(session, "plot_box",
+                       label = HTML(sprintf('<img src="Icon_Box.png" height="100px"> <br> %s', tr("plot.box"))))
+    updateActionButton(session, "plot_scatter",
+                       label = HTML(sprintf('<img src="Icon_Scatter.png" height="100px"> <br> %s', tr("plot.scatter"))))
+    
+    
   })
 }
 

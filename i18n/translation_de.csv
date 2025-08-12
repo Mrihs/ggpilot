@@ -3,3 +3,8 @@ key,en,de
 ui.language,Language,Sprache
 lang.en,English,Englisch
 lang.de,German,Deutsch
+
+plot.bar,Bar,Balken
+plot.line,Line,Linien
+plot.box,Boxplot,Boxplot
+plot.scatter,Scatter,Scatter
