@@ -4206,15 +4206,7 @@ server <- function(input, output, session) {
     setTxt("grid_col_reorder_title", "variables.reorder_levels")
     setTxt("grid_row_reorder_title", "variables.reorder_levels")
     
-    
-    req(data())
-    sel <- function(x) if (is.null(x)) " " else x
-    updateSelectInput(session, "x_var",        choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$x_var))
-    updateSelectInput(session, "y_var",        choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$y_var))
-    updateSelectInput(session, "group_var",    choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$group_var))
-    updateSelectInput(session, "grid_col_var", choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$grid_col_var))
-    updateSelectInput(session, "grid_row_var", choices = c(tr("variables.none") = " ", names(data())), selected = sel(input$grid_row_var))
-  })
+      })
   
   
   
