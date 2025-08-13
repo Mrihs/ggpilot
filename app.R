@@ -365,7 +365,7 @@ ui <- fluidPage(
                  # Define Conditional-Panel for when Variables tab is selected
                  conditionalPanel(condition = "input.activeTab == 'variables'",
                                   # Set title
-                                  h3(span(id = "x_title", HTML(tr("variables.x_title")))),
+                                  h3(span(id = "x_title", tr("variables.x_title"))),
                                   # X-xis Variable
                                   selectInput("x_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -382,7 +382,7 @@ ui <- fluidPage(
                                                    )
                                   ),
                                   # Set title
-                                  h3(span(id = "y_title", HTML(tr("variables.y_title")))),
+                                  h3(span(id = "y_title", tr("variables.y_title"))),
                                   # Y-Axis Variable
                                   selectInput("y_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -399,7 +399,7 @@ ui <- fluidPage(
                                                    )
                                   ),
                                   # Set title
-                                  h3(span(id = "group_title", HTML(tr("variables.group_title")))),
+                                  h3(span(id = "group_title", tr("variables.group_title"))),
                                   # Grouping Variable
                                   selectInput("group_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -416,7 +416,7 @@ ui <- fluidPage(
                                                    )
                                   ),
                                   # Set title
-                                  h3(span(id = "grid_col_title", HTML(tr("variables.grid_col_title")))),
+                                  h3(span(id = "grid_col_title", tr("variables.grid_col_title"))),
                                   # Facet Grid - Columns
                                   selectInput("grid_col_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -433,7 +433,7 @@ ui <- fluidPage(
                                                    )
                                   ),
                                   # Set title
-                                  h3(span(id = "grid_row_title", HTML(tr("variables.grid_row_title")))),
+                                  h3(span(id = "grid_row_title", tr("variables.grid_row_title"))),
                                   # Facet Grid - Rows
                                   selectInput("grid_row_var", NULL, choices = c(""), selected = ""),
                                   # Create a conditionl-panel for when a variable is selected
@@ -4169,19 +4169,19 @@ server <- function(input, output, session) {
     
     ############### 11.4 Update Navigation-Buttons ###############
     updateActionButton(session, "btn_data",
-                       label = HTML(tr("nav.data")))
+                       label = tr("nav.data"))
     updateActionButton(session, "btn_plottype",
-                       label = HTML(tr("nav.plottype")))
+                       label = tr("nav.plottype"))
     updateActionButton(session, "btn_variables",
-                       label = HTML(tr("nav.variables")))
+                       label = tr("nav.variables"))
     updateActionButton(session, "btn_plot_options",
-                       label = HTML(tr("nav.options")))
+                       label = tr("nav.options"))
     updateActionButton(session, "btn_text",
-                       label = HTML(tr("nav.text")))
+                       label = tr("nav.text"))
     updateActionButton(session, "btn_layout",
-                       label = HTML(tr("nav.layout")))
+                       label = tr("nav.layout"))
     updateActionButton(session, "btn_download",
-                       label = HTML(tr("nav.download")))
+                       label = tr("nav.download"))
     
     
     
