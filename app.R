@@ -629,11 +629,14 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Group-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Abstände der Gruppierungs-Variable"),
+                                                                title = BSCollapseArrow(text = tr("options.grouping.space"), 
+                                                                                        id = "options_grouping_space"),
                                                                 # Define CSS Settings
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Numeric Input for the position-dodge value
-                                                                    numericInput(inputId = "dodge_value", label = "Abstand", min = 0, max = 2, step = 0.1, value = "")
+                                                                    numericInput(inputId = "dodge_value", 
+                                                                                 label = tr("options.dodge.value"), 
+                                                                                 min = 0, max = 2, step = 0.1, value = "")
                                                                 )
                                                               )
                                                    )
@@ -645,11 +648,14 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Errorbar-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Barplot-Optionen"),
+                                                                title = BSCollapseArrow(tr("options.barplot"), 
+                                                                                        id = "options_barplot"),
                                                                 # Define CSS Settings
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "barplot_width", label = "Breite der Balken", min = 0, step = 0.1, value = "")
+                                                                    numericInput(inputId = "barplot_width", 
+                                                                                 tr("options.barplot.width"), 
+                                                                                 min = 0, step = 0.1, value = "")
                                                                 )
                                                               )
                                                    )
@@ -660,13 +666,19 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Lineplot-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Linienplot-Optionen"),
+                                                                title = BSCollapseArrow(tr("options.lineplot"), 
+                                                                                        id = "options_lineplot"),
                                                                 # Define CSS Settings
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Select linetype
-                                                                    selectInput(inputId = "lineplot_line_type", label = "Linien-Art", choices = c("Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Solide"),                                                                    
+                                                                    selectInput(inputId = "lineplot_line_type", 
+                                                                                label = tr("options.linetype"), 
+                                                                                choices = c("Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"),
+                                                                                selected = "Solide"),                                                                    
                                                                     # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "lineplot_width", label = "Liniengrösse", min = 0, step = 0.1, value = "")                                                                
+                                                                    numericInput(inputId = "lineplot_width", 
+                                                                                 label = tr("options.lineplot.width"), 
+                                                                                 min = 0, step = 0.1, value = "")                                                                
                                                                     )
                                                               )
                                                    )
@@ -677,17 +689,27 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Errorbar-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Fehlerbalken"),
+                                                                title = BSCollapseArrow(tr("options.errorbars"), 
+                                                                                        id = "options_errorbars"),
                                                                 # Define CSS Settings
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Dropdown to select the type of Errorbar
-                                                                    selectInput(inputId = "error_type", label = "Einheit", choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), selected = "Standardabweichung"),
+                                                                    selectInput(inputId = "error_type", 
+                                                                                label = tr("options.errorbars.unit"), 
+                                                                                choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), 
+                                                                                selected = "Standardabweichung"),
                                                                     # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "error_mult", label = "Anzahl Einheiten", min = 1, step = 1, value = 1),
+                                                                    numericInput(inputId = "error_mult", 
+                                                                                 label = tr("options.error.mult"), 
+                                                                                 min = 1, step = 1, value = 1),
                                                                     # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "error_width", label = "Breite der Fehlerbalken", min = 0, step = 0.1, value = ""),
+                                                                    numericInput(inputId = "error_width", 
+                                                                                 label = tr("options.error.width"), 
+                                                                                 min = 0, step = 0.1, value = ""),
                                                                     # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "error_size", label = "Grösse der Fehlerbalken-Linien", min = 0, step = 0.1, value = "")
+                                                                    numericInput(inputId = "error_size", 
+                                                                                 label = tr("options.error.size"), 
+                                                                                 min = 0, step = 0.1, value = "")
                                                                 )
                                                               )
                                                    )
@@ -698,11 +720,14 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Scatterplot-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Scatterplot"),
+                                                                title = BSCollapseArrow(tr("options.scatterplot"), 
+                                                                                        id = "options_scatterplot"),
                                                                 # Define CSS Settings
                                                                 div(class = ".collapse_panel-settings",
-                                                                    # Dropdown to select the size of the Points
-                                                                    numericInput(inputId = "scatterpoint_size", label = "Grösse der Punkte", min = 0, step = .1, value = ""),
+                                                                    # Input to define the size of the Points
+                                                                    numericInput(inputId = "scatterpoint_size", 
+                                                                                 label = "options.scatterpoint.size", 
+                                                                                 min = 0, step = .1, value = ""),
                                                                 )
                                                               )
                                                    )
@@ -713,13 +738,25 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Scatterplot-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Regressionslinie"),
-                                                                checkboxInput(inputId = "show_line", label = "Regressionslinie anzeigen", value = FALSE),
+                                                                title = BSCollapseArrow(tr("options.regressionline"), 
+                                                                                        id = "options_regressionline"),
+                                                                checkboxInput(inputId = "show_line",
+                                                                              label = tr("options.regressionline.show"),
+                                                                              value = FALSE),
                                                                 conditionalPanel(condition = "input.show_line",
-                                                                                 checkboxInput(inputId = "scater_line_full_range", label = "Regressionslinie verlängern", value = FALSE),
-                                                                                     selectInput(inputId = "scater_line_type", label = "Linien-Art", choices = c("Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Solide"),
-                                                                                     numericInput(inputId = "scater_line_size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                                                     checkboxInput(inputId = "scater_line_show_se", label = "Standardfehler anzeigen", value = TRUE)
+                                                                                 checkboxInput(inputId = "scater_line_full_range", 
+                                                                                               label = tr("options.regressionline.expand"), 
+                                                                                               value = FALSE),
+                                                                                 selectInput(inputId = "scater_line_type", 
+                                                                                             label = tr("options.linewidth"), 
+                                                                                             choices = c("Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), 
+                                                                                             selected = "Solide"),
+                                                                                 numericInput(inputId = "scater_line_size", 
+                                                                                              label = tr("options.linewidth"), 
+                                                                                              min = 0, max = 50, step = 0.1, value = NA),
+                                                                                 checkboxInput(inputId = "scater_line_show_se", 
+                                                                                               label = tr("options.regressionline.showse"), 
+                                                                                               value = TRUE)
                                                                 )
                                                               )
                                                    )
@@ -4262,11 +4299,17 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.5 Update Text Sidebar ###############
+    ############### 11.5 Update Options Sidebar ###############
     setTxt("opt_theme_title", "options.theme.title")
     setTxt("opt_palette_title", "options.palette.title")
     setTxt("options_plotsize_title", "options.plotsize.title")
     setTxt("opt_range_title", "options.range.title")
+    setTxt("options_grouping_space", "options.grouping.space")
+    setTxt("options_barplot", "options.barplot")
+    setTxt("options_lineplot", "options.lineplot")
+    setTxt("options_errorbars", "options.errorbars")
+    setTxt("options_scatterplot", "options.scatterplot")
+    setTxt("options_regressionline", "options.regressionline")
     
     updateSelectInput(
       session, "Color_Palette",
@@ -4278,6 +4321,22 @@ server <- function(input, output, session) {
       label    = tr("options.palette.apply_to"),
       selected = input$color_palette_target
     )    
+    updateSelectInput(
+      session, "scater_line_type",
+      label    = tr("options.linewidth"),
+      selected = input$scater_line_type
+    )    
+    updateSelectInput(
+      session, "error_type",
+      label    = tr("options.errorbars.unit"),
+      selected = input$error_type
+    )    
+    updateSelectInput(
+      session, "lineplot_line_type",
+      label    = tr("options.linetype"),
+      selected = input$lineplot_line_type
+    )    
+    
     updateNumericInput(
       session, "plot_width_px",
       label    = tr("options.plotsize.width_px"),
@@ -4290,21 +4349,68 @@ server <- function(input, output, session) {
     )
     updateNumericInput(session, 
                        inputId = "x_axis_min", 
-                       label = tr("options.range.min"))
+                       label = tr("options.range.min"), 
+                       value = input$x_axis_min )
     updateNumericInput(session,
                        inputId = "x_axis_max", 
-                       label = tr("options.range.max"))
+                       label = tr("options.range.max"),
+                       value = input$x_axis_max )
     updateNumericInput(session, 
                        inputId = "y_axis_min", 
-                       label = tr("options.range.min"))
+                       label = tr("options.range.min"),
+                       value = input$y_axis_min )
     updateNumericInput(session,
                        inputId = "y_axis_max", 
-                       label = tr("options.range.max"))
-    session$sendCustomMessage('setText', list(id="opt_xaxis_lbl", text=tr("options.range.xaxis")))
-    session$sendCustomMessage('setText', list(id="opt_yaxis_lbl", text=tr("options.range.yaxis")))
-    updateCheckboxInput(session, 
+                       label = tr("options.range.max"),
+                       value = input$y_axis_max )
+    updateNumericInput(session, 
+                       inputId = "dodge_value", 
+                       label = tr("options.dodge.value"),
+                       value = input$dodge_value)
+    updateNumericInput(session, 
+                       inputId = "barplot_width", 
+                       label = tr("options.barplot.width"),
+                       value = input$barplot_width)
+    updateNumericInput(session, 
+                       inputId = "lineplot_width", 
+                       label = tr("options.lineplot.width"),
+                       value = input$lineplot_width)
+    updateNumericInput(session, 
+                       inputId = "error.mult", 
+                       label = tr("options.error.mult"),
+                       value = input$error.mult)
+    updateNumericInput(session, 
+                       inputId = "error_width", 
+                       label = tr("options.error.width"),
+                       value = input$error_width)
+    updateNumericInput(session, 
+                       inputId = "error_size", 
+                       label = tr("options.error.size"),
+                       value = input$error_size)
+    updateNumericInput(session, 
+                       inputId = "scatterpoint_size", 
+                       label = tr("options.scatterpoint.size"),
+                       value = input$scatterpoint_size)
+    updateNumericInput(session, 
+                       inputId = "scater_line_size", 
+                       label = tr("options.linewidth"),
+                       value = input$scater_line_size)
+    updateCheckboxInput(session,
                         inputId = "exact_axis_range", 
                         label = tr("options.range.expand"))
+    updateCheckboxInput(session, 
+                        inputId = "show_line", 
+                        label = tr("options.regressionline.show"))
+    updateCheckboxInput(session, 
+                        inputId = "scater_line_full_range", 
+                        label = tr("options.regressionline.expand"))
+    updateCheckboxInput(session, 
+                        inputId = "scater_line_show_se", 
+                        label = tr("options.regressionline.showse"))
+    
+    session$sendCustomMessage('setText', list(id="opt_xaxis_lbl", text=tr("options.range.xaxis")))
+    session$sendCustomMessage('setText', list(id="opt_yaxis_lbl", text=tr("options.range.yaxis")))
+
     
     
     
