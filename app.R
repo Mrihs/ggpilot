@@ -372,7 +372,7 @@ ui <- fluidPage(
                                   conditionalPanel(condition = "output.is_numeric_x == false",
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              # Create a Collapse-Panel
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
                                                                 title = BSCollapseArrow(tr("variables.reorder_levels"), id = "x_reorder_title"),
@@ -389,7 +389,7 @@ ui <- fluidPage(
                                   conditionalPanel(condition = "output.is_numeric_y == false",
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              # Create a Collapse-Panel
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
                                                                 title = BSCollapseArrow(tr("variables.reorder_levels"), id = "y_reorder_title"),
@@ -406,7 +406,7 @@ ui <- fluidPage(
                                   conditionalPanel(condition =  "output.is_numeric_group == false",
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              # Create a Collapse-Panel
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
                                                                 title = BSCollapseArrow(tr("variables.reorder_levels"), id = "group_reorder_title"),
@@ -423,7 +423,7 @@ ui <- fluidPage(
                                   conditionalPanel(condition =  "output.is_numeric_col == false",
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              # Create a Collapse-Panel
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
                                                                 title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_col_reorder_title"),
@@ -440,7 +440,7 @@ ui <- fluidPage(
                                   conditionalPanel(condition =  "output.is_numeric_row == false",
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Theme-Settings
+                                                              # Create a Collapse-Panel
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
                                                                 title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_row_reorder_title"),
@@ -463,7 +463,8 @@ ui <- fluidPage(
                                              # Create a Collapse-Panel for Theme-Settings
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Theme"),
+                                               title = BSCollapseArrow(tr("options.theme.title"), 
+                                                                       id = "opt_theme_title"),
                                                # Define CSS Settings
                                                div(class = ".collapse_panel-settings",
                                                    # Create Input-Options for themes
@@ -484,11 +485,13 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Color-Palette-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow("Farbpalletten"),
+                                                                title = BSCollapseArrow(tr("options.palette.title"), 
+                                                                                        id = "opt_palette_title"),
                                                                 # Define CSS Settings
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Dropdown with options for color-palette
-                                                                    selectInput(inputId = "Color_Palette", label = "Farbpalette", 
+                                                                    selectInput(inputId = "Color_Palette", 
+                                                                                label = tr("options.palette.select"), 
                                                                                 choices = c("Gemäss Theme", "Eigene Farbpalette erstellen", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
                                                                                             "viridis - cividis", "viridis - mako", "viridis - rocket", "viridis - turbo",
                                                                                             "Accent", "Blues", "Greens", "Greys", "Oranges", "Paired", "Pastel1", 
@@ -527,8 +530,10 @@ ui <- fluidPage(
                                                                       });
                                                                     "))
                                                                     ),
-                                                                    selectInput(inputId = "color_palette_target", label = "Farbelette anwenden auf...", 
-                                                                                choices = c("Füllung", "Linien", "Füllung und Linien"), selected = "Füllung")
+                                                                    selectInput(inputId = "color_palette_target", 
+                                                                                label = tr("options.palette.apply_to"),
+                                                                                choices = c("Füllung", "Linien", "Füllung und Linien"),
+                                                                                selected = "Füllung")
                                                                 )
                                                               )
                                                    )
@@ -538,16 +543,21 @@ ui <- fluidPage(
                                              # Create a Collapse-Panel for Plot-Size
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Plot-Grösse"),
+                                               title = BSCollapseArrow(tr("options.plotsize.title"), 
+                                                                       id = "options_plotsize_title"),
                                                # Define CSS Settings
                                                div(class = ".collapse_panel-settings",
                                                    column(6,
                                                           # Define Plot-Width
-                                                          numericInput("plot_width_px", "Breite (in Pixel):", value = 800, min = 100),
+                                                          numericInput(inputId = "plot_width_px", 
+                                                                       label = tr("options.plotsize.width_px"),
+                                                                       value = 800, min = 100),
                                                    ),
                                                    column(6,
                                                           # Define Plot-Height
-                                                          numericInput("plot_height_px", "Höhe (in Pixel):", value = 600, min = 100),
+                                                          numericInput(inputId = "plot_height_px", 
+                                                                       label = tr("options.plotsize.height_px"),
+                                                                       value = 600, min = 100),
                                                    )
                                                )
                                              )
@@ -557,11 +567,12 @@ ui <- fluidPage(
                                              # Create a Collapse-Panel for Axis-Range
                                              bsCollapsePanel(
                                                # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow("Achsen-Range definieren"),
+                                               title = BSCollapseArrow(tr("options.range.title"), 
+                                                                       id = "opt_range_title"),
                                                # Define CSS Settings
                                                div(class = ".collapse_panel-settings",
                                                    # Set a HTML header for the Y-Axis Range Text
-                                                   HTML('<label class="control-label">X-Achse</label>'),
+                                                   HTML(sprintf('<label class="control-label"><span id="opt_xaxis_lbl">%s</span></label>', tr("options.range.xaxis"))),
                                                    # Define the min and max value next to each other
                                                    div(
                                                      # Define style
@@ -569,16 +580,22 @@ ui <- fluidPage(
                                                      div(
                                                        style = "flex: 1;",
                                                        # Numeric Input field for the minimal X-Axis value
-                                                       numericInput(inputId = "x_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
+                                                       div(style="flex:1;", 
+                                                           numericInput("x_axis_min", 
+                                                                        label = tr("options.range.min"), 
+                                                                        step = 0.1, value = "")),
                                                      ),
                                                      div(
                                                        style = "flex: 1;",
                                                        # Numeric Input field for the max X-Axis value
-                                                       numericInput(inputId = "x_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
+                                                       div(style="flex:1;",
+                                                           numericInput("x_axis_max",
+                                                                        label = tr("options.range.max"),
+                                                                        step = 0.1, value = ""))
                                                      )
                                                    ),
                                                    # Set a HTML header for the X-Axis Range Text
-                                                   HTML('<label class="control-label">Y-Achse</label>'),
+                                                   HTML(sprintf('<label class="control-label"><span id="opt_yaxis_lbl">%s</span></label>', tr("options.range.yaxis"))),
                                                    # Define the min and max value next to each other
                                                    div(
                                                      # Define style
@@ -586,16 +603,24 @@ ui <- fluidPage(
                                                      div(
                                                        style = "flex: 1;",
                                                        # Numeric Input field for the minimal Y-Axis value
-                                                       numericInput(inputId = "y_axis_min", label = HTML('<span style="font-weight: normal;">Min</span>'), step = 0.1, value = "")
+                                                       div(style="flex:1;", 
+                                                           numericInput("y_axis_min", 
+                                                                        label = tr("options.range.min"), 
+                                                                        step = 0.1, value = "")),
                                                      ),
                                                      div(
                                                        style = "flex: 1;",
                                                        # Numeric Input field for the max Y-Axis value
-                                                       numericInput(inputId = "y_axis_max", label = HTML('<span style="font-weight: normal;">Max</span>'), step = 0.1, value = "")
+                                                       div(style="flex:1;", 
+                                                           numericInput("y_axis_max", 
+                                                                        label = tr("options.range.max"), 
+                                                                        step = 0.1, value = ""))
                                                      )
                                                    )                                
                                                ),
-                                               checkboxInput(inputId = "exact_axis_range", label = "Abstand bis zu Achsen-Ende", value = TRUE)
+                                               checkboxInput("exact_axis_range", 
+                                                             label = tr("options.range.expand"), 
+                                                             value = TRUE)
                                              )
                                   ),
                                   # Create a Layout for CollapsePanels
@@ -4238,6 +4263,55 @@ server <- function(input, output, session) {
     
     
     ############### 11.5 Update Text Sidebar ###############
+    setTxt("opt_theme_title", "options.theme.title")
+    setTxt("opt_palette_title", "options.palette.title")
+    setTxt("options_plotsize_title", "options.plotsize.title")
+    setTxt("opt_range_title", "options.range.title")
+    
+    updateSelectInput(
+      session, "Color_Palette",
+      label    = tr("options.palette.select"),
+      selected = input$Color_Palette
+    )    
+    updateSelectInput(
+      session, "color_palette_target",
+      label    = tr("options.palette.apply_to"),
+      selected = input$color_palette_target
+    )    
+    updateNumericInput(
+      session, "plot_width_px",
+      label    = tr("options.plotsize.width_px"),
+      value = input$plot_width_px
+    )
+    updateNumericInput(
+      session, "plot_height_px",
+      label    = tr("options.plotsize.height_px"),
+      value = input$plot_height_px
+    )
+    updateNumericInput(session, 
+                       inputId = "x_axis_min", 
+                       label = tr("options.range.min"))
+    updateNumericInput(session,
+                       inputId = "x_axis_max", 
+                       label = tr("options.range.max"))
+    updateNumericInput(session, 
+                       inputId = "y_axis_min", 
+                       label = tr("options.range.min"))
+    updateNumericInput(session,
+                       inputId = "y_axis_max", 
+                       label = tr("options.range.max"))
+    session$sendCustomMessage('setText', list(id="opt_xaxis_lbl", text=tr("options.range.xaxis")))
+    session$sendCustomMessage('setText', list(id="opt_yaxis_lbl", text=tr("options.range.yaxis")))
+    updateCheckboxInput(session, 
+                        inputId = "exact_axis_range", 
+                        label = tr("options.range.expand"))
+    
+    
+    
+    
+    
+    
+    ############### 11.6 Update Text Sidebar ###############
     # Title
     updateTextInput(session, "plot_title",
                     label = tr("text.title"),
@@ -4267,8 +4341,7 @@ server <- function(input, output, session) {
                     label = tr("text.legend"),
                     placeholder = tr("text.legend_placeholder")
     )
-    
-      })
+    })
   
   
   

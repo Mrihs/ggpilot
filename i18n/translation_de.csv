@@ -31,9 +31,23 @@ variables.grid_row_title,Facet Variable (Rows),Variable für Zeilen-Facettierung
 variables.reorder_levels,Reorder Levels,Reihenfolge der Stufen anpassen
 variables.none,No Variable,Keine Variable
 
-text.title, Title, Titel
+options.theme.title,Theme,Theme
+options.palette.title,Color Palette,Farb-Palette
+options.palette.select,Color Palette,Farb-Palette
+options.palette.apply_to,Apply Color Palette to...,Farbelette anwenden auf...
+options.plotsize.title,Plot Size,Plot-Grösse
+options.plotsize.width_px,Heigth (in Pixels):,Höhe (in Pixel):
+options.plotsize.height_px,Width (in Pixels):,Breite (in Pixel):
+options.range.title,Set Axis Range,Achsen-Range definieren
+options.range.xaxis,X Axis,X-Achse
+options.range.yaxis,Y Axis,Y-Achse
+options.range.min,Min,Min
+options.range.max,Max,Max
+options.range.expand,Distance to Axis End,Abstand bis zu Achsen-Ende
+
+text.title,Title,Titel
 text.title_placeholder, Enter Title,Titel eingeben
-text.subtitle, Subtitle,Untertitel
+text.subtitle,Subtitle,Untertitel
 text.subtitle_placeholder, Enter Subtitle, Untertitel eingeben
 text.x_axis, X-Axis Label,X-Achsen-Beschriftung
 text.x_axis_placeholder, Enter Custom X Axis Label,Eigene X-Achsen Beschriftung eingeben
