@@ -31,6 +31,17 @@ variables.grid_row_title,Facet Variable (Rows),Variable für Zeilen-Facettierung
 variables.reorder_levels,Reorder Levels,Reihenfolge der Stufen anpassen
 variables.none,No Variable,Keine Variable
 
+text.title, Title, Titel
+text.title_placeholder, Enter Title,Titel eingeben
+text.subtitle, Subtitle,Untertitel
+text.subtitle_placeholder, Enter Subtitle, Untertitel eingeben
+text.x_axis, X-Axis Label,X-Achsen-Beschriftung
+text.x_axis_placeholder, Enter Custom X Axis Label,Eigene X-Achsen Beschriftung eingeben
+text.y_axis, Y-Axis Label,Y-Achsen-Beschriftung
+text.y_axis_placeholder, Enter Custom Y Axis Label,Eigene Y-Achsen Beschriftung eingeben
+text.legend, Legend Title,Legenden-Beschriftung
+text.legend_placeholder, Enter Legend Title,Eigene Legenden Beschriftung eingeben
+
 download.plot,Plot,Plot
 download.download_plot,Download Plot,Plot herunterladen
 download.file_format,File Format:,Dateiformat:

@@ -104,8 +104,16 @@ is_valid_color <- function(color) {
 
 
 ########## 1.4.3 tr-Function to Help Translate ##########
-tr <- function(key) as.character(i18n$t(key))[1]
-
+# tr <- function(key) as.character(i18n$t(key))[1]
+tr <- function(key) {
+  # Get the key from the translation filee
+  x <- i18n$t(key)
+  # Convert the key to characters
+  x <- paste(as.character(x), collapse = "")
+  # Remove potential HTML-elements
+  x <- gsub("<[^>]+>", "", x)
+  trimws(x)
+}
 
 
 
@@ -702,15 +710,30 @@ ui <- fluidPage(
                  # Define Conditional-Panel for when text tab is selected
                  conditionalPanel(condition = "input.activeTab == 'text'",
                                   # Text-Input for the Title
-                                  textInput(inputId = "plot_title", label = "Titel", value = "", placeholder = "Titel eingeben"),
+                                  textInput(inputId = "plot_title", 
+                                            label = tr("text.title"), 
+                                            value = "", 
+                                            placeholder = tr("text.title_placeholder")),
                                   # Text-Input for the Sub-Title
-                                  textInput(inputId = "plot_subtitle", label = "Untertitel", value = "", placeholder = "Untertitel eingeben"),
+                                  textInput(inputId = "plot_subtitle", 
+                                            label = tr("text.subtitle"), 
+                                            value = "", 
+                                            placeholder = tr("text.subtitle_placeholder")),
                                   # Text-Input for the X-Axis-Title
-                                  textInput(inputId = "x_axis_title", label = "X-Achsen-Beschriftung", value = "", placeholder = "Eigene X-Achsen Beschriftung eingeben"),
+                                  textInput(inputId = "x_axis_title", 
+                                            label = tr("text.x_axis"), 
+                                            value = "", 
+                                            placeholder = tr("text.x_axis_placeholder")),
                                   # Text-Input for the Y-Axis-Title
-                                  textInput(inputId = "y_axis_title", label = "Y-Achsen-Beschriftung", value = "", placeholder = "Eigene Y-Achsen Beschriftung eingeben"),
+                                  textInput(inputId = "y_axis_title", 
+                                            label = tr("text.y_axis"), 
+                                            value = "", 
+                                            placeholder = tr("text.y_axis_placeholder")),
                                   # Text-Input for the Legend-Title
-                                  textInput(inputId = "legend_title", label = "Legenden-Beschriftung", value = "", placeholder = "Eigene Legenden Beschriftung eingeben")
+                                  textInput(inputId = "legend_title", 
+                                            label = tr("text.legend"), 
+                                            value = "", 
+                                            placeholder = tr("text.legend_placeholder"))
                  ),
                  
                  
@@ -4205,6 +4228,45 @@ server <- function(input, output, session) {
     setTxt("group_reorder_title",    "variables.reorder_levels")
     setTxt("grid_col_reorder_title", "variables.reorder_levels")
     setTxt("grid_row_reorder_title", "variables.reorder_levels")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 11.5 Update Text Sidebar ###############
+    # Title
+    updateTextInput(session, "plot_title",
+                    label = tr("text.title"),
+                    placeholder = tr("text.title_placeholder")
+    )
+    
+    # Subtitle
+    updateTextInput(session, "plot_subtitle",
+                    label = tr("text.subtitle"),
+                    placeholder = tr("text.subtitle_placeholder")
+    )
+    
+    # X-Axis Title
+    updateTextInput(session, "x_axis_title",
+                    label = tr("text.x_axis"),
+                    placeholder = tr("text.x_axis_placeholder")
+    )
+    
+    # Y-Axis Title
+    updateTextInput(session, "y_axis_title",
+                    label = tr("text.y_axis"),
+                    placeholder = tr("text.y_axis_placeholder")
+    )
+    
+    # Legend-Title
+    updateTextInput(session, "legend_title",
+                    label = tr("text.legend"),
+                    placeholder = tr("text.legend_placeholder")
+    )
     
       })
   
