@@ -4438,7 +4438,7 @@ server <- function(input, output, session) {
                        label = tr("options.lineplot.width"),
                        value = input$lineplot_width)
     updateNumericInput(session, 
-                       inputId = "error.mult", 
+                       inputId = "error_mult", 
                        label = tr("options.errorbar.mult"),
                        value = input$error.mult)
     updateNumericInput(session, 
@@ -4600,7 +4600,6 @@ server <- function(input, output, session) {
     updateNumericInput(session,"Axis_Y_Text_Rotation",    label = tr("label.rotation"))
     updateSelectInput(session, "Axis_Y_Text_H_Alignment",label= tr("label.align.h"),     choices = align_h_choices(),  selected = input$Axis_Y_Text_H_Alignment)
     updateSelectInput(session, "Axis_Y_Text_V_Alignment",label= tr("label.align.v"),     choices = align_v_choices(),  selected = input$Axis_Y_Text_V_Alignment)
-    
     })
   
   
