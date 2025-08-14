@@ -119,6 +119,32 @@ tr <- function(key) {
 
 
 
+########## 1.4.4 Functions to Serialise Dropdown-Localization ##########
+font_choices <- function() setNames(
+  c("Gemäss Theme","Sans Serife","Serife","Monospace"),
+  c(tr("options.font.theme"), tr("options.font.sans"), tr("options.font.serif"), tr("options.font.mono"))
+)
+face_choices <- function() setNames(
+  c("Gemäss Theme","Normal","Fett","Kursiv","Fett & Kursiv"),
+  c(tr("face.theme"), tr("face.plain"), tr("face.bold"), tr("face.italic"), tr("face.bolditalic"))
+)
+align_h_choices <- function() setNames(
+  c("Gemäss Theme","Linksbündig","Mittig","Rechtsbündig"),
+  c(tr("align.theme"), tr("align.left"), tr("align.center"), tr("align.right"))
+)
+align_v_choices <- function() setNames(
+  c("Gemäss Theme","Unten","Mittig","Oben"),
+  c(tr("align.theme"), tr("align.bottom"), tr("align.center"), tr("align.top"))
+)
+linetype_choices_all <- function() setNames(
+  c("Gemäss Theme","Keine","Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
+  c(tr("linetype.theme"), tr("linetype.none"), tr("options.linetype.solid"),
+    tr("options.linetype.dashed"), tr("options.linetype.dotted"),
+    tr("options.linetype.pointdash"), tr("options.linetype.longdash"),
+    tr("options.linetype.twodash"))
+)
+
+
 
 
 
@@ -821,26 +847,26 @@ ui <- fluidPage(
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
-                                                                title = BSCollapseArrow("Überschrift"),
+                                                                title = BSCollapseArrow(tr("layout.collapse.header"), id = "layout_collapse_header"),
                                                                 div(class = ".collapse_panel-settings",
                                                                     column(6,
-                                                                           h3("Titel"),
-                                                                           # Text-Input for the Title
-                                                                           selectInput(inputId = "Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           numericInput(inputId = "Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                           h3(span(id = "layout_h3_title", tr("layout.h3.title"))),
+                                                                           # Layout-Options for the Title
+                                                                           selectInput(inputId = "Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                           numericInput(inputId = "Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                                     ),
                                                                     column(6,
-                                                                           h3("Untertitel"),
+                                                                           h3(span(id = "layout_h3_subtitle", tr("layout.h3.subtitle"))),
                                                                            title = BSCollapseArrow("Untertitel"),
-                                                                           # Text-Input for the X-Axis-Title
-                                                                           selectInput(inputId = "Subtitle_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Subtitle_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Subtitle_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           numericInput(inputId = "Subtitle_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Subtitle_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                           # Layout-Options for the Subtitle
+                                                                           selectInput(inputId = "Subtitle_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Subtitle_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Subtitle_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                           numericInput(inputId = "Subtitle_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Subtitle_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                                     )
                                                                 )
                                                               )
@@ -849,27 +875,28 @@ ui <- fluidPage(
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Achsen-Überschrift"),
+                                               title = BSCollapseArrow(tr("layout.collapse.axis.title"), id = "layout_collapse_axis_title"),
+                                               # title = BSCollapseArrow("Achsen-Überschrift"),
                                                div(class = ".collapse_panel-settings", 
                                                    # Create a column
                                                    column(6,
-                                                          h3("X-Achse"),
+                                                          h3(span(id = "layout_h3_xaxis", tr("layout.h3.xaxis"))),
                                                           # Text-Input for the X-Axis-Title
-                                                          selectInput(inputId = "X_Axis_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "X_Axis_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "X_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "X_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "X_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                          selectInput(inputId = "X_Axis_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                          selectInput(inputId = "X_Axis_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                          textInput(inputId = "X_Axis_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                          numericInput(inputId = "X_Axis_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                          selectInput(inputId = "X_Axis_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                    ),
                                                    # Create a column
-                                                   column(6, 
-                                                          h3("Y-Achse"),
+                                                   column(6,
+                                                          h3(span(id = "layout_h3_yaxis", tr("layout.h3.yaxis"))),
                                                           # Text-Input for the Y-Axis-Title
-                                                          selectInput(inputId = "Y_Axis_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Y_Axis_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Y_Axis_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Y_Axis_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "Y_Axis_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                          selectInput(inputId = "Y_Axis_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                          selectInput(inputId = "Y_Axis_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                          textInput(inputId = "Y_Axis_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                          numericInput(inputId = "Y_Axis_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                          selectInput(inputId = "Y_Axis_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                    )
                                                )
                                              )
@@ -877,31 +904,31 @@ ui <- fluidPage(
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Achsen-Text"),
+                                               title = BSCollapseArrow(tr("layout.collapse.axis.text"), id = "layout_collapse_axis_text"),
                                                div(class = ".collapse_panel-settings",
                                                    # Create a column
                                                    column(6,
-                                                          h3("X Achse"),
+                                                          h3(span(id = "layout_h3_xaxis", tr("layout.h3.xaxis"))),
                                                           # Text-Input for the X-Axis Label
-                                                          selectInput(inputId = "Axis_X_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Axis_X_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Axis_X_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Axis_X_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Axis_X_Text_Rotation", label = "Rotation", min = 0, max = 360, step = 1, value = NA),
-                                                          selectInput(inputId = "Axis_X_Text_H_Alignment", label = "Vertikale Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Axis_X_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
+                                                          selectInput(inputId = "Axis_X_Text_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                          selectInput(inputId = "Axis_X_Text_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                          textInput(inputId = "Axis_X_Text_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                          numericInput(inputId = "Axis_X_Text_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                          numericInput(inputId = "Axis_X_Text_Rotation", label = tr("label.rotation"), min = 0, max = 360, step = 1, value = NA),
+                                                          selectInput(inputId = "Axis_X_Text_H_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme"),
+                                                          selectInput(inputId = "Axis_X_Text_V_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                    ),
                                                    # Create a column
                                                    column(6,
-                                                          h3("Y Achse"),
+                                                          h3(span(id = "layout_h3_yaxis", tr("layout.h3.yaxis"))),
                                                           # Text-Input for the Y-Axis Label
                                                           selectInput(inputId = "Axis_Y_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                                           selectInput(inputId = "Axis_Y_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                                           textInput(inputId = "Axis_Y_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           numericInput(inputId = "Axis_Y_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Axis_Y_Text_Rotation", label = "Rotation", min = 0, max = 360, step = 1, value = NA),
-                                                          selectInput(inputId = "Axis_Y_Text_H_Alignment", label = "Vertikale Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Axis_Y_Text_V_Alignment", label = "Horizonalte Ausrichtung", choices = c("Gemäss Theme", "Unten", "Mittig", "Oben"), selected = "Gemäss Theme")
+                                                          numericInput(inputId = "Axis_Y_Text_Rotation", label = tr("label.rotation"), min = 0, max = 360, step = 1, value = NA),
+                                                          selectInput(inputId = "Axis_Y_Text_H_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme"),
+                                                          selectInput(inputId = "Axis_Y_Text_V_Alignment", label = tr("label.align.v"), choices = align_v_choices(), selected = "Gemäss Theme")
                                                    )
                                                )
                                              )
@@ -1972,7 +1999,7 @@ server <- function(input, output, session) {
         id = paste0("input_row_", new_id),
         style = "display: flex; align-items: center;",
         textInput(paste0("vector_", new_id),
-                  label = sprintf("%s %d", tr("options.custom.colorpalette.color"), new_id),
+                  label = sprintf("%s %d", tr("label.color"), new_id),
                   placeholder = tr("options.custom.colorpalette.placeholder")
                   ),
         tags$span(
@@ -4218,7 +4245,15 @@ server <- function(input, output, session) {
     req(input$language)
     i18n$set_translation_language(input$language)
     
-    # Add Helper-Vectors to translate Dropdown-Options
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 11.2 Define Helper-Functions for Dropdown-Options ###############
     LINETYPES <- c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt")
     ERRTYPES  <- c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler")
     TARGETS   <- c("Füllung","Linien","Füllung und Linien")
@@ -4437,8 +4472,7 @@ server <- function(input, output, session) {
     
     session$sendCustomMessage('setText', list(id="opt_xaxis_lbl", text=tr("options.range.xaxis")))
     session$sendCustomMessage('setText', list(id="opt_yaxis_lbl", text=tr("options.range.yaxis")))
-    
-    
+
     ### Change UI of Custom Color Palette
     # Change language of Buttons
     updateActionButton(session, "add",         
@@ -4452,7 +4486,7 @@ server <- function(input, output, session) {
         updateTextInput(
           session,
           paste0("vector_", i),
-          label = sprintf("%s %d", tr("options.custom.colorpalette.color"), i),
+          label = sprintf("%s %d", tr("label.color"), i),
           placeholder = tr("options.custom.colorpalette.placeholder")
         )
         session$sendCustomMessage(
@@ -4499,6 +4533,74 @@ server <- function(input, output, session) {
                     label = tr("text.legend"),
                     placeholder = tr("text.legend_placeholder")
     )
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 11.8 Update Layout Sidebar ###############
+    setTxt <- function(id, key) session$sendCustomMessage('setText', list(id = id, text = tr(key)))
+    
+    # titles in Collapse Boxes
+    setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
+    setTxt(id = "layout_collapse_axis_title", key = "layout.collapse.axis.title")
+    setTxt(id = "layout_collapse_axis_text", key = "layout.collapse.axis.text")
+
+    # H3 Headers
+    setTxt(id = "layout_h3_title", key = "layout.h3.title")
+    setTxt(id = "layout_h3_subtitle", key = "layout.h3.subtitle")
+    setTxt(id = "layout_h3_xaxis", key = "layout.h3.xaxis")
+    setTxt(id = "layout_h3_yaxis", key = "layout.h3.yaxis")
+    
+    # Title Settings
+    updateSelectInput(session, "Title_Font",           label = tr("label.font"),        choices = font_choices(),     selected = input$Title_Font)
+    updateSelectInput(session, "Title_Face",           label = tr("label.face"),        choices = face_choices(),     selected = input$Title_Face)
+    updateTextInput(session, "Title_Color",          label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Title_Size",           label = tr("label.size"))
+    updateSelectInput(session, "Title_Alignment",      label = tr("label.align"),     choices = align_h_choices(),  selected = input$Title_Alignment)
+    
+    # Subtitle Settings
+    updateSelectInput(session, "Subtitle_Font",        label = tr("label.font"),        choices = font_choices(),     selected = input$Subtitle_Font)
+    updateSelectInput(session, "Subtitle_Face",        label = tr("label.face"),        choices = face_choices(),     selected = input$Subtitle_Face)
+    updateTextInput(session, "Subtitle_Color",       label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Subtitle_Size",        label = tr("label.size"))
+    updateSelectInput(session, "Subtitle_Alignment",   label = tr("label.align"),     choices = align_h_choices(),  selected = input$Subtitle_Alignment)
+    
+    # X-Axis Title Settings
+    updateSelectInput(session, "X_Axis_Title_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$X_Axis_Title_Font)
+    updateSelectInput(session, "X_Axis_Title_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$X_Axis_Title_Face)
+    updateTextInput(session, "X_Axis_Title_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"X_Axis_Title_Size",    label = tr("label.size"))
+    updateSelectInput(session, "X_Axis_Title_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$X_Axis_Title_Alignment)
+    
+    # Y-Axis Title Settings
+    updateSelectInput(session, "Y_Axis_Title_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Y_Axis_Title_Font)
+    updateSelectInput(session, "Y_Axis_Title_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Y_Axis_Title_Face)
+    updateTextInput  (session, "Y_Axis_Title_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Y_Axis_Title_Size",    label = tr("label.size"))
+    updateSelectInput(session, "Y_Axis_Title_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Y_Axis_Title_Alignment)
+    
+    # X Axis Text Settings
+    updateSelectInput(session, "Axis_X_Text_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Axis_X_Text_Font)
+    updateSelectInput(session, "Axis_X_Text_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Axis_X_Text_Face)
+    updateTextInput  (session, "Axis_X_Text_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Axis_X_Text_Size",    label = tr("label.size"))
+    updateNumericInput(session,"Axis_X_Text_Rotation",    label = tr("label.rotation"))
+    updateSelectInput(session, "Axis_X_Text_H_Alignment",label= tr("label.align.h"),     choices = align_h_choices(),  selected = input$Axis_X_Text_H_Alignment)
+    updateSelectInput(session, "Axis_X_Text_V_Alignment",label= tr("label.align.v"),     choices = align_v_choices(),  selected = input$Axis_X_Text_V_Alignment)
+    
+    # Y Axis Text Settings
+    updateSelectInput(session, "Axis_Y_Text_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Axis_Y_Text_Font)
+    updateSelectInput(session, "Axis_Y_Text_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Axis_Y_Text_Face)
+    updateTextInput  (session, "Axis_Y_Text_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Axis_Y_Text_Size",    label = tr("label.size"))
+    updateNumericInput(session,"Axis_Y_Text_Rotation",    label = tr("label.rotation"))
+    updateSelectInput(session, "Axis_Y_Text_H_Alignment",label= tr("label.align.h"),     choices = align_h_choices(),  selected = input$Axis_Y_Text_H_Alignment)
+    updateSelectInput(session, "Axis_Y_Text_V_Alignment",label= tr("label.align.v"),     choices = align_v_choices(),  selected = input$Axis_Y_Text_V_Alignment)
+    
     })
   
   
