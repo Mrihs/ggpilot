@@ -673,7 +673,9 @@ ui <- fluidPage(
                                                                     # Select linetype
                                                                     selectInput(inputId = "lineplot_line_type", 
                                                                                 label = tr("options.linetype"), 
-                                                                                choices = c("Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"),
+                                                                                choices = setNames(c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
+                                                                                                   c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
+                                                                                                     tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
                                                                                 selected = "Solide"),                                                                    
                                                                     # Numeric Input for the width of the Errorbar
                                                                     numericInput(inputId = "lineplot_width", 
@@ -4212,6 +4214,7 @@ server <- function(input, output, session) {
     i18n$set_translation_language(input$language)
     
     # Add Helper-Vectors to translate Dropdown-Options
+    LINETYPES <- c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt")
     ERRTYPES  <- c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler")
     
     
@@ -4316,6 +4319,13 @@ server <- function(input, output, session) {
                                                      tr("options.errorbar.ci"),
                                                      tr("options.errorbar.se")))
     )
+    updateSelectInput(session, "lineplot_line_type",
+                      label   = tr("options.linetype"),
+                      choices = setNames(LINETYPES, c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
+                                                      tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash")))
+    )
+    
+
     
     setTxt("opt_theme_title", "options.theme.title")
     setTxt("opt_palette_title", "options.palette.title")
