@@ -532,7 +532,8 @@ ui <- fluidPage(
                                                                     ),
                                                                     selectInput(inputId = "color_palette_target", 
                                                                                 label = tr("options.palette.apply_to"),
-                                                                                choices = c("Füllung", "Linien", "Füllung und Linien"),
+                                                                                choices = setNames(c("Füllung", "Linien", "Füllung und Linien"),
+                                                                                                   c(tr("options.palette.target.fill"),tr("options.palette.target.line"),tr("options.palette.target.both"))),
                                                                                 selected = "Füllung")
                                                                 )
                                                               )
@@ -4216,6 +4217,7 @@ server <- function(input, output, session) {
     # Add Helper-Vectors to translate Dropdown-Options
     LINETYPES <- c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt")
     ERRTYPES  <- c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler")
+    TARGETS   <- c("Füllung","Linien","Füllung und Linien")
     
     
     
@@ -4323,6 +4325,12 @@ server <- function(input, output, session) {
                       label   = tr("options.linetype"),
                       choices = setNames(LINETYPES, c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
                                                       tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash")))
+    )
+    updateSelectInput(session, "color_palette_target",
+                      label   = tr("options.palette.apply_to"),
+                      choices = setNames(TARGETS, c(tr("options.palette.target.fill"),
+                                                    tr("options.palette.target.line"),
+                                                    tr("options.palette.target.both")))
     )
     
 

@@ -35,6 +35,9 @@ options.theme.title,Theme,Theme
 options.palette.title,Color Palette,Farb-Palette
 options.palette.select,Color Palette,Farb-Palette
 options.palette.apply_to,Apply Color Palette to...,Farbelette anwenden auf...
+options.palette.target.fill,Fill,Füllung
+options.palette.target.line,Lines,Linien
+options.palette.target.both,Both,Beides
 options.plotsize.title,Plot Size,Plot-Grösse
 options.plotsize.width_px,Heigth (in Pixels):,Höhe (in Pixel):
 options.plotsize.height_px,Width (in Pixels):,Breite (in Pixel):
@@ -94,7 +97,6 @@ footer.github,View on GitHub,Auf GitHub ansehen
 
 options.linewidth,Linewidth,Linien-Grösse
 options.linetype,Line Type,Linien-Art
-
 
 options.linetype.solid,Solid,Solide
 options.linetype.dashed,Dashed,Gestrichelt
