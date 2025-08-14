@@ -757,8 +757,10 @@ ui <- fluidPage(
                                                                                                label = tr("options.regressionline.expand"), 
                                                                                                value = FALSE),
                                                                                  selectInput(inputId = "scater_line_type", 
-                                                                                             label = tr("options.linewidth"), 
-                                                                                             choices = c("Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), 
+                                                                                             label = tr("options.linetype"), 
+                                                                                             choices = setNames(c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
+                                                                                                                c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
+                                                                                                                  tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
                                                                                              selected = "Solide"),
                                                                                  numericInput(inputId = "scater_line_size", 
                                                                                               label = tr("options.linewidth"), 
@@ -4314,27 +4316,6 @@ server <- function(input, output, session) {
     
     
     ############### 11.5 Update Options Sidebar ###############
-    updateSelectInput(session, "error_type",
-                      label   = tr("options.errorbar.unit"),
-                      choices = setNames(ERRTYPES, c(tr("options.errorbar.none"),
-                                                     tr("options.errorbar.sd"),
-                                                     tr("options.errorbar.ci"),
-                                                     tr("options.errorbar.se")))
-    )
-    updateSelectInput(session, "lineplot_line_type",
-                      label   = tr("options.linetype"),
-                      choices = setNames(LINETYPES, c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
-                                                      tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash")))
-    )
-    updateSelectInput(session, "color_palette_target",
-                      label   = tr("options.palette.apply_to"),
-                      choices = setNames(TARGETS, c(tr("options.palette.target.fill"),
-                                                    tr("options.palette.target.line"),
-                                                    tr("options.palette.target.both")))
-    )
-    
-
-    
     setTxt("opt_theme_title", "options.theme.title")
     setTxt("opt_palette_title", "options.palette.title")
     setTxt("options_plotsize_title", "options.plotsize.title")
@@ -4351,27 +4332,33 @@ server <- function(input, output, session) {
       label    = tr("options.palette.select"),
       selected = input$Color_Palette
     )    
-    updateSelectInput(
-      session, "color_palette_target",
-      label    = tr("options.palette.apply_to"),
-      selected = input$color_palette_target
-    )    
-    updateSelectInput(
-      session, "scater_line_type",
-      label    = tr("options.linewidth"),
-      selected = input$scater_line_type
-    )    
-    updateSelectInput(
-      session, "error_type",
-      label    = tr("options.errorbar.unit"),
-      selected = input$error_type
-    )    
-    updateSelectInput(
-      session, "lineplot_line_type",
-      label    = tr("options.linetype"),
-      selected = input$lineplot_line_type
-    )    
-    
+    updateSelectInput(session, "color_palette_target",
+                      label   = tr("options.palette.apply_to"),
+                      choices = setNames(TARGETS, c(tr("options.palette.target.fill"),
+                                                    tr("options.palette.target.line"),
+                                                    tr("options.palette.target.both"))),
+                      selected = input$color_palette_target
+    )
+    updateSelectInput(session, "error_type",
+                      label   = tr("options.errorbar.unit"),
+                      choices = setNames(ERRTYPES, c(tr("options.errorbar.none"),
+                                                     tr("options.errorbar.sd"),
+                                                     tr("options.errorbar.ci"),
+                                                     tr("options.errorbar.se"))),
+                      selected = input$error_type
+    )
+    updateSelectInput(session, "lineplot_line_type",
+                      label   = tr("options.linetype"),
+                      choices = setNames(LINETYPES, c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
+                                                      tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
+                      selected = input$lineplot_line_type
+    )
+    updateSelectInput(session, "scater_line_type",
+                      label   = tr("options.linetype"),
+                      choices = setNames(LINETYPES, c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
+                                                      tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
+                      selected = input$scater_line_type
+    )
     updateNumericInput(
       session, "plot_width_px",
       label    = tr("options.plotsize.width_px"),
