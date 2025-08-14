@@ -689,26 +689,32 @@ ui <- fluidPage(
                                                               # Create a Collapse-Panel for Errorbar-Settings
                                                               bsCollapsePanel(
                                                                 # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("options.errorbars"), 
+                                                                title = BSCollapseArrow(tr("options.errorbar"), 
                                                                                         id = "options_errorbars"),
                                                                 # Define CSS Settings
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Dropdown to select the type of Errorbar
                                                                     selectInput(inputId = "error_type", 
-                                                                                label = tr("options.errorbars.unit"), 
-                                                                                choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), 
+                                                                                label = tr("options.errorbar.unit"),
+                                                                                choices = setNames(c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler"),
+                                                                                                   # Tranlsate the options
+                                                                                                   c(tr("options.errorbar.none"),
+                                                                                                     tr("options.errorbar.sd"),
+                                                                                                     tr("options.errorbar.ci"),
+                                                                                                     tr("options.errorbar.se"))),
+                                                                                # choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), 
                                                                                 selected = "Standardabweichung"),
                                                                     # Numeric Input for the width of the Errorbar
                                                                     numericInput(inputId = "error_mult", 
-                                                                                 label = tr("options.error.mult"), 
+                                                                                 label = tr("options.errorbar.mult"), 
                                                                                  min = 1, step = 1, value = 1),
                                                                     # Numeric Input for the width of the Errorbar
                                                                     numericInput(inputId = "error_width", 
-                                                                                 label = tr("options.error.width"), 
+                                                                                 label = tr("options.errorbar.width"), 
                                                                                  min = 0, step = 0.1, value = ""),
                                                                     # Numeric Input for the width of the Errorbar
                                                                     numericInput(inputId = "error_size", 
-                                                                                 label = tr("options.error.size"), 
+                                                                                 label = tr("options.errorbar.size"), 
                                                                                  min = 0, step = 0.1, value = "")
                                                                 )
                                                               )
@@ -4205,6 +4211,9 @@ server <- function(input, output, session) {
     req(input$language)
     i18n$set_translation_language(input$language)
     
+    # Add Helper-Vectors to translate Dropdown-Options
+    ERRTYPES  <- c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler")
+    
     
     
     
@@ -4300,6 +4309,14 @@ server <- function(input, output, session) {
     
     
     ############### 11.5 Update Options Sidebar ###############
+    updateSelectInput(session, "error_type",
+                      label   = tr("options.errorbar.unit"),
+                      choices = setNames(ERRTYPES, c(tr("options.errorbar.none"),
+                                                     tr("options.errorbar.sd"),
+                                                     tr("options.errorbar.ci"),
+                                                     tr("options.errorbar.se")))
+    )
+    
     setTxt("opt_theme_title", "options.theme.title")
     setTxt("opt_palette_title", "options.palette.title")
     setTxt("options_plotsize_title", "options.plotsize.title")
@@ -4307,7 +4324,7 @@ server <- function(input, output, session) {
     setTxt("options_grouping_space", "options.grouping.space")
     setTxt("options_barplot", "options.barplot")
     setTxt("options_lineplot", "options.lineplot")
-    setTxt("options_errorbars", "options.errorbars")
+    setTxt("options_errorbars", "options.errorbar")
     setTxt("options_scatterplot", "options.scatterplot")
     setTxt("options_regressionline", "options.regressionline")
     
@@ -4328,7 +4345,7 @@ server <- function(input, output, session) {
     )    
     updateSelectInput(
       session, "error_type",
-      label    = tr("options.errorbars.unit"),
+      label    = tr("options.errorbar.unit"),
       selected = input$error_type
     )    
     updateSelectInput(
@@ -4377,15 +4394,15 @@ server <- function(input, output, session) {
                        value = input$lineplot_width)
     updateNumericInput(session, 
                        inputId = "error.mult", 
-                       label = tr("options.error.mult"),
+                       label = tr("options.errorbar.mult"),
                        value = input$error.mult)
     updateNumericInput(session, 
                        inputId = "error_width", 
-                       label = tr("options.error.width"),
+                       label = tr("options.errorbar.width"),
                        value = input$error_width)
     updateNumericInput(session, 
                        inputId = "error_size", 
-                       label = tr("options.error.size"),
+                       label = tr("options.errorbar.size"),
                        value = input$error_size)
     updateNumericInput(session, 
                        inputId = "scatterpoint_size", 

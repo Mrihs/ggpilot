@@ -53,11 +53,16 @@ options.barplot.width,Width of Bars,Breite der Balken
 options.lineplot,Lineplot Options, Linienplot-Optionen
 options.lineplot.width,Linewidth,Liniengrösse
 
-options.errorbars,Errorbars, Fehlerbalken
-options.errorbars.unit,Unit,Einheit
-options.error.mult,Number of Units,Anzahl Einheiten
-options.error.width,Width of Errorbars,Breite der Fehlerbalken
-options.error.size,Size of Errorbars,Grösse der Fehlerbalken-Linien
+options.errorbar,Errorbars, Fehlerbalken
+options.errorbar.unit,Unit,Einheit
+options.errorbar.mult,Number of Units,Anzahl Einheiten
+options.errorbar.width,Width of Errorbars,Breite der Fehlerbalken
+options.errorbar.size,Size of Errorbars,Grösse der Fehlerbalken-Linien
+
+options.errorbar.none,None,Keine
+options.errorbar.sd,Standard Deviation, Standardabweichung
+options.errorbar.ci,Confidence Intervall,Konfidenzintervall
+options.errorbar.se,Standard Error,Standardfehler
 
 options.scatterplot,Scatterplot Options,Scatterplot Einstellungen
 options.scatterpoint.size,Point Size,Grösse der Punkte
