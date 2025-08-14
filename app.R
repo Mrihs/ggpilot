@@ -507,8 +507,8 @@ ui <- fluidPage(
                                                                     # Set UI for individual color palette
                                                                     conditionalPanel(condition = "input.Color_Palette =='Eigene Farbpalette erstellen'",
                                                                                      # Add Button
-                                                                                     actionButton("add", "Farbe hinzufügen"),
-                                                                                     actionButton("remove_last", "Letzte Farbe entfernen"),
+                                                                                     actionButton("add", tr("options.custom.colorpalette.add")),
+                                                                                     actionButton("remove_last", tr("options.custom.colorpalette.remove")),
                                                                                      tags$div(id = "input_container"),
                                                                                      # Create CSS for inavlid colors
                                                                                      tags$style(HTML("
@@ -1972,12 +1972,14 @@ server <- function(input, output, session) {
         id = paste0("input_row_", new_id),
         style = "display: flex; align-items: center;",
         textInput(paste0("vector_", new_id),
-                  label = paste("Color", new_id), 
-                  placeholder = "z.B. 'red', 'grey', '#F00F1F'"),
-        tags$span(id = paste0("vector_", new_id, "_error"), 
-                  class = "error-message", 
-                  "Keine gültige Farbe angegeben", 
-                  style = "display: none;")
+                  label = sprintf("%s %d", tr("options.custom.colorpalette.color"), new_id),
+                  placeholder = tr("options.custom.colorpalette.placeholder")
+                  ),
+        tags$span(
+          id = paste0("vector_", new_id, "_error"),
+          class = "error-message", 
+          tr("options.custom.colorpalette.error"),
+          style = "display: none;")
       )
     )
     # Create new entries using a standard-color
@@ -4316,6 +4318,7 @@ server <- function(input, output, session) {
     
     
     ############### 11.5 Update Options Sidebar ###############
+    ### Change UI-Text
     setTxt("opt_theme_title", "options.theme.title")
     setTxt("opt_palette_title", "options.palette.title")
     setTxt("options_plotsize_title", "options.plotsize.title")
@@ -4327,6 +4330,8 @@ server <- function(input, output, session) {
     setTxt("options_scatterplot", "options.scatterplot")
     setTxt("options_regressionline", "options.regressionline")
     
+    
+    ### Change Options
     updateSelectInput(
       session, "Color_Palette",
       label    = tr("options.palette.select"),
@@ -4432,6 +4437,31 @@ server <- function(input, output, session) {
     
     session$sendCustomMessage('setText', list(id="opt_xaxis_lbl", text=tr("options.range.xaxis")))
     session$sendCustomMessage('setText', list(id="opt_yaxis_lbl", text=tr("options.range.yaxis")))
+    
+    
+    ### Change UI of Custom Color Palette
+    # Change language of Buttons
+    updateActionButton(session, "add",         
+                       label = tr("options.custom.colorpalette.add"))
+    updateActionButton(session, "remove_last", 
+                       label = tr("options.custom.colorpalette.remove"))
+    
+    # Localise Error Message
+    if (manual_colors$count > 0) {
+      for (i in seq_len(manual_colors$count)) {
+        updateTextInput(
+          session,
+          paste0("vector_", i),
+          label = sprintf("%s %d", tr("options.custom.colorpalette.color"), i),
+          placeholder = tr("options.custom.colorpalette.placeholder")
+        )
+        session$sendCustomMessage(
+          "setText",
+          list(id = paste0("vector_", i, "_error"), text = tr("options.custom.colorpalette.error"))
+        )
+      }
+    }
+    
 
     
     

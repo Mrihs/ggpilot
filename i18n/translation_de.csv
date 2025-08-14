@@ -50,6 +50,12 @@ options.range.expand,Distance to Axis End,Abstand bis zu Achsen-Ende
 options.grouping.space,Space Between Grouping Variable,Abstände der Gruppierungs-Variable
 options.dodge.value,Space,Abstand
 
+options.custom.colorpalette.add,Add Color,Farbe hinzufügen 
+options.custom.colorpalette.remove,Remove Last Color,Letzte Farbe entfernen
+options.custom.colorpalette.color,Color,Farbe
+options.custom.colorpalette.placeholder,"e.g. 'red', 'grey', '#F00F1F'","z.B. 'red', 'grey', '#F00F1F'"
+options.custom.colorpalette.error,Not a valid color,Keine gültige Farbe angegeben
+
 options.barplot,Barplot Options,Barplot-Optionen
 options.barplot.width,Width of Bars,Breite der Balken
 
