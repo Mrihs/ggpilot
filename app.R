@@ -1030,18 +1030,18 @@ ui <- fluidPage(
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_plot", tr("layout.h3.plot"))),
-                                                          textInput(inputId = "Plot_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          selectInput(inputId = "Plot_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Plot_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Plot_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Plot_Background_Color", label = tr("options.background.color"),   value = "", placeholder = tr("placeholder.color")),
+                                                          selectInput(inputId = "Plot_Background_Linetype", label = tr("options.linetype"),  choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Plot_Background_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Plot_Background_Line_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
                                                    ),
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_panel", tr("layout.h3.panel"))),
-                                                          textInput(inputId = "Panel_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          selectInput(inputId = "Panel_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Panel_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Panel_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Panel_Background_Color", label = tr("options.background.color"),   value = "", placeholder = tr("placeholder.color")),
+                                                          selectInput(inputId = "Panel_Background_Linetype", label = tr("options.linetype"),  choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Panel_Background_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Panel_Background_Line_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
                                                    )
                                                )
                                              )
@@ -1084,10 +1084,10 @@ ui <- fluidPage(
                                                                     # Create a column
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_legend_box", tr("layout.h3.legend.box"))),
-                                                                           textInput(inputId = "Legend_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           selectInput(inputId = "Legend_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                                           numericInput(inputId = "Legend_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                                           textInput(inputId = "Legend_Background_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                                           textInput(inputId = "Legend_Background_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
+                                                                           selectInput(inputId = "Legend_Background_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                                           numericInput(inputId = "Legend_Background_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
+                                                                           textInput(inputId = "Legend_Background_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
                                                                     )
                                                                 )
                                                               )
@@ -1127,18 +1127,18 @@ ui <- fluidPage(
                                                                     # Create a column
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_columns_facets", tr("layout.h3.columns"))),
-                                                                           textInput(inputId = "Stripe_X_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           selectInput(inputId = "Stripe_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                                           numericInput(inputId = "Stripe_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                                           textInput(inputId = "Stripe_X_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                                           textInput(inputId = "Stripe_X_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
+                                                                           selectInput(inputId = "Stripe_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                                           numericInput(inputId = "Stripe_X_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
+                                                                           textInput(inputId = "Stripe_X_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_rows_facets", tr("layout.h3.rows"))),
-                                                                           textInput(inputId = "Stripe_Y_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           selectInput(inputId = "Stripe_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                                           numericInput(inputId = "Stripe_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                                           textInput(inputId = "Stripe_Y_Line_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                                           textInput(inputId = "Stripe_Y_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
+                                                                           selectInput(inputId = "Stripe_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                                           numericInput(inputId = "Stripe_Y_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
+                                                                           textInput(inputId = "Stripe_Y_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
                                                                     )
                                                                 )
                                                               )
@@ -4543,19 +4543,11 @@ server <- function(input, output, session) {
     setTxt <- function(id, key) session$sendCustomMessage('setText', list(id = id, text = tr(key)))
     
     # titles in Collapse Boxes
-    setTxt(id = "layout_collapse_background", key = "layout.collapse.background")
-    setTxt(id = "layout_collapse_legend_background", key = "layout.collapse.legend.background")
-    setTxt(id = "layout_collapse_legend_options", key = "layout.collapse.legend.options")
     setTxt(id = "layout_collapse_facets_background", key = "layout.collapse.facets.background")
 
     # H3 Headers
-    setTxt(id = "layout_h3_plot", key = "layout.h3.plot")
-    setTxt(id = "layout_h3_panel", key = "layout.h3.panel")
-    setTxt(id = "layout_h3_legend_box", key = "layout.h3.legend.box")
     setTxt(id = "layout_h3_arrangement", key = "layout.h3.arrangement")
     setTxt(id = "layout_h3_sizes", key = "layout.h3.sizes")
-    setTxt(id = "layout_h3_columns_facets", key = "layout.h3.columns")
-    setTxt(id = "layout_h3_rows_facets", key = "layout.h3.rows")
 
     # Title Settings
     setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
@@ -4666,8 +4658,20 @@ server <- function(input, output, session) {
     updateNumericInput(session,"Minor_Grid_Y_Size",    label = tr("options.linewidth"))
     updateTextInput  (session, "Minor_Grid_Y_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
     
-    
-    
+    # Background Settings
+    setTxt(id = "layout_collapse_background", key = "layout.collapse.background")
+    # Plot Background Settings
+    setTxt(id = "layout_h3_plot", key = "layout.h3.plot")
+    updateTextInput  (session, "Plot_Background_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
+    updateSelectInput(session, "Plot_Background_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Plot_Background_Linetype)
+    updateNumericInput(session,"Plot_Background_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Plot_Background_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    # Panel Background Settings
+    setTxt(id = "layout_h3_panel", key = "layout.h3.panel")
+    updateTextInput  (session, "Panel_Background_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
+    updateSelectInput(session, "Panel_Background_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Panel_Background_Linetype)
+    updateNumericInput(session,"Panel_Background_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Panel_Background_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
     
     # Legend Text Settings
     setTxt(id = "layout_collapse_legend", key = "layout.collapse.legend")
@@ -4686,6 +4690,30 @@ server <- function(input, output, session) {
     updateNumericInput(session,"Legend_Text_Size",    label = tr("label.size"))
     updateSelectInput(session, "Legend_Text_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Legend_Text_Alignment)
 
+    # Legend Box Settings
+    setTxt(id = "layout_collapse_legend_background", key = "layout.collapse.legend.background")
+    setTxt(id = "layout_h3_legend_box", key = "layout.h3.legend.box")
+    updateTextInput  (session, "Legend_Background_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
+    updateSelectInput(session, "Legend_Background_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Legend_Background_Linetype)
+    updateNumericInput(session,"Legend_Background_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Legend_Background_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+
+    # Facet Background Settings
+    setTxt(id = "layout_collapse_legend_options", key = "layout.collapse.legend.options")
+    # Facet Columns Background Settings
+    setTxt(id = "layout_h3_columns_facets", key = "layout.h3.columns")
+    updateTextInput  (session, "Stripe_X_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
+    updateSelectInput(session, "Stripe_X_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Stripe_X_Linetype)
+    updateNumericInput(session,"Stripe_X_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Stripe_X_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    # Facet Rows Background Settings
+    setTxt(id = "layout_h3_rows_facets", key = "layout.h3.rows")
+    updateTextInput  (session, "Stripe_Y_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
+    updateSelectInput(session, "Stripe_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Stripe_Y_Linetype)
+    updateNumericInput(session,"Stripe_Y_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Stripe_Y_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    
+    
     # Facet Texts
     setTxt(id = "layout_collapse_facets_text", key = "layout.collapse.facets.text")
     # Facet Columns Text
@@ -4701,7 +4729,7 @@ server <- function(input, output, session) {
     updateSelectInput(session, "Stripe_Y_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Stripe_Y_Face)
     updateTextInput  (session, "Stripe_Y_Textcolor",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
     updateNumericInput(session,"Stripe_Y_Textsize",    label = tr("label.size"))
-    updateSelectInput(session, "Legend_Text_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Stripe_Y_Alignment)
+    updateSelectInput(session, "Stripe_Y_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Stripe_Y_Alignment)
     
     
     })

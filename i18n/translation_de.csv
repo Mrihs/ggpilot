@@ -137,6 +137,7 @@ options.linecolor,Linecolor,Linien-Farbe
 options.linelength,Length,Länge
 options.linetype,Line Type,Linien-Art
 
+options.background.color,Background Color,Hintergrundfarbe
 options.linetype.theme,Theme Default,Gemäss Theme
 options.linetype.none,None,Keine
 options.linetype.solid,Solid,Solide
