@@ -99,6 +99,25 @@ layout.collapse.axis.title,Axis Title,Achsen-Überschrift
 layout.h3.xaxis,X Axis,X-Achse
 layout.h3.yaxis,Y Axis,Y-Achse
 layout.collapse.axis.text,Axis Text,Achsen-Text
+layout.collapse.axis.lines,Axis Lines,Achsen-Linien
+layout.collapse.axis.ticks,Axis Ticks,Achsen-Ticks
+layout.collapse.major.grid,Main Grid Lines,Haupt-Linien
+layout.collapse.minor.grid,Minor Grid Lines,Minor-Linien
+layout.collapse.background,Background,Hintergrund
+layout.h3.plot,Plot,Plot
+layout.h3.panel,Panel,Panel
+layout.collapse.legend,Legend,Legende
+layout.h3.legend.title,Title,Überschrift
+layout.h3.items,Items,Items
+layout.collapse.legend.background,Legend Background,Legenden-Hintergrund
+layout.h3.legend.box,Legend Box,Legenden-Box
+layout.collapse.legend.options,Legend Options,Legenden Einstellungen
+layout.h3.arrangement,Arrangement,Anordnung
+layout.h3.sizes,Sizes & Distances,Grösse & Abstände
+layout.collapse.facets.background,Facets Background, Facetten-Hintergrund
+layout.h3.columns,Columns,Spalten
+layout.h3.rows,Rows,Zeilen
+layout.collapse.facets.text,Facets Text,Facetten-Beschriftung
 
 download.plot,Plot,Plot
 download.download_plot,Download Plot,Plot herunterladen
@@ -107,6 +126,11 @@ download.r_code,R Code,R-Code
 download.download_code,Download Code,Code herunterladen
 
 footer.github,View on GitHub,Auf GitHub ansehen
+footer.imprint,About,Info
+imprint.title,About,Info
+imprint.close,Close,Schliessen
+imprint.body_html,Text Follows...,Text folgt...
+
 
 
 options.linewidth,Linewidth,Linien-Grösse

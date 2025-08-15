@@ -860,7 +860,6 @@ ui <- fluidPage(
                                                                     ),
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_subtitle", tr("layout.h3.subtitle"))),
-                                                                           title = BSCollapseArrow("Untertitel"),
                                                                            # Layout-Options for the Subtitle
                                                                            selectInput(inputId = "Subtitle_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Subtitle_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
@@ -880,7 +879,7 @@ ui <- fluidPage(
                                                div(class = ".collapse_panel-settings", 
                                                    # Create a column
                                                    column(6,
-                                                          h3(span(id = "layout_h3_xaxis", tr("layout.h3.xaxis"))),
+                                                          h3(span(id = "layout_h3_title_xaxis", tr("layout.h3.xaxis"))),
                                                           # Text-Input for the X-Axis-Title
                                                           selectInput(inputId = "X_Axis_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
                                                           selectInput(inputId = "X_Axis_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
@@ -890,7 +889,7 @@ ui <- fluidPage(
                                                    ),
                                                    # Create a column
                                                    column(6,
-                                                          h3(span(id = "layout_h3_yaxis", tr("layout.h3.yaxis"))),
+                                                          h3(span(id = "layout_h3_title_yaxis", tr("layout.h3.yaxis"))),
                                                           # Text-Input for the Y-Axis-Title
                                                           selectInput(inputId = "Y_Axis_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
                                                           selectInput(inputId = "Y_Axis_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
@@ -908,7 +907,7 @@ ui <- fluidPage(
                                                div(class = ".collapse_panel-settings",
                                                    # Create a column
                                                    column(6,
-                                                          h3(span(id = "layout_h3_xaxis", tr("layout.h3.xaxis"))),
+                                                          h3(span(id = "layout_h3_xaxis_text", tr("layout.h3.xaxis"))),
                                                           # Text-Input for the X-Axis Label
                                                           selectInput(inputId = "Axis_X_Text_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
                                                           selectInput(inputId = "Axis_X_Text_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
@@ -920,7 +919,7 @@ ui <- fluidPage(
                                                    ),
                                                    # Create a column
                                                    column(6,
-                                                          h3(span(id = "layout_h3_yaxis", tr("layout.h3.yaxis"))),
+                                                          h3(span(id = "layout_h3_yaxis_text", tr("layout.h3.yaxis"))),
                                                           # Text-Input for the Y-Axis Label
                                                           selectInput(inputId = "Axis_Y_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                                           selectInput(inputId = "Axis_Y_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
@@ -936,18 +935,18 @@ ui <- fluidPage(
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Achsen-Linien"),
+                                               title = BSCollapseArrow(tr("layout.collapse.axis.lines"), id = "layout_collapse_axis_lines"),
                                                div(class = ".collapse_panel-settings",
                                                    # Create a column
                                                    column(6,
-                                                          h3("X-Achse"),
+                                                          h3(span(id = "layout_h3_xaxis_lines", tr("layout.h3.xaxis"))),
                                                           selectInput(inputId = "Axis_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Axis_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Axis_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
                                                    # Create a column
                                                    column(6,
-                                                          h3("Y-Achse"),
+                                                          h3(span(id = "layout_h3_yaxis_lines", tr("layout.h3.yaxis"))),
                                                           selectInput(inputId = "Axis_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Axis_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Axis_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
@@ -958,11 +957,11 @@ ui <- fluidPage(
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Achsen-Ticks"),
+                                               title = BSCollapseArrow(tr("layout.collapse.axis.ticks"), id = "layout_collapse_axis_ticks"),
                                                div(class = ".collapse_panel-settings",
                                                    # Create a column
                                                    column(6,
-                                                          h3("X-Achse"),
+                                                          h3(span(id = "layout_h3_xaxis_ticks", tr("layout.h3.xaxis"))),
                                                           selectInput(inputId = "Axis_X_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Axis_X_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Axis_X_Ticks_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
@@ -970,7 +969,7 @@ ui <- fluidPage(
                                                    ),
                                                    # Create a column
                                                    column(6,
-                                                          h3("Y-Achse"),
+                                                          h3(span(id = "layout_h3_yaxis_ticks", tr("layout.h3.yaxis"))),
                                                           selectInput(inputId = "Axis_Y_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Axis_Y_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Axis_Y_Ticks_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
@@ -982,18 +981,18 @@ ui <- fluidPage(
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Haupt-Linien"),
+                                               title = BSCollapseArrow(tr("layout.collapse.major.grid"), id = "layout_collapse_major_grid"),
                                                div(class = ".collapse_panel-settings",
                                                    # Create a column
                                                    column(6,
-                                                          h3("X-Achse"),
+                                                          h3(span(id = "layout_h3_xaxis_major_grid", tr("layout.h3.xaxis"))),
                                                           selectInput(inputId = "Major_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Major_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Major_Grid_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
                                                    # Create a column
                                                    column(6,
-                                                          h3("Y-Achse"),
+                                                          h3(span(id = "layout_h3_yaxis_major_grid", tr("layout.h3.yaxis"))),
                                                           selectInput(inputId = "Major_Grid_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Major_Grid_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Major_Grid_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
@@ -1004,18 +1003,18 @@ ui <- fluidPage(
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Minor-Linien"),
+                                               title = BSCollapseArrow(tr("layout.collapse.minor.grid"), id = "layout_collapse_minor_grid"),
                                                div(class = ".collapse_panel-settings",
                                                    # Create a column
                                                    column(6,
-                                                          h3("X-Achse"),
+                                                          h3(span(id = "layout_h3_xaxis_minor_grid", tr("layout.h3.xaxis"))),
                                                           selectInput(inputId = "Minor_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Minor_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Minor_Grid_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
                                                    ),
                                                    # Create a column
                                                    column(6,
-                                                          h3("Y-Achse"),
+                                                          h3(span(id = "layout_h3_yaxis_minor_grid", tr("layout.h3.yaxis"))),
                                                           selectInput(inputId = "Minor_Grid_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Minor_Grid_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Minor_Grid_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
@@ -1026,11 +1025,11 @@ ui <- fluidPage(
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
-                                               title = BSCollapseArrow("Hintergrund"),
+                                               title = BSCollapseArrow(tr("layout.collapse.background"), id = "layout_collapse_background"),
                                                div(class = ".collapse_panel-settings",
                                                    # Create a column
                                                    column(6,
-                                                          h3("Plot"),
+                                                          h3(span(id = "layout_h3_plot", tr("layout.h3.plot"))),
                                                           textInput(inputId = "Plot_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           selectInput(inputId = "Plot_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Plot_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
@@ -1038,7 +1037,7 @@ ui <- fluidPage(
                                                    ),
                                                    # Create a column
                                                    column(6,
-                                                          h3("Panel"),
+                                                          h3(span(id = "layout_h3_panel", tr("layout.h3.panel"))),
                                                           textInput(inputId = "Panel_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                           selectInput(inputId = "Panel_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Panel_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
@@ -1052,11 +1051,11 @@ ui <- fluidPage(
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
-                                                                title = BSCollapseArrow("Legende"),
+                                                                title = BSCollapseArrow(tr("layout.collapse.legend"), id = "layout_collapse_legend"),
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Crate a column
                                                                     column(6,
-                                                                           h3("Titel"),
+                                                                           h3(span(id = "layout_h3_legend_title", tr("layout.h3.legend.title"))),
                                                                            # Text-Input for the Legend-Title
                                                                            selectInput(inputId = "Legend_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Legend_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
@@ -1066,7 +1065,7 @@ ui <- fluidPage(
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Items"),
+                                                                           h3(span(id = "layout_h3_items", tr("layout.h3.items"))),
                                                                            # Text-Input for the X-Axis-Title
                                                                            selectInput(inputId = "Legend_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Legend_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
@@ -1080,12 +1079,11 @@ ui <- fluidPage(
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
-                                                                title = BSCollapseArrow("Legenden-Hintergrund"),
+                                                                title = BSCollapseArrow(tr("layout.collapse.legend.background"), id = "layout_collapse_legend_background"),
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Legenden-Box"),
-                                                                           title = BSCollapseArrow("Legenden-Hintergrund"),
+                                                                           h3(span(id = "layout_h3_legend_box", tr("layout.h3.legend.box"))),
                                                                            textInput(inputId = "Legend_Background_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                                            selectInput(inputId = "Legend_Background_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                                            numericInput(inputId = "Legend_Background_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
@@ -1097,11 +1095,11 @@ ui <- fluidPage(
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
-                                                                title = BSCollapseArrow("Legenden-Optionen"),
+                                                                title = BSCollapseArrow(tr("layout.collapse.legend.options"), id = "layout_collapse_legend_options"),
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Anordnung"),
+                                                                           h3(span(id = "layout_h3_arrangement", tr("layout.h3.arrangement"))),
                                                                            selectInput(inputId = "Legend_Position", label = "Position der Legende", choices = c("Gemäss Theme", "Keine", "Rechts", "Links", "Unten", "Oben", "Im Plot"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Legend_Title_Position", label = "Position des Legenden-Titel", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Legend_Text_Position", label = "Position der Legenden-Items", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
@@ -1109,7 +1107,7 @@ ui <- fluidPage(
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Grösse & Abstände"),
+                                                                           h3(span(id = "layout_h3_sizes", tr("layout.h3.sizes"))),
                                                                            numericInput(inputId = "Legend_Key_Width", label = "Breite der Symbole", min = 0, max = 50, step = 0.1, value = NA),
                                                                            numericInput(inputId = "Legend_Key_Height", label = "Höhe der Symbole", min = 0, max = 50, step = 0.1, value = NA),
                                                                            numericInput(inputId = "Legend_Key_Spacing", label = "Abstand der Symbole", min = 0, max = 50, step = 0.1, value = NA),
@@ -1124,11 +1122,11 @@ ui <- fluidPage(
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
-                                                                title = BSCollapseArrow("Facetten-Hintergrund"),
+                                                                title = BSCollapseArrow(tr("layout.collapse.facets.background"), id = "layout_collapse_facets_background"),
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Spalten"),
+                                                                           h3(span(id = "layout_h3_columns_facets", tr("layout.h3.columns"))),
                                                                            textInput(inputId = "Stripe_X_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                                            selectInput(inputId = "Stripe_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                                            numericInput(inputId = "Stripe_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
@@ -1136,7 +1134,7 @@ ui <- fluidPage(
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Zeilen"),
+                                                                           h3(span(id = "layout_h3_rows_facets", tr("layout.h3.rows"))),
                                                                            textInput(inputId = "Stripe_Y_Color", label = "Hintergrund-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                                            selectInput(inputId = "Stripe_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
                                                                            numericInput(inputId = "Stripe_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
@@ -1148,11 +1146,11 @@ ui <- fluidPage(
                                                    # Create a Layout for CollapsePanels
                                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                                               bsCollapsePanel(
-                                                                title = BSCollapseArrow("Facetten-Beschriftung"),
+                                                                title = BSCollapseArrow(tr("layout.collapse.facets.text"), id = "layout_collapse_facets_text"),
                                                                 div(class = ".collapse_panel-settings",
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Spalten"),
+                                                                           h3(span(id = "layout_h3_columns_facets_text", tr("layout.h3.columns"))),
                                                                            selectInput(inputId = "Stripe_X_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Stripe_X_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                                                            textInput(inputId = "Stripe_X_Textcolor", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
@@ -1161,7 +1159,7 @@ ui <- fluidPage(
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
-                                                                           h3("Zeilen"),
+                                                                           h3(span(id = "layout_h3_rows_facets_text", tr("layout.h3.rows"))),
                                                                            selectInput(inputId = "Stripe_Y_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
                                                                            selectInput(inputId = "Stripe_Y_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
                                                                            textInput(inputId = "Stripe_Y_Textcolor", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
@@ -4548,12 +4546,45 @@ server <- function(input, output, session) {
     setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
     setTxt(id = "layout_collapse_axis_title", key = "layout.collapse.axis.title")
     setTxt(id = "layout_collapse_axis_text", key = "layout.collapse.axis.text")
+    setTxt(id = "layout_collapse_axis_lines", key = "layout.collapse.axis.lines")
+    setTxt(id = "layout_collapse_axis_ticks", key = "layout.collapse.axis.ticks")
+    setTxt(id = "layout_collapse_major_grid", key = "layout.collapse.major.grid")
+    setTxt(id = "layout_collapse_minor_grid", key = "layout.collapse.minor.grid")
+    setTxt(id = "layout_collapse_background", key = "layout.collapse.background")
+    setTxt(id = "layout_collapse_legend", key = "layout.collapse.legend")
+    setTxt(id = "layout_collapse_legend_background", key = "layout.collapse.legend.background")
+    setTxt(id = "layout_collapse_legend_options", key = "layout.collapse.legend.options")
+    setTxt(id = "layout_collapse_facets_background", key = "layout.collapse.facets.background")
+    setTxt(id = "layout_collapse_facets_text", key = "layout.collapse.facets.text")
 
     # H3 Headers
     setTxt(id = "layout_h3_title", key = "layout.h3.title")
     setTxt(id = "layout_h3_subtitle", key = "layout.h3.subtitle")
     setTxt(id = "layout_h3_xaxis", key = "layout.h3.xaxis")
     setTxt(id = "layout_h3_yaxis", key = "layout.h3.yaxis")
+    setTxt(id = "layout_h3_title_xaxis", key = "layout.h3.xaxis")
+    setTxt(id = "layout_h3_title_yaxis", key = "layout.h3.yaxis")
+    setTxt(id = "layout_h3_xaxis_text", key = "layout.h3.xaxis")
+    setTxt(id = "layout_h3_yaxis_text", key = "layout.h3.yaxis")
+    setTxt(id = "layout_h3_xaxis_lines", key = "layout.h3.xaxis")
+    setTxt(id = "layout_h3_yaxis_lines", key = "layout.h3.yaxis")
+    setTxt(id = "layout_h3_xaxis_ticks", key = "layout.h3.xaxis")
+    setTxt(id = "layout_h3_yaxis_ticks", key = "layout.h3.yaxis")
+    setTxt(id = "layout_h3_xaxis_major_grid", key = "layout.h3.xaxis")
+    setTxt(id = "layout_h3_yaxis_major_grid", key = "layout.h3.yaxis")
+    setTxt(id = "layout_h3_xaxis_minor_grid", key = "layout.h3.xaxis")
+    setTxt(id = "layout_h3_yaxis_minor_grid", key = "layout.h3.yaxis")
+    setTxt(id = "layout_h3_plot", key = "layout.h3.plot")
+    setTxt(id = "layout_h3_panel", key = "layout.h3.panel")
+    setTxt(id = "layout_h3_legend_title", key = "layout.h3.legend.title")
+    setTxt(id = "layout_h3_items", key = "layout.h3.items")
+    setTxt(id = "layout_h3_legend_box", key = "layout.h3.legend.box")
+    setTxt(id = "layout_h3_arrangement", key = "layout.h3.arrangement")
+    setTxt(id = "layout_h3_sizes", key = "layout.h3.sizes")
+    setTxt(id = "layout_h3_columns_facets", key = "layout.h3.columns")
+    setTxt(id = "layout_h3_rows_facets", key = "layout.h3.rows")
+    setTxt(id = "layout_h3_columns_facets_text", key = "layout.h3.columns")
+    setTxt(id = "layout_h3_rows_facets_text", key = "layout.h3.rows")
     
     # Title Settings
     updateSelectInput(session, "Title_Font",           label = tr("label.font"),        choices = font_choices(),     selected = input$Title_Font)
