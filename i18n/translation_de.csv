@@ -92,6 +92,27 @@ text.y_axis_placeholder, Enter Custom Y Axis Label,Eigene Y-Achsen Beschriftung 
 text.legend, Legend Title,Legenden-Beschriftung
 text.legend_placeholder, Enter Legend Title,Eigene Legenden Beschriftung eingeben
 
+layout.legend.position,Legend Position,Position der Legende
+layout.legend.title.position,Legend Title Position,Position des Legenden-Titel
+layout.legend.text.position,Position of Legend Items,Position der Legenden-Items
+layout.legend.direction,Alignment of Legend Items,Ausrichtung der Legenden_items
+
+options.position.theme,Theme Default,Gemäss Theme
+options.position.none,None,Keine
+options.position.right,Right,Rechts
+options.position.left,Left,Links
+options.position.top,Top,Oben
+options.position.bottom,Bottom,Unten
+options.position.inside,Inside Plot,Im Plot
+options.position.alignment.theme, Theme Default,Gemäss Theme
+options.position.alignment.vertical,Vertical,Vertikal
+options.position.alignment.horicontal,Horicontal,Horizontal
+
+layout.legend.key.width,Symbol Width,Breite der Symbole
+layout.legend.key.height,Symbol Height,Höhe der Symbole
+layout.legend.key.spaicng,Symbol Spacing,Abstand der Symbole
+layout.legend.box.spacing,Spacing to Plot,Abstand zum Plot
+
 layout.collapse.header,Header,Überschrift
 layout.h3.title,Title, Titel
 layout.h3.subtitle,Subtitle,Untertitel

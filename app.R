@@ -143,9 +143,22 @@ linetype_choices_all <- function() setNames(
     tr("options.linetype.pointdash"), tr("options.linetype.longdash"),
     tr("options.linetype.twodash"))
 )
-
-
-
+legend_pos_choices <- function() setNames(
+  c("Gemäss Theme","Keine","Rechts","Links","Oben","Unten","Im Plot"),
+  c(tr("options.position.theme"), tr("options.position.none"), tr("options.position.right"),
+    tr("options.position.left"), tr("options.position.top"),
+    tr("options.position.bottom"), tr("options.position.inside"))
+)
+legend_text_pos_choices <- function() setNames(
+  c("Gemäss Theme","Oben","Unten","Links","Rechts"),
+  c(tr("options.position.theme"), tr("options.position.top"),
+    tr("options.position.bottom"), tr("options.position.left"), tr("options.position.right"))
+)
+legend_dir_choices <- function() setNames(
+  c("Gemäss Theme","Vertikal","Horizontal"),
+  c(tr("options.position.alignment.theme"), tr("options.position.alignment.vertical"),
+    tr("options.position.alignment.horicontal"))
+)
 
 
 
@@ -1100,18 +1113,18 @@ ui <- fluidPage(
                                                                     # Create a column
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_arrangement", tr("layout.h3.arrangement"))),
-                                                                           selectInput(inputId = "Legend_Position", label = "Position der Legende", choices = c("Gemäss Theme", "Keine", "Rechts", "Links", "Unten", "Oben", "Im Plot"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Title_Position", label = "Position des Legenden-Titel", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Text_Position", label = "Position der Legenden-Items", choices = c("Gemäss Theme", "Oben", "Rechts", "Links", "Unten"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Text_Direktion", label = "Ausrichtung der Legenden-Items", choices = c("Gemäss Theme", "Vertikal", "Horizontal"), selected = "Gemäss Theme")
+                                                                           selectInput(inputId = "Legend_Position", label = tr("layout.legend.position"), choices = legend_pos_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Title_Position", label = tr("layout.legend.title.position"), choices = legend_text_pos_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Text_Position", label = tr("layout.legend.text.position"), choices = legend_text_pos_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Text_Direction", label = tr("layout.legend.direction"),choices = legend_dir_choices(), selected = "Gemäss Theme")
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_sizes", tr("layout.h3.sizes"))),
-                                                                           numericInput(inputId = "Legend_Key_Width", label = "Breite der Symbole", min = 0, max = 50, step = 0.1, value = NA),
-                                                                           numericInput(inputId = "Legend_Key_Height", label = "Höhe der Symbole", min = 0, max = 50, step = 0.1, value = NA),
-                                                                           numericInput(inputId = "Legend_Key_Spacing", label = "Abstand der Symbole", min = 0, max = 50, step = 0.1, value = NA),
-                                                                           numericInput(inputId = "Legend_Box_Spacing", label = "Abstand zum Plot", min = 0, max = 50, step = 0.1, value = NA)
+                                                                           numericInput(inputId = "Legend_Key_Width", label = tr("layout.legend.key.width"), min = 0, max = 50, step = 0.1, value = NA),
+                                                                           numericInput(inputId = "Legend_Key_Height", label = tr("layout.legend.key.height"), min = 0, max = 50, step = 0.1, value = NA),
+                                                                           numericInput(inputId = "Legend_Key_Spacing", label = tr("layout.legend.key.spaicng"), min = 0, max = 50, step = 0.1, value = NA),
+                                                                           numericInput(inputId = "Legend_Box_Spacing", label = tr("layout.legend.box.spacing"), min = 0, max = 50, step = 0.1, value = NA)
                                                                     )
                                                                 )
                                                               )
@@ -3542,15 +3555,15 @@ server <- function(input, output, session) {
     }
     
     
-    # Check if Legend_Text_Direktion should be adjusted
-    if (input$Legend_Text_Direktion != "Gemäss Theme"){
+    # Check if Legend_Text_Direction should be adjusted
+    if (input$Legend_Text_Direction != "Gemäss Theme"){
       if (theme_code!=""){
         # Create new Line in Theme-Code if needed
         theme_code <- paste0(theme_code, ",\n        ")
       }
       # Create code for legend.direction
       theme_code <- paste0(theme_code, sprintf("legend.direction = '%s'",
-                                               switch(input$Legend_Text_Direktion,
+                                               switch(input$Legend_Text_Direction,
                                                       "Vertikal" = "vertical",
                                                       "Horizontal" = "horizontal", ")")))
     }
@@ -4542,13 +4555,6 @@ server <- function(input, output, session) {
     ############### 11.8 Update Layout Sidebar ###############
     setTxt <- function(id, key) session$sendCustomMessage('setText', list(id = id, text = tr(key)))
     
-    # titles in Collapse Boxes
-    setTxt(id = "layout_collapse_facets_background", key = "layout.collapse.facets.background")
-
-    # H3 Headers
-    setTxt(id = "layout_h3_arrangement", key = "layout.h3.arrangement")
-    setTxt(id = "layout_h3_sizes", key = "layout.h3.sizes")
-
     # Title Settings
     setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
     # Main Title Settings
@@ -4698,6 +4704,22 @@ server <- function(input, output, session) {
     updateNumericInput(session,"Legend_Background_Size",    label = tr("options.linewidth"))
     updateTextInput  (session, "Legend_Background_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
 
+    # Legend Settings
+    setTxt(id = "layout_collapse_facets_background", key = "layout.collapse.facets.background")
+    # Legend Arrangement Settings
+    setTxt(id = "layout_h3_arrangement", key = "layout.h3.arrangement")
+    updateSelectInput(session, "Legend_Position",    label = tr("layout.legend.position"),        choices = legend_pos_choices(),     selected = input$Legend_Position)
+    updateSelectInput(session, "Legend_Title_Position",    label = tr("layout.legend.title.position"),        choices = legend_text_pos_choices(),     selected = input$Legend_Title_Position)
+    updateSelectInput(session, "Legend_Text_Position",    label = tr("layout.legend.text.position"),        choices = legend_text_pos_choices(),     selected = input$Legend_Text_Position)
+    updateSelectInput(session, "Legend_Text_Direction",    label = tr("layout.legend.direction"),        choices = legend_dir_choices(),     selected = input$Legend_Text_Direction)
+    # Legend Sizes Settings
+    setTxt(id = "layout_h3_sizes", key = "layout.h3.sizes")
+    updateNumericInput(session,"Legend_Key_Width",    label = tr("layout.legend.key.width"))
+    updateNumericInput(session,"Legend_Key_Height",    label = tr("layout.legend.key.height"))
+    updateNumericInput(session,"Legend_Key_Spacing",    label = tr("layout.legend.key.spaicng"))
+    updateNumericInput(session,"Legend_Box_Spacing",    label = tr("layout.legend.box.spacing"))
+    
+    
     # Facet Background Settings
     setTxt(id = "layout_collapse_legend_options", key = "layout.collapse.legend.options")
     # Facet Columns Background Settings
