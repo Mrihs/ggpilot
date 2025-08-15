@@ -132,10 +132,13 @@ imprint.close,Close,Schliessen
 imprint.body_html,Text Follows...,Text folgt...
 
 
-
 options.linewidth,Linewidth,Linien-Grösse
+options.linecolor,Linecolor,Linien-Farbe
+options.linelength,Length,Länge
 options.linetype,Line Type,Linien-Art
 
+options.linetype.theme,Theme Default,Gemäss Theme
+options.linetype.none,None,Keine
 options.linetype.solid,Solid,Solide
 options.linetype.dashed,Dashed,Gestrichelt
 options.linetype.dotted,Dotted,Gepunkted

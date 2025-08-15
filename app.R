@@ -138,7 +138,7 @@ align_v_choices <- function() setNames(
 )
 linetype_choices_all <- function() setNames(
   c("Gemäss Theme","Keine","Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
-  c(tr("linetype.theme"), tr("linetype.none"), tr("options.linetype.solid"),
+  c(tr("options.linetype.theme"), tr("options.linetype.none"), tr("options.linetype.solid"),
     tr("options.linetype.dashed"), tr("options.linetype.dotted"),
     tr("options.linetype.pointdash"), tr("options.linetype.longdash"),
     tr("options.linetype.twodash"))
@@ -940,16 +940,16 @@ ui <- fluidPage(
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_xaxis_lines", tr("layout.h3.xaxis"))),
-                                                          selectInput(inputId = "Axis_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Axis_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          selectInput(inputId = "Axis_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Axis_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Axis_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
                                                    ),
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_yaxis_lines", tr("layout.h3.yaxis"))),
-                                                          selectInput(inputId = "Axis_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Axis_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          selectInput(inputId = "Axis_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Axis_Y_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Axis_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
                                                    )
                                                )
                                              )
@@ -962,18 +962,18 @@ ui <- fluidPage(
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_xaxis_ticks", tr("layout.h3.xaxis"))),
-                                                          selectInput(inputId = "Axis_X_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Axis_X_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_X_Ticks_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Axis_X_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA)
+                                                          selectInput(inputId = "Axis_X_Ticks_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Axis_X_Ticks_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Axis_X_Ticks_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color")),
+                                                          numericInput(inputId = "Axis_X_Ticks_Length", label = tr("options.linelength"), min = 0, max = 50, step = 0.1, value = NA)
                                                    ),
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_yaxis_ticks", tr("layout.h3.yaxis"))),
-                                                          selectInput(inputId = "Axis_Y_Ticks_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Axis_Y_Ticks_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_Y_Ticks_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Axis_Y_Ticks_Length", label = "Länge", min = 0, max = 50, step = 0.1, value = NA)
+                                                          selectInput(inputId = "Axis_Y_Ticks_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Axis_Y_Ticks_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Axis_Y_Ticks_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color")),
+                                                          numericInput(inputId = "Axis_Y_Ticks_Length", label = tr("options.linelength"), min = 0, max = 50, step = 0.1, value = NA)
                                                    )
                                                )
                                              )
@@ -986,16 +986,16 @@ ui <- fluidPage(
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_xaxis_major_grid", tr("layout.h3.xaxis"))),
-                                                          selectInput(inputId = "Major_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Major_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Major_Grid_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          selectInput(inputId = "Major_Grid_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Major_Grid_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Major_Grid_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
                                                    ),
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_yaxis_major_grid", tr("layout.h3.yaxis"))),
-                                                          selectInput(inputId = "Major_Grid_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
+                                                          selectInput(inputId = "Major_Grid_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Major_Grid_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Major_Grid_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          textInput(inputId = "Major_Grid_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
                                                    )
                                                )
                                              )
@@ -1008,20 +1008,20 @@ ui <- fluidPage(
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_xaxis_minor_grid", tr("layout.h3.xaxis"))),
-                                                          selectInput(inputId = "Minor_Grid_X_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Minor_Grid_X_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Minor_Grid_X_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
-                                                   ),
+                                                          selectInput(inputId = "Minor_Grid_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Minor_Grid_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Minor_Grid_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                          ),
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_yaxis_minor_grid", tr("layout.h3.yaxis"))),
-                                                          selectInput(inputId = "Minor_Grid_Y_Linetype", label = "Linien-Art", choices = c("Gemäss Theme", "Keine", "Solide", "Gestrichelt", "Gepunkted", "Punktgestrichelt", "Langgestrichen", "Doppelt gestrichelt"), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Minor_Grid_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Minor_Grid_Y_Color", label = "Linien-Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen")
+                                                          selectInput(inputId = "Minor_Grid_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                          numericInput(inputId = "Minor_Grid_Y_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                          textInput(inputId = "Minor_Grid_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                          )
                                                    )
                                                )
-                                             )
-                                  ),
+                                             ),
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
@@ -1057,21 +1057,21 @@ ui <- fluidPage(
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_legend_title", tr("layout.h3.legend.title"))),
                                                                            # Text-Input for the Legend-Title
-                                                                           selectInput(inputId = "Legend_Title_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Title_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Legend_Title_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           numericInput(inputId = "Legend_Title_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Legend_Title_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                           selectInput(inputId = "Legend_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Legend_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                           numericInput(inputId = "Legend_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Legend_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_items", tr("layout.h3.items"))),
                                                                            # Text-Input for the X-Axis-Title
-                                                                           selectInput(inputId = "Legend_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Legend_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           numericInput(inputId = "Legend_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Legend_Text_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                           selectInput(inputId = "Legend_Text_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Legend_Text_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Legend_Text_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                           numericInput(inputId = "Legend_Text_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Legend_Text_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                                     )
                                                                 )
                                                               )
@@ -1151,20 +1151,20 @@ ui <- fluidPage(
                                                                     # Create a column
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_columns_facets_text", tr("layout.h3.columns"))),
-                                                                           selectInput(inputId = "Stripe_X_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Stripe_X_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Stripe_X_Textcolor", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           numericInput(inputId = "Stripe_X_Textsize", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Stripe_X_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                           selectInput(inputId = "Stripe_X_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Stripe_X_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                           textInput(inputId = "Stripe_X_Textcolor", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                           numericInput(inputId = "Stripe_X_Textsize", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                           selectInput(inputId = "Stripe_X_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                                     ),
                                                                     # Create a column
                                                                     column(6,
                                                                            h3(span(id = "layout_h3_rows_facets_text", tr("layout.h3.rows"))),
-                                                                           selectInput(inputId = "Stripe_Y_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Stripe_Y_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Stripe_Y_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                           selectInput(inputId = "Stripe_Y_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
                                                                            textInput(inputId = "Stripe_Y_Textcolor", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
                                                                            numericInput(inputId = "Stripe_Y_Textsize", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Stripe_Y_Alignment", label = "Ausrichtung", choices = c("Gemäss Theme", "Linksbündig", "Mittig", "Rechtsbündig"), selected = "Gemäss Theme")
+                                                                           selectInput(inputId = "Stripe_Y_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
                                                                     )
                                                                 )
                                                               )
@@ -4543,78 +4543,58 @@ server <- function(input, output, session) {
     setTxt <- function(id, key) session$sendCustomMessage('setText', list(id = id, text = tr(key)))
     
     # titles in Collapse Boxes
-    setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
-    setTxt(id = "layout_collapse_axis_title", key = "layout.collapse.axis.title")
-    setTxt(id = "layout_collapse_axis_text", key = "layout.collapse.axis.text")
-    setTxt(id = "layout_collapse_axis_lines", key = "layout.collapse.axis.lines")
-    setTxt(id = "layout_collapse_axis_ticks", key = "layout.collapse.axis.ticks")
-    setTxt(id = "layout_collapse_major_grid", key = "layout.collapse.major.grid")
-    setTxt(id = "layout_collapse_minor_grid", key = "layout.collapse.minor.grid")
     setTxt(id = "layout_collapse_background", key = "layout.collapse.background")
-    setTxt(id = "layout_collapse_legend", key = "layout.collapse.legend")
     setTxt(id = "layout_collapse_legend_background", key = "layout.collapse.legend.background")
     setTxt(id = "layout_collapse_legend_options", key = "layout.collapse.legend.options")
     setTxt(id = "layout_collapse_facets_background", key = "layout.collapse.facets.background")
-    setTxt(id = "layout_collapse_facets_text", key = "layout.collapse.facets.text")
 
     # H3 Headers
-    setTxt(id = "layout_h3_title", key = "layout.h3.title")
-    setTxt(id = "layout_h3_subtitle", key = "layout.h3.subtitle")
-    setTxt(id = "layout_h3_xaxis", key = "layout.h3.xaxis")
-    setTxt(id = "layout_h3_yaxis", key = "layout.h3.yaxis")
-    setTxt(id = "layout_h3_title_xaxis", key = "layout.h3.xaxis")
-    setTxt(id = "layout_h3_title_yaxis", key = "layout.h3.yaxis")
-    setTxt(id = "layout_h3_xaxis_text", key = "layout.h3.xaxis")
-    setTxt(id = "layout_h3_yaxis_text", key = "layout.h3.yaxis")
-    setTxt(id = "layout_h3_xaxis_lines", key = "layout.h3.xaxis")
-    setTxt(id = "layout_h3_yaxis_lines", key = "layout.h3.yaxis")
-    setTxt(id = "layout_h3_xaxis_ticks", key = "layout.h3.xaxis")
-    setTxt(id = "layout_h3_yaxis_ticks", key = "layout.h3.yaxis")
-    setTxt(id = "layout_h3_xaxis_major_grid", key = "layout.h3.xaxis")
-    setTxt(id = "layout_h3_yaxis_major_grid", key = "layout.h3.yaxis")
-    setTxt(id = "layout_h3_xaxis_minor_grid", key = "layout.h3.xaxis")
-    setTxt(id = "layout_h3_yaxis_minor_grid", key = "layout.h3.yaxis")
     setTxt(id = "layout_h3_plot", key = "layout.h3.plot")
     setTxt(id = "layout_h3_panel", key = "layout.h3.panel")
-    setTxt(id = "layout_h3_legend_title", key = "layout.h3.legend.title")
-    setTxt(id = "layout_h3_items", key = "layout.h3.items")
     setTxt(id = "layout_h3_legend_box", key = "layout.h3.legend.box")
     setTxt(id = "layout_h3_arrangement", key = "layout.h3.arrangement")
     setTxt(id = "layout_h3_sizes", key = "layout.h3.sizes")
     setTxt(id = "layout_h3_columns_facets", key = "layout.h3.columns")
     setTxt(id = "layout_h3_rows_facets", key = "layout.h3.rows")
-    setTxt(id = "layout_h3_columns_facets_text", key = "layout.h3.columns")
-    setTxt(id = "layout_h3_rows_facets_text", key = "layout.h3.rows")
-    
+
     # Title Settings
-    updateSelectInput(session, "Title_Font",           label = tr("label.font"),        choices = font_choices(),     selected = input$Title_Font)
-    updateSelectInput(session, "Title_Face",           label = tr("label.face"),        choices = face_choices(),     selected = input$Title_Face)
-    updateTextInput(session, "Title_Color",          label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Title_Size",           label = tr("label.size"))
+    setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
+    # Main Title Settings
+    setTxt(id = "layout_h3_title", key = "layout.h3.title")
+    updateSelectInput(session, "Title_Font", label = tr("label.font"),        choices = font_choices(),     selected = input$Title_Font)
+    updateSelectInput(session, "Title_Face", label = tr("label.face"),        choices = face_choices(),     selected = input$Title_Face)
+    updateTextInput(session, "Title_Color", label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Title_Size", label = tr("label.size"))
     updateSelectInput(session, "Title_Alignment",      label = tr("label.align"),     choices = align_h_choices(),  selected = input$Title_Alignment)
-    
     # Subtitle Settings
+    setTxt(id = "layout_h3_subtitle", key = "layout.h3.subtitle")
     updateSelectInput(session, "Subtitle_Font",        label = tr("label.font"),        choices = font_choices(),     selected = input$Subtitle_Font)
     updateSelectInput(session, "Subtitle_Face",        label = tr("label.face"),        choices = face_choices(),     selected = input$Subtitle_Face)
     updateTextInput(session, "Subtitle_Color",       label = tr("label.color"),       placeholder = tr("placeholder.color"))
     updateNumericInput(session,"Subtitle_Size",        label = tr("label.size"))
     updateSelectInput(session, "Subtitle_Alignment",   label = tr("label.align"),     choices = align_h_choices(),  selected = input$Subtitle_Alignment)
     
+    # Axis Title Settings
+    setTxt(id = "layout_collapse_axis_title", key = "layout.collapse.axis.title")
     # X-Axis Title Settings
+    setTxt(id = "layout_h3_title_xaxis", key = "layout.h3.xaxis")
     updateSelectInput(session, "X_Axis_Title_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$X_Axis_Title_Font)
     updateSelectInput(session, "X_Axis_Title_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$X_Axis_Title_Face)
     updateTextInput(session, "X_Axis_Title_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
     updateNumericInput(session,"X_Axis_Title_Size",    label = tr("label.size"))
     updateSelectInput(session, "X_Axis_Title_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$X_Axis_Title_Alignment)
-    
     # Y-Axis Title Settings
+    setTxt(id = "layout_h3_title_yaxis", key = "layout.h3.yaxis")
     updateSelectInput(session, "Y_Axis_Title_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Y_Axis_Title_Font)
     updateSelectInput(session, "Y_Axis_Title_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Y_Axis_Title_Face)
     updateTextInput  (session, "Y_Axis_Title_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
     updateNumericInput(session,"Y_Axis_Title_Size",    label = tr("label.size"))
     updateSelectInput(session, "Y_Axis_Title_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Y_Axis_Title_Alignment)
     
+    # Axis Text Settings
+    setTxt(id = "layout_collapse_axis_text", key = "layout.collapse.axis.text")
     # X Axis Text Settings
+    setTxt(id = "layout_h3_xaxis_text", key = "layout.h3.xaxis")
     updateSelectInput(session, "Axis_X_Text_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Axis_X_Text_Font)
     updateSelectInput(session, "Axis_X_Text_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Axis_X_Text_Face)
     updateTextInput  (session, "Axis_X_Text_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
@@ -4622,8 +4602,8 @@ server <- function(input, output, session) {
     updateNumericInput(session,"Axis_X_Text_Rotation",    label = tr("label.rotation"))
     updateSelectInput(session, "Axis_X_Text_H_Alignment",label= tr("label.align.h"),     choices = align_h_choices(),  selected = input$Axis_X_Text_H_Alignment)
     updateSelectInput(session, "Axis_X_Text_V_Alignment",label= tr("label.align.v"),     choices = align_v_choices(),  selected = input$Axis_X_Text_V_Alignment)
-    
     # Y Axis Text Settings
+    setTxt(id = "layout_h3_yaxis_text", key = "layout.h3.yaxis")
     updateSelectInput(session, "Axis_Y_Text_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Axis_Y_Text_Font)
     updateSelectInput(session, "Axis_Y_Text_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Axis_Y_Text_Face)
     updateTextInput  (session, "Axis_Y_Text_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
@@ -4631,11 +4611,100 @@ server <- function(input, output, session) {
     updateNumericInput(session,"Axis_Y_Text_Rotation",    label = tr("label.rotation"))
     updateSelectInput(session, "Axis_Y_Text_H_Alignment",label= tr("label.align.h"),     choices = align_h_choices(),  selected = input$Axis_Y_Text_H_Alignment)
     updateSelectInput(session, "Axis_Y_Text_V_Alignment",label= tr("label.align.v"),     choices = align_v_choices(),  selected = input$Axis_Y_Text_V_Alignment)
+    
+    # Axis Lines Settings
+    setTxt(id = "layout_collapse_axis_lines", key = "layout.collapse.axis.lines")
+    # X Axis Lines Settings
+    setTxt(id = "layout_h3_xaxis_lines", key = "layout.h3.xaxis")
+    updateSelectInput(session, "Axis_X_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Axis_X_Linetype)
+    updateNumericInput(session,"Axis_X_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Axis_X_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    # Y Axis Lines Settings
+    setTxt(id = "layout_h3_yaxis_lines", key = "layout.h3.yaxis")
+    updateSelectInput(session, "Axis_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Axis_Y_Linetype)
+    updateNumericInput(session,"Axis_Y_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Axis_Y_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    
+    # Axis Ticks Settings
+    setTxt(id = "layout_collapse_axis_ticks", key = "layout.collapse.axis.ticks")
+    # X Axis Ticks Settings
+    setTxt(id = "layout_h3_xaxis_ticks", key = "layout.h3.xaxis")
+    updateSelectInput(session, "Axis_X_Ticks_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Axis_X_Ticks_Linetype)
+    updateNumericInput(session,"Axis_X_Ticks_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Axis_X_Ticks_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Axis_X_Ticks_Length",    label = tr("options.linelength"))
+    # Y Axis Ticks Settings
+    setTxt(id = "layout_h3_yaxis_ticks", key = "layout.h3.yaxis")
+    updateSelectInput(session, "Axis_Y_Ticks_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Axis_Y_Ticks_Linetype)
+    updateNumericInput(session,"Axis_Y_Ticks_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Axis_Y_Ticks_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Axis_Y_Ticks_Length",    label = tr("options.linelength"))
+    
+    # Minor Grid Lines Settings
+    setTxt(id = "layout_collapse_major_grid", key = "layout.collapse.major.grid")
+    # X Major Grid Lines Settings
+    setTxt(id = "layout_h3_xaxis_major_grid", key = "layout.h3.xaxis")
+    updateSelectInput(session, "Major_Grid_X_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Major_Grid_X_Linetype)
+    updateNumericInput(session,"Major_Grid_X_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Major_Grid_X_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    # Y Major Grid Lines Settings
+    setTxt(id = "layout_h3_yaxis_major_grid", key = "layout.h3.yaxis")
+    updateSelectInput(session, "Major_Grid_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Major_Grid_Y_Linetype)
+    updateNumericInput(session,"Major_Grid_Y_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Major_Grid_Y_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    
+    # Minor Grid Lines Settings
+    setTxt(id = "layout_collapse_minor_grid", key = "layout.collapse.minor.grid")
+    # X Minor Grid Lines Settings
+    setTxt(id = "layout_h3_xaxis_minor_grid", key = "layout.h3.xaxis")
+    updateSelectInput(session, "Minor_Grid_X_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Minor_Grid_X_Linetype)
+    updateNumericInput(session,"Minor_Grid_X_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Minor_Grid_X_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    # Y Minor Grid Lines Settings
+    setTxt(id = "layout_h3_yaxis_minor_grid", key = "layout.h3.yaxis")
+    updateSelectInput(session, "Minor_Grid_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Minor_Grid_Y_Linetype)
+    updateNumericInput(session,"Minor_Grid_Y_Size",    label = tr("options.linewidth"))
+    updateTextInput  (session, "Minor_Grid_Y_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
+    
+    
+    
+    
+    # Legend Text Settings
+    setTxt(id = "layout_collapse_legend", key = "layout.collapse.legend")
+    # Legend Title Text Settings
+    setTxt(id = "layout_h3_legend_title", key = "layout.h3.legend.title")
+    updateSelectInput(session, "Legend_Title_Font",           label = tr("label.font"),        choices = font_choices(),     selected = input$Legend_Title_Font)
+    updateSelectInput(session, "Legend_Title_Face",           label = tr("label.face"),        choices = face_choices(),     selected = input$Legend_Title_Face)
+    updateTextInput(session, "Legend_Title_Color",          label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Legend_Title_Size",           label = tr("label.size"))
+    updateSelectInput(session, "Legend_Title_Alignment",      label = tr("label.align"),     choices = align_h_choices(),  selected = input$Legend_Title_Alignment)
+    # Legend Item Text Settings
+    setTxt(id = "layout_h3_items", key = "layout.h3.items")
+    updateSelectInput(session, "Legend_Text_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Legend_Text_Font)
+    updateSelectInput(session, "Legend_Text_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Legend_Text_Face)
+    updateTextInput  (session, "Legend_Text_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Legend_Text_Size",    label = tr("label.size"))
+    updateSelectInput(session, "Legend_Text_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Legend_Text_Alignment)
+
+    # Facet Texts
+    setTxt(id = "layout_collapse_facets_text", key = "layout.collapse.facets.text")
+    # Facet Columns Text
+    setTxt(id = "layout_h3_columns_facets_text", key = "layout.h3.columns")
+    updateSelectInput(session, "Stripe_X_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Stripe_X_Font)
+    updateSelectInput(session, "Stripe_X_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Stripe_X_Face)
+    updateTextInput  (session, "Stripe_X_Textcolor",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Stripe_X_Textsize",    label = tr("label.size"))
+    updateSelectInput(session, "Stripe_X_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Stripe_X_Alignment)
+    # Facet Rows Text
+    setTxt(id = "layout_h3_rows_facets_text", key = "layout.h3.rows")
+    updateSelectInput(session, "Stripe_Y_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Stripe_Y_Font)
+    updateSelectInput(session, "Stripe_Y_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Stripe_Y_Face)
+    updateTextInput  (session, "Stripe_Y_Textcolor",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
+    updateNumericInput(session,"Stripe_Y_Textsize",    label = tr("label.size"))
+    updateSelectInput(session, "Legend_Text_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Stripe_Y_Alignment)
+    
+    
     })
-  
-  
-  
-  
 }
 
 
