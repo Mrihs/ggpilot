@@ -1,47 +1,28 @@
 #################### 1. Preparation ####################
 ############### 1.1 Install Packages ###############
-# Install packages if they are not already installed
-if (!require("shiny")) install.packages("shiny")
-if (!require("ggplot2")) install.packages("ggplot2")
-if (!require("readxl")) install.packages("readxl")
-if (!require("dplyr")) install.packages("dplyr")
-if (!require("shinythemes")) install.packages("shinythemes")
-if (!require("shinyBS")) install.packages("shinyBS")
-if (!require("Hmisc")) install.packages("Hmisc")
-if (!require("ggsci")) install.packages("ggsci")
-if (!require("ggthemes")) install.packages("ggthemes")
-if (!require("rclipboard")) install.packages("rclipboard")
-if (!require("sortable")) install.packages("sortable")
-if (!require("svglite")) install.packages("svglite")
-if (!require("shiny.i18n")) install.packages("shiny.i18n")
+# Create a list of required Packages
+packages <- c("shiny",
+          "ggplot2",
+          "readxl",
+          "dplyr",
+          "shinythemes",
+          "shinyBS",
+          "Hmisc",
+          "ggsci",
+          "ggthemes",
+          "rclipboard",
+          "sortable",
+          "svglite",
+          "shiny.i18n")
 
+# For each Package
+for (pkg in packages) {
+  # Install package if not installed yed
+  if (!require(pkg, character.only = TRUE)) install.packages(pkg)
+  # Load package
+  library(pkg, character.only = TRUE)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-############### 1.2 Load Packages ###############
-# Load Packages
-library(shiny)
-library(ggplot2)
-library(readxl)
-library(dplyr)
-library(shinythemes)
-library(shinyBS)
-library(Hmisc)
-library(ggsci)
-library(ggthemes)
-library(rclipboard)
-library(sortable)
-library(svglite)
-library(shiny.i18n)
 
 
 
@@ -104,7 +85,6 @@ is_valid_color <- function(color) {
 
 
 ########## 1.4.3 tr-Function to Help Translate ##########
-# tr <- function(key) as.character(i18n$t(key))[1]
 tr <- function(key) {
   # Get the key from the translation filee
   x <- i18n$t(key)
@@ -288,8 +268,6 @@ ui <- fluidPage(
     column(8, align = "center", 
            style = "margin-top: 15px;",
            tags$head(
-             tags$style(HTML("
-          "))
            ),
            tags$script(HTML("
             Shiny.addCustomMessageHandler('setActiveButton', function(btnId) {
@@ -1413,63 +1391,31 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.2.3 Update UI for barplot options ##########
-  # Check whether the current plot is a barplot
+  ########## 3.2.3 Update UI for plot options ##########
+  # Obeserve the Plot-Type Selections
   observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    if(activePlot() == "Bar"){
-      show_barplot_options(TRUE)}
-    else{
-      show_barplot_options(FALSE)}
+    # Check whether active plot is Barplot
+    show_barplot_options(identical(activePlot(), "Bar"))
+    # Check whether active plot is Barplot
+    show_linepolot_options(identical(activePlot(), "Line"))
+    # Check whether active plot is Barplot
+    show_errorbar_options(activePlot() %in% c("Bar", "Line"))
+    # Check whether active plot is Barplot
+    show_scatter_options(identical(activePlot(), "Scatter"))
   })
+
   # Update variable to control visibility of barplot options
   output$show_barplot_options <- reactive({ show_barplot_options() })
   outputOptions(output, "show_barplot_options", suspendWhenHidden = FALSE)
   
-  
-  
-  
-  
-  ########## 3.2.4 Update UI for lineplot options ##########
-  # Check whether the current plot is a lineplot
-  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    if(activePlot() == "Line"){
-      show_linepolot_options(TRUE)}
-    else{
-      show_linepolot_options(FALSE)}
-  })
   # Update variable to control visibility of lineplot options
   output$show_linepolot_options <- reactive({ show_linepolot_options() })
   outputOptions(output, "show_linepolot_options", suspendWhenHidden = FALSE)
   
-  
-  
-  
-  
-  ########## 3.2.5 Update UI for errorbar options ##########
-  # Check whether the current plot uses an errorbar
-  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    if(activePlot() == "Bar" | activePlot() == "Line"){
-      show_errorbar_options(TRUE)}
-    else{
-      show_errorbar_options(FALSE)}
-  })
   # Update variable to control visibility of errorbar options
   output$show_errorbar_options <- reactive({ show_errorbar_options() })
   outputOptions(output, "show_errorbar_options", suspendWhenHidden = FALSE)
   
-  
-  
-  
-  
-  ########## 3.2.6 Update UI for scatterplot options ##########
-  # Check whether the current plot is a scatterplot
-  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    if (activePlot() == "Scatter"){
-      show_scatter_options(TRUE)
-    }
-    else{
-      show_scatter_options(FALSE)}
-  })
   # Update variable to control visibility of scatterplot options
   output$show_scatter_options <- reactive({ show_scatter_options() })
   outputOptions(output, "show_scatter_options", suspendWhenHidden = FALSE)
@@ -3924,11 +3870,7 @@ server <- function(input, output, session) {
   ############### 8.1 Generate Plot ###############
   # Define Plot-Output
   output$dynamic_plot <- renderUI({
-    # Calculate dpi of plot-width
-    scaled_width <- input$plot_width_px * (72 / 96)
-    # Calculate dpi of plot-height
-    scaled_height <- input$plot_height_px * (72 / 96)
-    
+
     #Set Plot-Output
     plotOutput(
       "plot",
@@ -4553,8 +4495,6 @@ server <- function(input, output, session) {
     
     
     ############### 11.8 Update Layout Sidebar ###############
-    setTxt <- function(id, key) session$sendCustomMessage('setText', list(id = id, text = tr(key)))
-    
     # Title Settings
     setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
     # Main Title Settings
