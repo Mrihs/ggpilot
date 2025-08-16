@@ -1643,143 +1643,60 @@ server <- function(input, output, session) {
 
   
   ########## 3.4.3 Check for changes in factor orders ##########
-  # Check for Update on order of levels on x-factor
-  observeEvent(input$x_factor_Order, {
-    # Require data
-    req(data(), input$x_factor_Order, input$x_var)
-    # Initate new_factor_code
-    new_x_factor_code <- ""
-    # Check if order has changed
-    if (!identical(Factors$x_values, input$x_factor_Order)) {
-      # Adjust factors if variable is factor
-      if (is.factor(data()[[input$x_var]])) {
-        new_x_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
-                                     input$x_var, input$x_var, 
-                                     paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))} 
-      # Make factor if variable is not a factor
-      else if (is.character(data()[[input$x_var]])) {
-        new_x_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
-                                     input$x_var, input$x_var, 
-                                     paste(sprintf("'%s'", input$x_factor_Order), collapse = ", "))}
-    }
-    # Update reactive x-factor variable
-    x_factor_code(new_x_factor_code)
-    # Create new factor-code
-    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    # Update factor_code
-    factor_code(new_factor_code)
-  })
-  
-  
-  # Check for Update on order of levels on y-factor
-  observeEvent(input$y_factor_Order, {
-    # Require data
-    req(data(), input$y_factor_Order, input$y_var)
-    # Initate new_factor_code
-    new_y_factor_code <- ""
-    # Check if order has changed
-    if (!identical(Factors$y_values, input$y_factor_Order)) {
-      # Adjust factors if variable is factor
-      if (is.factor(data()[[input$y_var]])) {
-        new_y_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
-                                     input$y_var, input$y_var, 
-                                     paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))} 
-      # Make factor if variable is not a factor
-      else if (is.character(data()[[input$y_var]])) {
-        new_y_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))", 
-                                     input$y_var, input$y_var, 
-                                     paste(sprintf("'%s'", input$y_factor_Order), collapse = ", "))}
-    }
-    # Update reactive y-factor variable
-    y_factor_code(new_y_factor_code)
-    # Create new factor-code
-    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    # Update factor_code
-    factor_code(new_factor_code)
-  })
-  
-  
-  # Check for Update on order of levels on grouping-factor
-  observeEvent(input$group_factor_Order, {
-    # Require data
-    req(data(), input$group_factor_Order, input$group_var)
-    # Initate new_factor_code
-    new_group_factor_code <- ""
-    # Check if order has changed
-    if (!identical(Factors$group_values, input$group_factor_Order)) {
-      # Adjust factors if variable is factor
-      if (is.factor(data()[[input$group_var]])) {
-        new_group_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                         input$group_var, input$group_var,
-                                         paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))}
-      # Make factor if variable is not a factor
-      else if (is.character(data()[[input$group_var]])) {
-        new_group_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                         input$group_var, input$group_var,
-                                         paste(sprintf("'%s'", input$group_factor_Order), collapse = ", "))}
-    }
-    # Update reactive group-factor variable
-    group_factor_code(new_group_factor_code)
-    # Create new factor-code
-    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    # Update factor_code
-    factor_code(new_factor_code)
-  })
-  
-  
-  # Check for Update on order of levels on grid-column-factor
-  observeEvent(input$grid_col_factor_Order, {
-    # Require data
-    req(data(), input$grid_col_factor_Order, input$grid_col_var)
-    # Initate new_factor_code
-    new_gridcol_factor_code <- ""
-    # Check if order has changed
-    if (!identical(Factors$grid_cols_values, input$grid_col_factor_Order)) {
-      # Adjust factors if variable is factor
-      if (is.factor(data()[[input$grid_col_var]])) {
-        new_gridcol_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                           input$grid_col_var, input$grid_col_var,
-                                           paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))}
-      # Make factor if variable is not a factor
-      else if (is.character(data()[[input$grid_col_var]])) {
-        new_gridcol_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                           input$grid_col_var, input$grid_col_var,
-                                           paste(sprintf("'%s'", input$grid_col_factor_Order), collapse = ", "))}
-    }
-    # Update reactive group-factor variable
-    grid_col_factor_code(new_gridcol_factor_code)
-    # Create new factor-code
-    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    # Update factor_code
-    factor_code(new_factor_code)
-  })
-  
-  
-  # Check for Update on order of levels on grid-row-factor
-  observeEvent(input$grid_row_factor_Order, {
-    # Require data
-    req(data(), input$grid_row_factor_Order, input$grid_row_var)
-    # Initate new_factor_code
-    new_gridrow_factor_code <- ""
-    # Check if order has changed
-    if (!identical(Factors$grid_row_values, input$grid_row_factor_Order)) {
-      # Adjust factors if variable is factor
-      if (is.factor(data()[[input$grid_row_var]])) {
-        new_gridrow_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                           input$grid_row_var, input$grid_row_var,
-                                           paste(sprintf("'%s'", input$grid_row_factor_Order), collapse = ", "))}
-      # Make factor if variable is not a factor
-      else if (is.character(data()[[input$grid_row_var]])) {
-        new_gridrow_factor_code <- sprintf("\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
-                                           input$grid_row_var, input$grid_row_var,
-                                           paste(sprintf("'%s'", input$grid_row_factor_Order), collapse = ", "))}
-    }
-    # Update reactive group-factor variable
-    grid_row_factor_code(new_gridrow_factor_code)
-    # Create new factor-code
-    new_factor_code <- paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code())
-    # Update factor_code
-    factor_code(new_factor_code)
+  # For all variables
+  for (i in c("x","y","group","grid_col","grid_row")) local({
+    # Create factor_order_variable for current variable
+    this_variable_order <- paste0(i, "_factor_Order")
+    # Create variable for current variable
+    this_variable   <- paste0(switch(i,
+                                     x="x", y="y", group="group", grid_col="grid_col", grid_row="grid_row"), 
+                              # Paste variable-suffix
+                              "_var")
+    # Switch variable values for current variable
+    vals_sym <- switch(i,
+                       x="x_values",
+                       y="y_values",
+                       group="group_values",
+                       grid_col="grid_cols_values",
+                       grid_row="grid_row_values"
+    )
+    # Switch variable-order code for current variable
+    setter <- switch(i,
+                     x = x_factor_code, 
+                     y = y_factor_code,
+                     group = group_factor_code, 
+                     grid_col = grid_col_factor_code,
+                     grid_row = grid_row_factor_code
+    )
+    # Observe the current variable_order
+    observeEvent(input[[this_variable_order]], {
+      # Require data, variable order and variable
+      req(data(), input[[this_variable_order]], input[[this_variable]])
+      # Create empty code
+      new_code <- ""
+      # If changes were made in variable-order
+      if (!identical(Factors[[vals_sym]], input[[this_variable_order]])) {
+        # Get the respective variable-data
+        var_data <- data()[[ input[[this_variable]] ]]
+        # If the variable is a factor or character
+        if (is.factor(var_data) || is.character(var_data)) {
+          # Create new code to change factor levels order
+          new_code <- sprintf(
+            "\ndf$'%s' <- factor(df$'%s', levels = c(%s))",
+            input[[this_variable]], input[[this_variable]],
+            paste(sprintf("'%s'", input[[this_variable_order]]), collapse = ", ")
+          )
+        }
+      }
+      # Set new code
+      setter(new_code)
+      # Paste factor code
+      factor_code(paste(x_factor_code(),
+                        y_factor_code(),
+                        group_factor_code(),
+                        grid_col_factor_code(),
+                        grid_row_factor_code()))
+    })
   })
   
   
@@ -4327,202 +4244,142 @@ server <- function(input, output, session) {
     
     
     ############### 11.8 Update Layout Sidebar ###############
-    # Title Settings
     setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
-    # Main Title Settings
     setTxt(id = "layout_h3_title", key = "layout.h3.title")
-    updateSelectInput(session, "Title_Font", label = tr("label.font"),        choices = font_choices(),     selected = input$Title_Font)
-    updateSelectInput(session, "Title_Face", label = tr("label.face"),        choices = face_choices(),     selected = input$Title_Face)
-    updateTextInput(session, "Title_Color", label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Title_Size", label = tr("label.size"))
-    updateSelectInput(session, "Title_Alignment",      label = tr("label.align"),     choices = align_h_choices(),  selected = input$Title_Alignment)
-    # Subtitle Settings
     setTxt(id = "layout_h3_subtitle", key = "layout.h3.subtitle")
-    updateSelectInput(session, "Subtitle_Font",        label = tr("label.font"),        choices = font_choices(),     selected = input$Subtitle_Font)
-    updateSelectInput(session, "Subtitle_Face",        label = tr("label.face"),        choices = face_choices(),     selected = input$Subtitle_Face)
-    updateTextInput(session, "Subtitle_Color",       label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Subtitle_Size",        label = tr("label.size"))
-    updateSelectInput(session, "Subtitle_Alignment",   label = tr("label.align"),     choices = align_h_choices(),  selected = input$Subtitle_Alignment)
-    
-    # Axis Title Settings
     setTxt(id = "layout_collapse_axis_title", key = "layout.collapse.axis.title")
-    # X-Axis Title Settings
     setTxt(id = "layout_h3_title_xaxis", key = "layout.h3.xaxis")
-    updateSelectInput(session, "X_Axis_Title_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$X_Axis_Title_Font)
-    updateSelectInput(session, "X_Axis_Title_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$X_Axis_Title_Face)
-    updateTextInput(session, "X_Axis_Title_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"X_Axis_Title_Size",    label = tr("label.size"))
-    updateSelectInput(session, "X_Axis_Title_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$X_Axis_Title_Alignment)
-    # Y-Axis Title Settings
     setTxt(id = "layout_h3_title_yaxis", key = "layout.h3.yaxis")
-    updateSelectInput(session, "Y_Axis_Title_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Y_Axis_Title_Font)
-    updateSelectInput(session, "Y_Axis_Title_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Y_Axis_Title_Face)
-    updateTextInput  (session, "Y_Axis_Title_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Y_Axis_Title_Size",    label = tr("label.size"))
-    updateSelectInput(session, "Y_Axis_Title_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Y_Axis_Title_Alignment)
-    
-    # Axis Text Settings
     setTxt(id = "layout_collapse_axis_text", key = "layout.collapse.axis.text")
-    # X Axis Text Settings
     setTxt(id = "layout_h3_xaxis_text", key = "layout.h3.xaxis")
-    updateSelectInput(session, "Axis_X_Text_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Axis_X_Text_Font)
-    updateSelectInput(session, "Axis_X_Text_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Axis_X_Text_Face)
-    updateTextInput  (session, "Axis_X_Text_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Axis_X_Text_Size",    label = tr("label.size"))
-    updateNumericInput(session,"Axis_X_Text_Rotation",    label = tr("label.rotation"))
-    updateSelectInput(session, "Axis_X_Text_H_Alignment",label= tr("label.align.h"),     choices = align_h_choices(),  selected = input$Axis_X_Text_H_Alignment)
-    updateSelectInput(session, "Axis_X_Text_V_Alignment",label= tr("label.align.v"),     choices = align_v_choices(),  selected = input$Axis_X_Text_V_Alignment)
-    # Y Axis Text Settings
     setTxt(id = "layout_h3_yaxis_text", key = "layout.h3.yaxis")
-    updateSelectInput(session, "Axis_Y_Text_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Axis_Y_Text_Font)
-    updateSelectInput(session, "Axis_Y_Text_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Axis_Y_Text_Face)
-    updateTextInput  (session, "Axis_Y_Text_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Axis_Y_Text_Size",    label = tr("label.size"))
-    updateNumericInput(session,"Axis_Y_Text_Rotation",    label = tr("label.rotation"))
-    updateSelectInput(session, "Axis_Y_Text_H_Alignment",label= tr("label.align.h"),     choices = align_h_choices(),  selected = input$Axis_Y_Text_H_Alignment)
-    updateSelectInput(session, "Axis_Y_Text_V_Alignment",label= tr("label.align.v"),     choices = align_v_choices(),  selected = input$Axis_Y_Text_V_Alignment)
-    
-    # Axis Lines Settings
     setTxt(id = "layout_collapse_axis_lines", key = "layout.collapse.axis.lines")
-    # X Axis Lines Settings
     setTxt(id = "layout_h3_xaxis_lines", key = "layout.h3.xaxis")
-    updateSelectInput(session, "Axis_X_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Axis_X_Linetype)
-    updateNumericInput(session,"Axis_X_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Axis_X_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    # Y Axis Lines Settings
     setTxt(id = "layout_h3_yaxis_lines", key = "layout.h3.yaxis")
-    updateSelectInput(session, "Axis_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Axis_Y_Linetype)
-    updateNumericInput(session,"Axis_Y_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Axis_Y_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    
-    # Axis Ticks Settings
     setTxt(id = "layout_collapse_axis_ticks", key = "layout.collapse.axis.ticks")
-    # X Axis Ticks Settings
     setTxt(id = "layout_h3_xaxis_ticks", key = "layout.h3.xaxis")
-    updateSelectInput(session, "Axis_X_Ticks_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Axis_X_Ticks_Linetype)
-    updateNumericInput(session,"Axis_X_Ticks_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Axis_X_Ticks_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Axis_X_Ticks_Length",    label = tr("options.linelength"))
-    # Y Axis Ticks Settings
     setTxt(id = "layout_h3_yaxis_ticks", key = "layout.h3.yaxis")
-    updateSelectInput(session, "Axis_Y_Ticks_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Axis_Y_Ticks_Linetype)
-    updateNumericInput(session,"Axis_Y_Ticks_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Axis_Y_Ticks_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Axis_Y_Ticks_Length",    label = tr("options.linelength"))
-    
-    # Minor Grid Lines Settings
     setTxt(id = "layout_collapse_major_grid", key = "layout.collapse.major.grid")
-    # X Major Grid Lines Settings
     setTxt(id = "layout_h3_xaxis_major_grid", key = "layout.h3.xaxis")
-    updateSelectInput(session, "Major_Grid_X_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Major_Grid_X_Linetype)
-    updateNumericInput(session,"Major_Grid_X_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Major_Grid_X_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    # Y Major Grid Lines Settings
     setTxt(id = "layout_h3_yaxis_major_grid", key = "layout.h3.yaxis")
-    updateSelectInput(session, "Major_Grid_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Major_Grid_Y_Linetype)
-    updateNumericInput(session,"Major_Grid_Y_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Major_Grid_Y_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    
-    # Minor Grid Lines Settings
     setTxt(id = "layout_collapse_minor_grid", key = "layout.collapse.minor.grid")
-    # X Minor Grid Lines Settings
     setTxt(id = "layout_h3_xaxis_minor_grid", key = "layout.h3.xaxis")
-    updateSelectInput(session, "Minor_Grid_X_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Minor_Grid_X_Linetype)
-    updateNumericInput(session,"Minor_Grid_X_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Minor_Grid_X_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    # Y Minor Grid Lines Settings
     setTxt(id = "layout_h3_yaxis_minor_grid", key = "layout.h3.yaxis")
-    updateSelectInput(session, "Minor_Grid_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Minor_Grid_Y_Linetype)
-    updateNumericInput(session,"Minor_Grid_Y_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Minor_Grid_Y_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    
-    # Background Settings
     setTxt(id = "layout_collapse_background", key = "layout.collapse.background")
-    # Plot Background Settings
     setTxt(id = "layout_h3_plot", key = "layout.h3.plot")
-    updateTextInput  (session, "Plot_Background_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
-    updateSelectInput(session, "Plot_Background_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Plot_Background_Linetype)
-    updateNumericInput(session,"Plot_Background_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Plot_Background_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    # Panel Background Settings
     setTxt(id = "layout_h3_panel", key = "layout.h3.panel")
-    updateTextInput  (session, "Panel_Background_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
-    updateSelectInput(session, "Panel_Background_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Panel_Background_Linetype)
-    updateNumericInput(session,"Panel_Background_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Panel_Background_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    
-    # Legend Text Settings
     setTxt(id = "layout_collapse_legend", key = "layout.collapse.legend")
-    # Legend Title Text Settings
     setTxt(id = "layout_h3_legend_title", key = "layout.h3.legend.title")
-    updateSelectInput(session, "Legend_Title_Font",           label = tr("label.font"),        choices = font_choices(),     selected = input$Legend_Title_Font)
-    updateSelectInput(session, "Legend_Title_Face",           label = tr("label.face"),        choices = face_choices(),     selected = input$Legend_Title_Face)
-    updateTextInput(session, "Legend_Title_Color",          label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Legend_Title_Size",           label = tr("label.size"))
-    updateSelectInput(session, "Legend_Title_Alignment",      label = tr("label.align"),     choices = align_h_choices(),  selected = input$Legend_Title_Alignment)
-    # Legend Item Text Settings
     setTxt(id = "layout_h3_items", key = "layout.h3.items")
-    updateSelectInput(session, "Legend_Text_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Legend_Text_Font)
-    updateSelectInput(session, "Legend_Text_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Legend_Text_Face)
-    updateTextInput  (session, "Legend_Text_Color",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Legend_Text_Size",    label = tr("label.size"))
-    updateSelectInput(session, "Legend_Text_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Legend_Text_Alignment)
-
-    # Legend Box Settings
+    setTxt(id = "layout_collapse_facets_background", key = "layout.collapse.facets.background")
     setTxt(id = "layout_collapse_legend_background", key = "layout.collapse.legend.background")
     setTxt(id = "layout_h3_legend_box", key = "layout.h3.legend.box")
-    updateTextInput  (session, "Legend_Background_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
-    updateSelectInput(session, "Legend_Background_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Legend_Background_Linetype)
-    updateNumericInput(session,"Legend_Background_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Legend_Background_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-
-    # Legend Settings
-    setTxt(id = "layout_collapse_facets_background", key = "layout.collapse.facets.background")
-    # Legend Arrangement Settings
     setTxt(id = "layout_h3_arrangement", key = "layout.h3.arrangement")
+    setTxt(id = "layout_h3_sizes", key = "layout.h3.sizes")
+    setTxt(id = "layout_collapse_legend_options", key = "layout.collapse.legend.options")
+    setTxt(id = "layout_h3_columns_facets", key = "layout.h3.columns")
+    setTxt(id = "layout_h3_rows_facets", key = "layout.h3.rows")
+    setTxt(id = "layout_collapse_facets_text", key = "layout.collapse.facets.text")
+    setTxt(id = "layout_h3_columns_facets_text", key = "layout.h3.columns")
+    setTxt(id = "layout_h3_rows_facets_text", key = "layout.h3.rows")
+    
+    # For all Font-Settings
+    for (id in c("Title_Font","Subtitle_Font","X_Axis_Title_Font","Y_Axis_Title_Font",
+                 "Stripe_X_Font", "Stripe_Y_Font", "Axis_X_Text_Font", "Axis_Y_Text_Font",
+                 "Legend_Title_Font", "Legend_Text_Font")) {
+      # Update the respective Input
+      updateSelectInput(session, id, label = tr("label.font"), choices = font_choices(), selected = input[[id]])
+    }
+    # For all Face-Settings
+    for (id in c("Title_Face","Subtitle_Face","X_Axis_Title_Face","Y_Axis_Title_Face",
+                 "Axis_X_Text_Face", "Axis_Y_Text_Face", "Legend_Title_Face", "Legend_Text_Face",
+                 "Stripe_X_Face", "Stripe_Y_Face")) {
+      # Update the respective Input
+      updateSelectInput(session, id, label = tr("label.face"), choices = font_choices(), selected = input[[id]])
+    }
+    # For all Color-Settings
+    for (id in c("Title_Color","Subtitle_Color","X_Axis_Title_Color","Y_Axis_Title_Color",
+                 "Axis_X_Text_Color", "Axis_Y_Text_Color", "Legend_Title_Color", "Legend_Text_Color",
+                 "Stripe_X_Textcolor", "Stripe_Y_Textcolor")) {
+      # Update the respective Input
+      updateTextInput(session, id, label = tr("label.color"), placeholder = tr("placeholder.color"))
+    }
+    # For all Text-Size Settings
+    for (id in c("Title_Size","Subtitle_Size","X_Axis_Title_Color","Y_Axis_Title_Color",
+                 "X_Axis_Title_Size", "Y_Axis_Title_Size", "Axis_X_Text_Size", "Axis_Y_Text_Size", "Legend_Title_Size", "Legend_Text_Size",
+                 "Stripe_X_Textsize", "Stripe_Y_Textsize")) { 
+      # Update the respective Input
+      updateNumericInput(session, id, label = tr("label.size"))
+    }
+    # For all Text-Rotation Settings
+    for (id in c("Axis_X_Text_Rotation","Axis_Y_Text_Rotation")) { 
+      # Update the respective Input
+      updateNumericInput(session, id, label = tr("label.rotation"))
+    }
+    # For all Text-Alignment Settings
+    for (id in c("Title_Alignment","Subtitle_Alignment","X_Axis_Title_Face","Y_Axis_Title_Face",
+                 "X_Axis_Title_Alignment", "Y_Axis_Title_Alignment", "Legend_Title_Alignment", "Legend_Text_Alignment",
+                 "Stripe_X_Alignment", "Stripe_Y_Alignment")) {
+      # Update the respective Input
+      updateSelectInput(session, id, label = tr("label.align"), choices = align_h_choices(), selected = input[[id]])
+    }    
+    # For all Horicontal Text-Alignment Settings
+    for (id in c("Axis_X_Text_H_Alignment", "Axis_Y_Text_H_Alignment")) {
+      # Update the respective Input
+      updateSelectInput(session, id, label = tr("label.align.h"), choices = align_h_choices(), selected = input[[id]])
+    }    
+    # For all Vertical Text-Alignment Settings
+    for (id in c("Axis_X_Text_V_Alignment", "Axis_Y_Text_V_Alignment")) {
+      # Update the respective Input
+      updateSelectInput(session, id, label = tr("label.align.v"), choices = align_v_choices(), selected = input[[id]])
+    }
+    # For all Linetype Settings
+    for (id in c("Axis_X_Linetype","Axis_Y_Linetype","Axis_X_Ticks_Linetype","Axis_Y_Ticks_Linetype",
+                 "Major_Grid_X_Linetype", "Major_Grid_Y_Linetype", "Minor_Grid_X_Linetype", "Minor_Grid_Y_Linetype",
+                 "Plot_Background_Linetype", "Panel_Background_Linetype", "Legend_Background_Linetype", 
+                 "Stripe_X_Linetype", "Stripe_Y_Linetype")) {
+      # Update the respective Input
+      updateSelectInput(session, id, label = tr("options.linetype"), choices = linetype_choices_all(), selected = input[[id]])
+    } 
+    # For all Linewidth-Settings
+    for (id in c("Axis_X_Size","Axis_Y_Size","Axis_X_Ticks_Size","Axis_Y_Ticks_Size",
+                 "X_Axis_Title_Alignment", "Major_Grid_Y_Size", "Minor_Grid_X_Size", "Minor_Grid_Y_Size",
+                 "Plot_Background_Size", "Panel_Background_Size", "Legend_Background_Size", 
+                 "Stripe_X_Size", "Stripe_Y_Size")) {
+      # Update the respective Input
+      updateNumericInput(session, id, label = tr("options.linewidth"))
+    }     
+    # For all Linecolor Settings
+    for (id in c("Axis_X_Color","Axis_Y_Color","Axis_X_Ticks_Color","Axis_Y_Ticks_Color",
+                 "Major_Grid_X_Color", "Major_Grid_Y_Color", "Minor_Grid_X_Color", "Minor_Grid_Y_Color",
+                 "Plot_Background_Line_Color", "Panel_Background_Line_Color", "Legend_Background_Line_Color", 
+                 "Stripe_X_Line_Color", "Stripe_Y_Line_Color")) {
+      # Update the respective Input
+      updateTextInput(session, id, label = tr("options.linecolor"), placeholder = tr("placeholder.color"))
+    } 
+    # For all Background-Color Settings
+    for (id in c("Plot_Background_Color","Panel_Background_Color","Legend_Background_Color",
+                 "Stripe_X_Color", "Stripe_Y_Color", "Y_Axis_Title_Alignment", "Legend_Title_Alignment", "Legend_Text_Alignment",
+                 "Stripe_X_Alignment", "Stripe_Y_Alignment")) {
+      # Update the respective Input
+      updateTextInput(session, id, label = tr("options.background.color"), placeholder = tr("placeholder.color"))
+    } 
+    # For all Linelength-Settings
+    for (id in c("Axis_X_Ticks_Length","Axis_Y_Ticks_Length")) {
+      # Update the respective Input
+      updateNumericInput(session, id, label = tr("options.linelength"))
+    }
+    # Legend Arrangement Settings
     updateSelectInput(session, "Legend_Position",    label = tr("layout.legend.position"),        choices = legend_pos_choices(),     selected = input$Legend_Position)
     updateSelectInput(session, "Legend_Title_Position",    label = tr("layout.legend.title.position"),        choices = legend_text_pos_choices(),     selected = input$Legend_Title_Position)
     updateSelectInput(session, "Legend_Text_Position",    label = tr("layout.legend.text.position"),        choices = legend_text_pos_choices(),     selected = input$Legend_Text_Position)
     updateSelectInput(session, "Legend_Text_Direction",    label = tr("layout.legend.direction"),        choices = legend_dir_choices(),     selected = input$Legend_Text_Direction)
     # Legend Sizes Settings
-    setTxt(id = "layout_h3_sizes", key = "layout.h3.sizes")
     updateNumericInput(session,"Legend_Key_Width",    label = tr("layout.legend.key.width"))
     updateNumericInput(session,"Legend_Key_Height",    label = tr("layout.legend.key.height"))
     updateNumericInput(session,"Legend_Key_Spacing",    label = tr("layout.legend.key.spaicng"))
     updateNumericInput(session,"Legend_Box_Spacing",    label = tr("layout.legend.box.spacing"))
-    
-    # Facet Background Settings
-    setTxt(id = "layout_collapse_legend_options", key = "layout.collapse.legend.options")
-    # Facet Columns Background Settings
-    setTxt(id = "layout_h3_columns_facets", key = "layout.h3.columns")
-    updateTextInput  (session, "Stripe_X_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
-    updateSelectInput(session, "Stripe_X_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Stripe_X_Linetype)
-    updateNumericInput(session,"Stripe_X_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Stripe_X_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    # Facet Rows Background Settings
-    setTxt(id = "layout_h3_rows_facets", key = "layout.h3.rows")
-    updateTextInput  (session, "Stripe_Y_Color",   label = tr("options.background.color"),       placeholder = tr("placeholder.color"))
-    updateSelectInput(session, "Stripe_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Stripe_Y_Linetype)
-    updateNumericInput(session,"Stripe_Y_Size",    label = tr("options.linewidth"))
-    updateTextInput  (session, "Stripe_Y_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    
-    # Facet Texts
-    setTxt(id = "layout_collapse_facets_text", key = "layout.collapse.facets.text")
-    # Facet Columns Text
-    setTxt(id = "layout_h3_columns_facets_text", key = "layout.h3.columns")
-    updateSelectInput(session, "Stripe_X_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Stripe_X_Font)
-    updateSelectInput(session, "Stripe_X_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Stripe_X_Face)
-    updateTextInput  (session, "Stripe_X_Textcolor",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Stripe_X_Textsize",    label = tr("label.size"))
-    updateSelectInput(session, "Stripe_X_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Stripe_X_Alignment)
-    # Facet Rows Text
-    setTxt(id = "layout_h3_rows_facets_text", key = "layout.h3.rows")
-    updateSelectInput(session, "Stripe_Y_Font",    label = tr("label.font"),        choices = font_choices(),     selected = input$Stripe_Y_Font)
-    updateSelectInput(session, "Stripe_Y_Face",    label = tr("label.face"),        choices = face_choices(),     selected = input$Stripe_Y_Face)
-    updateTextInput  (session, "Stripe_Y_Textcolor",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
-    updateNumericInput(session,"Stripe_Y_Textsize",    label = tr("label.size"))
-    updateSelectInput(session, "Stripe_Y_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Stripe_Y_Alignment)
-    })
+  })
 }
 
 
