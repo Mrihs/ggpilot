@@ -1580,57 +1580,62 @@ server <- function(input, output, session) {
   })
   
   
-  # Redefine factor code when there is a change in the factors
-  observeEvent(input$x_var, {
-    x_factor_code("")
-    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  observeEvent(input$y_var, {
-    y_factor_code("")
-    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  observeEvent(input$group_var, {
-    group_factor_code("")
-    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  observeEvent(input$grid_col_var, {
-    grid_col_factor_code("")
-    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  observeEvent(input$grid_row_var, {
-    grid_row_factor_code("")
-    factor_code(paste(x_factor_code(), y_factor_code(), group_factor_code(), grid_col_factor_code(), grid_row_factor_code()))})
-  
-  
-  # Create dynamic UI for rank_list() of x-axis variable
-  output$x_factor_rank_list <- renderUI({
-    rank_list(input_id = "x_factor_Order", 
-              labels = Factors$x_values,  
-              options = sortable_options(swap = TRUE))
+  # For all variables
+  for (i in c("x","y","group","grid_col","grid_row")) local({
+    # Switch based on current variable
+    setter <- switch(i,
+                     x = x_factor_code,
+                     y = y_factor_code,
+                     group = group_factor_code,
+                     grid_col = grid_col_factor_code,
+                     grid_row = grid_row_factor_code
+    )
+    
+    # Set associated input-variable
+    input_variable <- switch(i,
+                             x="x_var",
+                             y="y_var",
+                             group="group_var",
+                             grid_col="grid_col_var",
+                             grid_row="grid_row_var"
+    )
+    
+    # Observe Input-Variable
+    observeEvent(input[[input_variable]], {
+      # Reset setter-variable
+      setter("")
+      # Append factor-code
+      factor_code(paste(x_factor_code(), 
+                        y_factor_code(), 
+                        group_factor_code(),
+                        grid_col_factor_code(), 
+                        grid_row_factor_code()))
+    })
   })
   
-  # Create dynamic UI for rank_list() of y-axis variable
-  output$y_factor_rank_list <- renderUI({
-    rank_list(input_id = "y_factor_Order", 
-              labels = Factors$y_values,  
-              options = sortable_options(swap = TRUE))
-  })
   
-  # Create dynamic UI for rank_list() of grouping variable
-  output$group_factor_rank_list <- renderUI({
-    rank_list(input_id = "group_factor_Order", 
-              labels = Factors$group_values,  
-              options = sortable_options(swap = TRUE))
-  })
-  
-  # Create dynamic UI for rank_list() of grid-col variable
-  output$grid_col_factor_rank_list <- renderUI({
-    rank_list(input_id = "grid_col_factor_Order", 
-              labels = Factors$grid_cols_values,  
-              options = sortable_options(swap = TRUE))
-  })
-  
-  # Create dynamic UI for rank_list() of grid-row variable
-  output$grid_row_factor_rank_list <- renderUI({
-    rank_list(input_id = "grid_row_factor_Order", 
-              labels = Factors$grid_row_values,  
-              options = sortable_options(swap = TRUE))
+  # For all variables
+  for (i in c("x","y","group","grid_col","grid_row")) local({
+    # Get the current variable
+    this.variable <- i
+    
+    # Create the UI for the current variable
+    output[[paste0(this.variable, "_factor_rank_list")]] <- renderUI({
+      # Set the labels as factors of each variable
+      labels <- switch(this.variable,
+                       "x"        = Factors$x_values,
+                       "y"        = Factors$y_values,
+                       "group"    = Factors$group_values,
+                       "grid_col" = Factors$grid_cols_values,
+                       "grid_row" = Factors$grid_row_values
+      )
+      # Create dynamic UI for rank_list() of y-axis variable
+      rank_list(input_id = paste0(this.variable, "_factor_Order"),
+                # Set labels
+                labels = labels,
+                # Set options
+                options = sortable_options(swap = TRUE))
+    })
   })
   
   
