@@ -1351,33 +1351,24 @@ server <- function(input, output, session) {
   
   
   ########## 3.2.3 Update UI for plot options ##########
-  # Obeserve the Plot-Type Selections
-  observeEvent(list(input$plot_bar, input$plot_box, input$plot_line, input$plot_scatter), {
-    # Check whether active plot is Barplot
-    show_barplot_options(identical(activePlot(), "Bar"))
-    # Check whether active plot is Barplot
-    show_linepolot_options(identical(activePlot(), "Line"))
-    # Check whether active plot is Barplot
-    show_errorbar_options(activePlot() %in% c("Bar", "Line"))
-    # Check whether active plot is Barplot
-    show_scatter_options(identical(activePlot(), "Scatter"))
-  })
+  # Create reactive variables for barplot options
+  show_barplot_options   <- reactive(identical(activePlot(), "Bar"))
+  show_lineplot_options  <- reactive(identical(activePlot(), "Line"))
+  show_errorbar_options  <- reactive(activePlot() %in% c("Bar","Line"))
+  show_scatter_options   <- reactive(identical(activePlot(), "Scatter"))
+  
+  # Create function to update visibility of barplot options
+  show_plot_options <- function(name, rx){
+    # Update variable to control visibility of barplot options
+    output[[name]] <- reactive({ rx() })
+    outputOptions(output, name, suspendWhenHidden = FALSE)
+  }
 
-  # Update variable to control visibility of barplot options
-  output$show_barplot_options <- reactive({ show_barplot_options() })
-  outputOptions(output, "show_barplot_options", suspendWhenHidden = FALSE)
-  
-  # Update variable to control visibility of lineplot options
-  output$show_linepolot_options <- reactive({ show_linepolot_options() })
-  outputOptions(output, "show_linepolot_options", suspendWhenHidden = FALSE)
-  
-  # Update variable to control visibility of errorbar options
-  output$show_errorbar_options <- reactive({ show_errorbar_options() })
-  outputOptions(output, "show_errorbar_options", suspendWhenHidden = FALSE)
-  
-  # Update variable to control visibility of scatterplot options
-  output$show_scatter_options <- reactive({ show_scatter_options() })
-  outputOptions(output, "show_scatter_options", suspendWhenHidden = FALSE)
+  # Show and hide plot options
+  show_plot_options("show_barplot_options",  show_barplot_options)
+  show_plot_options("show_linepolot_options",show_lineplot_options)
+  show_plot_options("show_errorbar_options", show_errorbar_options)
+  show_plot_options("show_scatter_options",  show_scatter_options)
   
   
   
