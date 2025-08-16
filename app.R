@@ -1,5 +1,5 @@
 #################### 1. Preparation ####################
-############### 1.1 Install Packages ###############
+############### 1.1 Packages ###############
 # Create a list of required Packages
 packages <- c("shiny",
           "ggplot2",
@@ -32,10 +32,7 @@ for (pkg in packages) {
 
 
 
-
-
-
-############### 1.3 Load Translator ###############
+############### 1.2 Load Translator ###############
 # Create Translator
 i18n <- Translator$new(translation_csvs_path = "i18n", translation_csv_config = "www/i18n.config.yaml")
 # Set Default language
@@ -50,9 +47,8 @@ i18n$set_translation_language("en")
 
 
 
-
-############### 1.4 Define Function ###############
-########## 1.4.1 BSCollapse-Function is set using an arrow-down icon ##########
+############### 1.3 Define Functions ###############
+########## 1.3.1 BSCollapse-Function is set using an arrow-down icon ##########
 BSCollapseArrow <- function(text, id = NULL, icon_class = "glyphicon-menu-down") {
   HTML(sprintf(
     '<div class="panel-title-container">
@@ -69,9 +65,9 @@ BSCollapseArrow <- function(text, id = NULL, icon_class = "glyphicon-menu-down")
 
 
 
-########## 1.4.2 is_valid_colo-Function to validate color-inputs ##########
+########## 1.3.2 is_valid_colo-Function to validate color-inputs ##########
 is_valid_color <- function(color) {
-  # empty colors are not invalid
+  # Empty colors are not invalid
   if (is.null(color) || color == "") return(FALSE)
   tryCatch({
     # Check if valid color
@@ -84,7 +80,7 @@ is_valid_color <- function(color) {
 
 
 
-########## 1.4.3 tr-Function to Help Translate ##########
+########## 1.3.3 tr-Function to Help Translate ##########
 tr <- function(key) {
   # Get the key from the translation filee
   x <- i18n$t(key)
@@ -99,7 +95,7 @@ tr <- function(key) {
 
 
 
-########## 1.4.4 Functions to Serialise Dropdown-Localization ##########
+########## 1.3.4 Functions to Serialise Dropdown-Localization ##########
 font_choices <- function() setNames(
   c("Gemäss Theme","Sans Serife","Serife","Monospace"),
   c(tr("options.font.theme"), tr("options.font.sans"), tr("options.font.serif"), tr("options.font.mono"))
@@ -151,6 +147,9 @@ legend_dir_choices <- function() setNames(
 
 
 
+
+
+
 #################### 2. UI ####################
 ui <- fluidPage(
   ############### 2.1 General Settings ###############
@@ -163,6 +162,7 @@ ui <- fluidPage(
   
   ########## 2.1.2 Use i18n ##########  
   usei18n(i18n),
+  
   
   
   
@@ -1298,56 +1298,27 @@ server <- function(input, output, session) {
   
   ############### 3.2 Update UI ###############
   ########## 3.2.1 Observe buttons for active tab ##########
-  # Observe button-inputs for btn_data
-  observeEvent(input$btn_data, {
-    # Define the active Tab
-    activeTab("data")
-    # Set Button to active version
-    session$sendCustomMessage("setActiveButton", "btn_data")
-  })
-  # Observe button-inputs for btn_plottype
-  observeEvent(input$btn_plottype, {
-    # Define the active Tab
-    activeTab("plottype")
-    # Set Button to active version
-    session$sendCustomMessage("setActiveButton", "btn_plottype")
-  })
-  # Observe button-inputs for btn_variables
-  observeEvent(input$btn_variables, {
-    # Define the active Tab
-    activeTab("variables")
-    # Set Button to active version
-    session$sendCustomMessage("setActiveButton", "btn_variables")
-  })
-  # Observe button-inputs for btn_plot_options
-  observeEvent(input$btn_plot_options, {
-    # Define the active Tab
-    activeTab("plot_options")
-    # Set Button to active version
-    session$sendCustomMessage("setActiveButton", "btn_plot_options")
-  })
-  # Observe button-inputs for btn_text
-  observeEvent(input$btn_text, {
-    # Define the active Tab
-    activeTab("text")
-    # Set Button to active version
-    session$sendCustomMessage("setActiveButton", "btn_text")
-  })
-  # Observe button-inputs for btn_layout
-  observeEvent(input$btn_layout, {
-    # Define the active Tab
-    activeTab("layout")
-    # Set Button to active version
-    session$sendCustomMessage("setActiveButton", "btn_layout")
-  })
-  # Observe button-inputs for btn_download
-  observeEvent(input$btn_download, {
-    # Define the active Tab
-    activeTab("download")
-    # Set Button to active version
-    session$sendCustomMessage("setActiveButton", "btn_download")
-  })
+  # Create a list of tabs
+  tab_map <- c(
+    btn_data        = "data",
+    btn_plottype    = "plottype",
+    btn_variables   = "variables",
+    btn_plot_options= "plot_options",
+    btn_text        = "text",
+    btn_layout      = "layout",
+    btn_download    = "download"
+  )
   
+  # Apply for all tabs
+  invisible(lapply(names(tab_map), function(id){
+    # Observe tabs
+    observeEvent(input[[id]], {
+      # Set selected tab to current tab
+      activeTab(tab_map[[id]])
+      # Set Button to active tab
+      session$sendCustomMessage("setActiveButton", id)
+    })
+  }))
   
   # Make active tab accessible in the UI
   observe({
@@ -1358,34 +1329,22 @@ server <- function(input, output, session) {
   
   
   ########## 3.2.2 Observe buttons for plot-type ##########
-  # Observe button-inputs for plot_bar
-  observeEvent(input$plot_bar, {
-    # Define the active Plot
-    activePlot("Bar")
-    # Set Button to active version
-    session$sendCustomMessage("setActivePlot", "plot_bar")
-  })
-  # Observe button-inputs for plot_box
-  observeEvent(input$plot_box, {
-    # Define the active Plot
-    activePlot("Box")
-    # Set Button to active version
-    session$sendCustomMessage("setActivePlot", "plot_box")
-  })
-  # Observe button-inputs for plot_line
-  observeEvent(input$plot_line, {
-    # Define the active Plot
-    activePlot("Line")
-    # Set Button to active version
-    session$sendCustomMessage("setActivePlot", "plot_line")
-  })
-  # Observe button-inputs for plot_scatter
-  observeEvent(input$plot_scatter, {
-    # Define the active Plot
-    activePlot("Scatter")
-    # Set Button to active version
-    session$sendCustomMessage("setActivePlot", "plot_scatter")
-  })
+  # Create a list of plot-types
+  plot_map <- c(plot_bar="Bar", 
+                plot_box="Box", 
+                plot_line="Line", 
+                plot_scatter="Scatter")
+  
+  # Apply for all plot-types
+  invisible(lapply(names(plot_map), function(id){
+    # Observe plot-types
+    observeEvent(input[[id]], {
+      # Set selected plot-type
+      activePlot(plot_map[[id]])
+      # Set Button to active version
+      session$sendCustomMessage("setActivePlot", id)
+    })
+  }))
   
   
   
@@ -4020,15 +3979,6 @@ server <- function(input, output, session) {
   
   
   ############### 9. Copy/Download ###############
-  
-  
-  
-  
-  
-  
-  
-  
-  
   ############### 9.1 Add Code to clipboad ###############
   # Add clipboard buttons
   output$clip <- renderUI({
@@ -4460,32 +4410,23 @@ server <- function(input, output, session) {
     # Title
     updateTextInput(session, "plot_title",
                     label = tr("text.title"),
-                    placeholder = tr("text.title_placeholder")
-    )
-    
+                    placeholder = tr("text.title_placeholder"))
     # Subtitle
     updateTextInput(session, "plot_subtitle",
                     label = tr("text.subtitle"),
-                    placeholder = tr("text.subtitle_placeholder")
-    )
-    
+                    placeholder = tr("text.subtitle_placeholder"))
     # X-Axis Title
     updateTextInput(session, "x_axis_title",
                     label = tr("text.x_axis"),
-                    placeholder = tr("text.x_axis_placeholder")
-    )
-    
+                    placeholder = tr("text.x_axis_placeholder"))
     # Y-Axis Title
     updateTextInput(session, "y_axis_title",
                     label = tr("text.y_axis"),
-                    placeholder = tr("text.y_axis_placeholder")
-    )
-    
+                    placeholder = tr("text.y_axis_placeholder"))
     # Legend-Title
     updateTextInput(session, "legend_title",
                     label = tr("text.legend"),
-                    placeholder = tr("text.legend_placeholder")
-    )
+                    placeholder = tr("text.legend_placeholder"))
     
     
     
@@ -4659,7 +4600,6 @@ server <- function(input, output, session) {
     updateNumericInput(session,"Legend_Key_Spacing",    label = tr("layout.legend.key.spaicng"))
     updateNumericInput(session,"Legend_Box_Spacing",    label = tr("layout.legend.box.spacing"))
     
-    
     # Facet Background Settings
     setTxt(id = "layout_collapse_legend_options", key = "layout.collapse.legend.options")
     # Facet Columns Background Settings
@@ -4674,7 +4614,6 @@ server <- function(input, output, session) {
     updateSelectInput(session, "Stripe_Y_Linetype",    label = tr("options.linetype"),        choices = linetype_choices_all(),     selected = input$Stripe_Y_Linetype)
     updateNumericInput(session,"Stripe_Y_Size",    label = tr("options.linewidth"))
     updateTextInput  (session, "Stripe_Y_Line_Color",   label = tr("options.linecolor"),       placeholder = tr("placeholder.color"))
-    
     
     # Facet Texts
     setTxt(id = "layout_collapse_facets_text", key = "layout.collapse.facets.text")
@@ -4692,8 +4631,6 @@ server <- function(input, output, session) {
     updateTextInput  (session, "Stripe_Y_Textcolor",   label = tr("label.color"),       placeholder = tr("placeholder.color"))
     updateNumericInput(session,"Stripe_Y_Textsize",    label = tr("label.size"))
     updateSelectInput(session, "Stripe_Y_Alignment",label= tr("label.align"),     choices = align_h_choices(),  selected = input$Stripe_Y_Alignment)
-    
-    
     })
 }
 
