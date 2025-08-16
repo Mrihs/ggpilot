@@ -1430,78 +1430,41 @@ server <- function(input, output, session) {
   ############### 3.3 Read Data ###############
   # Create a reactive data with the loaded data
   data <- reactive({
-    
-    
-    
-    ########## 3.3.1 Default Data for missing data ##########
     if (is.null(input$file)) {
       # Return an empty standard dataset if no data is selected
       return(data.frame(
         Placeholder_X = numeric(0),
         Placeholder_Y = numeric(0)
       ))
-    } else {
       # If input-file is selected
+    } else {
+      # Get Input-File
       req(input$file)
       # Get the type of selected file
       file_ext <- tools::file_ext(input$file$name)
-      
-      
-      
-      
-      ########## 3.3.2 Read CSV ##########
-      # If file type is csv, read csv-File
-      if (file_ext == "csv") {
-        return(read.csv(input$file$datapath, header = TRUE))
-      }
-      
-      
-      
-      
-      ########## 3.3.3 Read XLSX ##########
-      # If file type is xlsx, read xlsx-File
-      else if (file_ext == "xlsx") {
-        return(readxl::read_excel(input$file$datapath))
-      }
-      
-      
-      
-      ########## 3.3.4 Read RDS ##########
-      # If file type is rds, load rds-File
-      else if (file_ext == "rds") {
-        return(readRDS(input$file$datapath))
-      }
-      
-      
-      
-      
-      ########## 3.3.5 Read RDATA ##########
-      # If file type is rds, load rds-File
-      else if (file_ext == "rdata") {
-        # Create new environment
-        env <- new.env()
-        
-        # Load file
-        load(input$file$datapath, envir = env)
-        
-        # List all files in environment
-        obj_names <- ls(env)
-        
-        # Select first object of .RData-File if there is only one object
-        if (length(obj_names) == 1) {
-          return(env[[obj_names[1]]])
-          # Give error-message if there are more objects in the .RData-File
-        } else {
-          stop(tr("error.rdata_multiple"))
-        }
-      }
-      # If file is other type, stop
-      else {
-        stop(tr("error.unknown_format"))
-      }
+      # Switch function based on file-type
+      switch(file_ext,
+             # Read CSV-Files
+             csv  = read.csv(input$file$datapath, header = TRUE),
+             # Read Excel-File
+             xlsx = readxl::read_excel(input$file$datapath),
+             # Read rds-File 
+             rds  = readRDS(input$file$datapath),
+             # Read rdata-File
+             rdata = {
+               # Create new environment
+               env <- new.env()
+               # Load file
+               load(input$file$datapath, envir = env)
+               # List all files in environment
+               objs <- ls(env)
+               # Select first object of .RData-File if there is only one object, give error message when multiple objects are in .RData-File
+               if (length(objs) == 1) env[[objs[1]]] else stop(tr("error.rdata_multiple"))
+             },
+             stop(tr("error.unknown_format"))
+      )
     }
-    }
-    )
+  })
 
   
   
@@ -1514,11 +1477,13 @@ server <- function(input, output, session) {
   ############### 3.4 Update Variables ###############
   ########## 3.4.1 Define list of variables ##########
   observeEvent(data(), {
-    updateSelectInput(session, "x_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
-    updateSelectInput(session, "y_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
-    updateSelectInput(session, "group_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
-    updateSelectInput(session, "grid_col_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
-    updateSelectInput(session, "grid_row_var", choices = c("Keine Variable" = " ", names(data())), selected = " ")
+    # Create a list of all variable-dropdowns
+    variable_dropdowns <- c("x_var","y_var","group_var","grid_col_var","grid_row_var")
+    # Create a list of all available variables
+    variable_options <- c("Keine Variable" = " ", names(data()))
+    
+    # Add variables into each dropdown
+    lapply(variable_dropdowns, function(id) updateSelectInput(session, id, choices = variable_options, selected = " "))
   })
   
   
@@ -1591,98 +1556,28 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  # Set variable to control whether x-axis variable is numeric
-  output$is_numeric_x <- reactive({
-    # Require x_var and data()
-    req(input$x_var, data())
-    # save the selected x-axis variable
-    x_data <- data()[[input$x_var]]
-    # Check if it is factor/character
-    if (is.factor(x_data) || is.character(x_data)) {
-      # Return FALSE if it is not numeric
-      return(FALSE)
-    } else {
-      # Return TRUE if it is numeric
-      return(TRUE)
-    }
+  # Set is_numeric_boolean for each variable-dropdown
+  for (pair in list(
+    c("x_var","is_numeric_x"),
+    c("y_var","is_numeric_y"),
+    c("group_var","is_numeric_group"),
+    c("grid_col_var","is_numeric_col"),
+    c("grid_row_var","is_numeric_row")
+  )) local({
+    # Get the pair
+    inp <- pair[1]; out <- pair[2]
+    # Make reactive output
+    output[[out]] <- reactive({
+      # Get data and the inputs
+      req(input[[inp]], data())
+      # get the variable
+      this_variable <- data()[[ input[[inp]] ]]
+      # check if variable is factor or character
+      !(is.factor(this_variable) || is.character(this_variable))
+    })
+    # Hide the output-variables
+    outputOptions(output, out, suspendWhenHidden = FALSE)
   })
-  
-  
-  # Set variable to control whether y-axis variable is numeric
-  output$is_numeric_y <- reactive({
-    # Require y_var and data()
-    req(input$y_var, data())
-    # save the selected y-axis variable
-    y_data <- data()[[input$y_var]]
-    # Check if it is factor/character
-    if (is.factor(y_data) || is.character(y_data)) {
-      # Return FALSE if it is not numeric
-      return(FALSE)
-    } else {
-      # Return TRUE if it is numeric
-      return(TRUE)
-    }
-  })
-  
-  
-  # Set variable to control whether grouping variable is numeric
-  output$is_numeric_group <- reactive({
-    # Require group_var and data()
-    req(input$group_var, data())
-    # save the selected grouping variable
-    group_data <- data()[[input$group_var]]
-    # Check if it is factor/character
-    if (is.factor(group_data) || is.character(group_data)) {
-      # Return FALSE if it is not numeric
-      return(FALSE)
-    } else {
-      # Return TRUE if it is numeric
-      return(TRUE)
-    }
-  })
-  
-  
-  # Set variable to control whether facet-col variable is numeric
-  output$is_numeric_col <- reactive({
-    # Require grid_col_var and data()
-    req(input$grid_col_var, data())
-    # save the selected facet-col variable
-    gridcol_data <- data()[[input$grid_col_var]]
-    # Check if it is factor/character
-    if (is.factor(gridcol_data) || is.character(gridcol_data)) {
-      # Return FALSE if it is not numeric
-      return(FALSE)
-    } else {
-      # Return TRUE if it is numeric
-      return(TRUE)
-    }
-  })
-  
-  
-  # Set variable to control whether facet-row variable is numeric
-  output$is_numeric_row <- reactive({
-    # Require grid_row_var and data()
-    req(input$grid_row_var, data())
-    # save the selected facet-row variable
-    grid_row <- data()[[input$grid_row_var]]
-    # Check if it is factor/character
-    if (is.factor(grid_row) || is.character(grid_row)) {
-      # Return FALSE if it is not numeric
-      return(FALSE)
-    } else {
-      # Return TRUE if it is numeric
-      return(TRUE)
-    }
-  })
-  
-  
-  # Hide the defined output-variables
-  outputOptions(output, "is_numeric_x", suspendWhenHidden = FALSE)
-  outputOptions(output, "is_numeric_y", suspendWhenHidden = FALSE)
-  outputOptions(output, "is_numeric_group", suspendWhenHidden = FALSE)
-  outputOptions(output, "is_numeric_col", suspendWhenHidden = FALSE)
-  outputOptions(output, "is_numeric_row", suspendWhenHidden = FALSE)
   
   
   # Redefine factor code when there is a change in the factors
