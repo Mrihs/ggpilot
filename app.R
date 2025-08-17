@@ -4096,12 +4096,7 @@ server <- function(input, output, session) {
         placeholder= tr("data.no_file")
       )
     )
-    
-    updateSelectInput(session, "file_format",
-                      label   = tr("download.file_format"),
-                      selected = input$file_format
-    )
-    
+
     
     
     

@@ -14,6 +14,7 @@ nav.download,Download,Download
 
 data.select_dataset,Select Dataset,Datensatz auswählen
 data.browse,Browse,Durchsuchen
+data.upload_complete,Upload Complete,Hochladen abgeschlossen
 data.no_file,No file selected,Keine Datei ausgewählt
 error.rdata_multiple,The .RData file contains multiple objects. Please provide a file with a single object.,Das .RData-File beinhaltet mehrere Objekte. Bitte .RData-File mit nur einem Objekt verwenden.
 error.unknown_format,Unknown file format. Please upload a CSV/XLSX/RData/RDS file.,Unbekanntes Dateiformat. Bitte laden Sie eine CSV/XLSX/RData/RDS Datei hoch.
