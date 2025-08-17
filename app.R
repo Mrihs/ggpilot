@@ -244,11 +244,11 @@ ui <- fluidPage(
     }  
     
     /* Body Space for footer */
-    body { padding-bottom: 56px; }
+    body { padding-bottom: 0px; }
 
     /* Fixed footer */
     footer.app-footer {
-      position: fixed;
+      position: static;
       left: 0;
       bottom: 0;
       width: 100%;
@@ -259,6 +259,7 @@ ui <- fluidPage(
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-top: 48px;
     }
     .app-footer .bootstrap-select { 
       margin: 0 !important; 
