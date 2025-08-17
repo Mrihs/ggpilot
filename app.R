@@ -254,6 +254,27 @@ ui <- fluidPage(
       align-items: center;
       justify-content: space-between;
     }
+    .app-footer .bootstrap-select { 
+      margin: 0 !important; 
+    }
+    .app-footer .bootstrap-select > .dropdown-toggle {
+      padding: 6px 12px;        /* gleiche vertikale Padding wie GitHub-Button */
+      height: 36px;             /* gleiche Höhe wie .github-btn */
+      background: #fff;
+      border: 1px solid #ddd;
+      display: inline-flex;     /* vertikal zentrieren */
+      align-items: center;      /* vertikal zentrieren */
+      line-height: 1;           /* vermeidet Verschiebung nach oben */
+    }
+    .app-footer .bootstrap-select .filter-option,
+    .app-footer .bootstrap-select .filter-option-inner-inner {
+      display: flex;
+      align-items: center;
+    }
+    .app-footer .bootstrap-select .caret {
+      margin-top: 0 !important;
+      align-self: center;
+    }
     
     /* Language switcher */
     .lang-switch {
@@ -278,12 +299,49 @@ ui <- fluidPage(
     
     /* Language-Icons */
     .lang-icon { width: 20px; height: 20px; vertical-align: middle; }
-    
-    /* Picker-Button in Footer */
-    .app-footer .bootstrap-select > .dropdown-toggle {
-      padding: 2px 8px;
+
+    /* GitHub-Button */
+    .app-footer .github-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
       background: #fff;
       border: 1px solid #ddd;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #000;
+      transition: background-color .15s ease, box-shadow .15s ease;
+    }
+    .app-footer .github-btn:hover {
+      background: #f5f5f5;
+      text-decoration: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .app-footer .github-btn .fa {
+      font-size: 18px;   /* Font Awesome Icon-Größe */
+      line-height: 1;
+    }
+    
+    .app-footer .shiny-input-container,
+    .app-footer .form-group {
+      margin: 0 !important;
+      margin-bottom: 0 !important;
+    }
+    .app-footer .shiny-input-container {
+      display: flex;
+      align-items: center;
+    }
+    .app-footer .bootstrap-select > .dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      height: 36px;
+      padding: 6px 12px;
+      line-height: 1;
+      box-sizing: border-box;
+    }
+    .app-footer .bootstrap-select .caret {
+      margin-top: 0 !important;
     }
   "))
   ),
@@ -3947,14 +4005,18 @@ server <- function(input, output, session) {
       tags$a(
         # Set link
         href   = "https://github.com/Mrihs/ggpilot",
-        tr("footer.github"),
         # Open in new window
-        target = "_blank"
+        target = "_blank",
+        # Set github-buttong
+        class  = "github-btn",
+        title = "Github",
+        icon("github"),
+        span(tr("footer.github"))
       ),
       shinyWidgets::pickerInput(
         inputId  = "language",
-        label    = NULL,                  # kein Textlabel, nur Icons
-        choices  = c("en","de"),          # Werte bleiben "en"/"de"
+        label    = NULL,
+        choices  = c("en","de"),
         selected = if (!is.null(input$language)) input$language else "en",
         width    = "70px",
         choicesOpt = list(
