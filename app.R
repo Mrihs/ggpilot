@@ -431,8 +431,34 @@ ui <- fluidPage(
                  conditionalPanel(condition = "input.activeTab == 'data'",
                                   ########## 2.4.1 UI to Select Data ########## 
                                   # Add UI-Object for the Data Input page
-                                  uiOutput("file_input_ui")
+                                  tags$head(
+                                    tags$script(HTML("
+                                    Shiny.addCustomMessageHandler('setFileInputLang', function(x){
+                                      var root = $('#file').closest('.shiny-input-container');
+                                      // Label über dem Feld
+                                      $('#file_label').text(x.label);
+                                      // Button-Text (robusteste Variante: Textknoten im Button ersetzen)
+                                      var btn = root.find('label.btn');
+                                      if(btn.length){
+                                        var tn = btn.contents().filter(function(){return this.nodeType === 3;}).first();
+                                        if(tn.length){ tn[0].nodeValue = ' ' + x.browse + ' '; }
+                                      }
+                                      // Placeholder (readonly Textfeld)
+                                      root.find('input[type=\"text\"][readonly]').attr('placeholder', x.placeholder);
+                                    });
+                                  "))
                                   ),
+                                  
+                                  conditionalPanel(condition = "input.activeTab == 'data'",
+                                                   tags$label(id = "file_label", class = "control-label", tr("data.select_dataset")),
+                                                   fileInput(
+                                                     "file",
+                                                     label       = NULL,                                 # Label kommt als separater <label> drüber
+                                                     buttonLabel = tr("data.browse"),                    # initiale Sprache
+                                                     placeholder = tr("data.no_file"),                   # initiale Sprache
+                                                     accept      = c(".csv", ".xlsx", ".rds", ".RData")
+                                                   )
+                                  )                                  ),
                                   
                  
                  
@@ -1268,8 +1294,21 @@ ui <- fluidPage(
                  ########## 2.4.7 Download ##########
                  # Define Conditional-Panel for when Download tab is selected
                  conditionalPanel(condition = "input.activeTab == 'download'",
-                                  # Create a UI-Element
-                                  uiOutput("download_ui")
+                                  fluidRow(
+                                    column(6,
+                                           h3(span(id = "download_plot_hdr", tr("download.plot"))),
+                                           downloadButton("downloadPlot", label = span(id = "download_plot_btn", tr("download.download_plot"))),
+                                           selectInput(
+                                             "file_format",
+                                             label   = span(id = "download_file_format_lbl", tr("download.file_format")),
+                                             choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")
+                                           )
+                                    ),
+                                    column(6,
+                                           h3(span(id = "download_code_hdr", tr("download.r_code"))),
+                                           downloadButton("downloadCode", label = span(id = "download_code_btn", tr("download.download_code")))
+                                    )
+                                  )
                  )
     ),
     
@@ -3649,76 +3688,6 @@ server <- function(input, output, session) {
   
   
   
-  ############### 7. Create UI ###############
-  ############### 7.1 Data Panel ###############
-  output$file_input_ui <- renderUI({
-    # Get the selected language
-    i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
-    
-    # Add Button for File Input
-    fileInput(
-      "file",
-      label        = tr("data.select_dataset"),
-      buttonLabel  = tr("data.browse"),
-      placeholder  = tr("data.no_file"),
-      accept       = c(".csv", ".xlsx", ".rds", ".RData")
-    )
-  })
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  ############### 7.2 Download Panel ###############
-  output$download_ui <- renderUI({
-    # Get the selected language
-    i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
-    
-    fluidRow(
-      # Create a column
-      column(6,
-             h3(tr("download.plot")),
-             # create a Download-Button for Plot
-             downloadButton("downloadPlot", tr("download.download_plot")),
-             # Define File-format
-             selectInput("file_format", 
-                         tr("download.file_format"), 
-                         choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")),
-      ),
-      # Create a column
-      column(6,
-             h3(tr("download.r_code")),
-             # create a Download-Button for RCode
-             downloadButton("downloadCode", tr("download.download_code"))
-      ),
-    )
-  })
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   ############### 8. Set Output ###############
   ############### 8.1 Generate Plot ###############
   # Define Plot-Output
@@ -4118,6 +4087,25 @@ server <- function(input, output, session) {
     
     
     
+    ############### 11.9 Update Data Sidebar ###############
+    session$sendCustomMessage(
+      "setFileInputLang",
+      list(
+        label      = tr("data.select_dataset"),
+        browse     = tr("data.browse"),
+        placeholder= tr("data.no_file")
+      )
+    )
+    
+    updateSelectInput(session, "file_format",
+                      label   = tr("download.file_format"),
+                      selected = input$file_format
+    )
+    
+    
+    
+    
+    
     
     ############### 11.3 Update Buttons for Plot-Type ###############
     updateActionButton(session, "plot_bar",
@@ -4481,6 +4469,21 @@ server <- function(input, output, session) {
     updateNumericInput(session,"Legend_Key_Height",    label = tr("layout.legend.key.height"))
     updateNumericInput(session,"Legend_Key_Spacing",    label = tr("layout.legend.key.spaicng"))
     updateNumericInput(session,"Legend_Box_Spacing",    label = tr("layout.legend.box.spacing"))
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 11.9 Update Download Sidebar ###############
+    setTxt("download_plot_hdr",        "download.plot")
+    setTxt("download_code_hdr",        "download.r_code")
+    setTxt("download_plot_btn",        "download.download_plot")
+    setTxt("download_code_btn",        "download.download_code")
+    setTxt("download_file_format_lbl", "download.file_format")
+    setTxt("file_label",               "data.select_dataset")
   })
 }
 
