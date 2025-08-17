@@ -92,6 +92,12 @@ tr <- function(key) {
   trimws(x)
 }
 
+tr_html <- function(key) {
+  x <- i18n$t(key)
+  x <- paste(as.character(x), collapse = "")
+  HTML(x)
+}
+
 
 
 
@@ -343,6 +349,51 @@ ui <- fluidPage(
     .app-footer .bootstrap-select .caret {
       margin-top: 0 !important;
     }
+    
+    /* Right Side of Footer*/
+    .right-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* Info-Button */
+    .app-footer .info-btn,
+    .app-footer .info-btn:visited,
+    .app-footer .info-btn:active {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      color: #000 !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color .15s ease, box-shadow .15s ease;
+    }
+    
+    .app-footer .info-btn .fa {
+      font-size: 18px;
+      line-height: 1;
+      color: #000;
+    }
+    
+    .app-footer .info-btn:hover {
+      background: #f5f5f5;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      color: #000 !important;
+      text-decoration: none;
+    }
+    
+    .modal-title .info-modal-title { 
+      font-size: 28px; 
+      line-height: 1.2;
+      font-weight: 600;
+    }
+        
   "))
   ),
   
@@ -3963,6 +4014,7 @@ server <- function(input, output, session) {
   
   
   ############### 10. Set Footer ###############
+  ############### 11.1 Footer UI ###############
   output$app_footer <- renderUI({
     # Get the selected language
     i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
@@ -3982,21 +4034,51 @@ server <- function(input, output, session) {
         icon("github"),
         span(tr("footer.github"))
       ),
-      shinyWidgets::pickerInput(
-        inputId  = "language",
-        label    = NULL,
-        choices  = c("en","de"),
-        selected = if (!is.null(input$language)) input$language else "en",
-        width    = "70px",
-        choicesOpt = list(
-          content = c(
-            '<img src="en.svg" class="lang-icon" alt="EN" />',
-            '<img src="de.svg" class="lang-icon" alt="DE" />'
-          )
+      div(
+        class = "right-tools",
+        # neuer runder Info-Button
+        actionLink(
+          inputId = "info_btn",
+          label   = icon("info-circle"),
+          class   = "info-btn",
+          title = tags$span(class = "info-modal-title", tr("footer.info.title")),
+          `aria-label` = tr("footer.info.tooltip")
         ),
-        options = list(dropupAuto = FALSE)
+        shinyWidgets::pickerInput(
+          inputId  = "language",
+          label    = NULL,
+          choices  = c("en","de"),
+          selected = if (!is.null(input$language)) input$language else "en",
+          width    = "70px",
+          choicesOpt = list(
+            content = c(
+              '<img src="en.svg" class="lang-icon" alt="EN" />',
+              '<img src="de.svg" class="lang-icon" alt="DE" />'
+            )
+          ),
+          options = list(dropupAuto = FALSE)
+        )
       )
     )
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ############### 11.2 Ino-Dialogue ###############
+  observeEvent(input$info_btn, {
+    showModal(modalDialog(
+      title = tags$span(class = "info-modal-title", tr("footer.info.title")),  
+      size = "l",
+      easyClose = TRUE,
+      footer = modalButton(tr("footer.info.close")),
+      div(style = "white-space: pre-line;", tr_html("footer.info.text.html"))
+    ))
   })
   
   

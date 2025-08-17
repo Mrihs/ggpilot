@@ -14,7 +14,8 @@ nav.download,Download,Download
 
 data.select_dataset,Select Dataset,Datensatz auswählen
 data.browse,Browse,Durchsuchen
-data.upload_complete,Upload Complete,Hochladen abgeschlossen
+data.uploading,Uploading...,Hochladen...
+data.upload.complete,Upload Complete,Hochladen abgeschlossen
 data.no_file,No file selected,Keine Datei ausgewählt
 error.rdata_multiple,The .RData file contains multiple objects. Please provide a file with a single object.,Das .RData-File beinhaltet mehrere Objekte. Bitte .RData-File mit nur einem Objekt verwenden.
 error.unknown_format,Unknown file format. Please upload a CSV/XLSX/RData/RDS file.,Unbekanntes Dateiformat. Bitte laden Sie eine CSV/XLSX/RData/RDS Datei hoch.
@@ -148,9 +149,9 @@ download.r_code,R Code,R-Code
 download.download_code,Download Code,Code herunterladen
 
 footer.github,View on GitHub,Auf GitHub ansehen
-footer.imprint,About,Info
-imprint.title,About,Info
-imprint.close,Close,Schliessen
+footer.info.tooltip,Info,Info
+footer.info.title,About,Info
+footer.info.close,Close,Schliessen
 imprint.body_html,Text Follows...,Text folgt...
 
 
@@ -202,3 +203,5 @@ label.rotation,Rotation,Rotation
 
 
 
+
+footer.info.text.html,"<h4>Authors</h4><p>Michael Rihs<br><br>Department for Cognitive Psychology, Perception and Research Methods<br>Institute for Psychology<br>University of Bern, Switzerland</p><br><h4>Citation</h4><p>Rihs, M., (2025). <i> ggpilot </i> [Shiny app]. <a href='https://mrihs.shinyapps.io/ggpilot/' target='_blank' rel='noopener'>https://mrihs.shinyapps.io/ggpilot/</a></p><br><h4>License</h4><p><a href='https://creativecommons.org/licenses/by/4.0/' target='_blank' rel='noopener'><img src='https://licensebuttons.net/l/by/4.0/88x31.png' alt='CC BY 4.0' style='vertical-align:middle; margin-right:8px;'></a>This application is licensed under a Creative Commons Attribution (CC BY 4.0) license.</p><br><h4>GitHub Repository</h4><p>The source code for this shiny app is hosted at: <a href='https://github.com/Mrihs/ggpilot' target='_blank' rel='noopener'>github.com/Mrihs/ggpilot </a></p><br><h4>Contact</h4><p>Michael Rihs<br>Institut for Psychology<br>Fabrikstrasse 8<br>3012 Bern, Switzerland<br>E-Mail: <a href="mailto:michael.rihs@unibe.ch">michael.rihs@unibe.ch</a>.</p>","<h4>Autoren</h4><p>Michael Rihs<br><br> Abteilung für kognitive Psychologie, Wahrnehmung und Methodenlehre<br>Institut für Psychologie<br>Universität Bern, Switzerland</p><br><h4>Quellenangabe</h4><p>Rihs, M., (2025). <i>ggpilot</i> [Shiny app]. <a href='https://mrihs.shinyapps.io/ggpilot/' target='_blank' rel='noopener'>https://mrihs.shinyapps.io/ggpilot/</a></p><br><h4>Lizenz</h4><p><a href='https://creativecommons.org/licenses/by/4.0/deed.de' target='_blank' rel='noopener'><img src='https://licensebuttons.net/l/by/4.0/88x31.png' alt='CC BY 4.0' style='vertical-align:middle; margin-right:8px;'></a>Diese Applikation steht unter einer Creative Commons Namensnennung (CC BY 4.0) Lizenz.</p><br><h4>GitHub-Repository</h4><p>Der Source-Code für diese Shiny-App ist unter folgendem GitHub-Repository hinterlegt: <a href='https://github.com/Mrihs/ggpilot' target='_blank' rel='noopener'>github.com/Mrihs/ggpilot </a></p><br><h4>Kontakt</h4><p>Michael Rihs<br>Institut für Psychologie<br>Fabrikstrasse 8<br>3012 Bern, Switzerland<br>E-Mail: <a href="mailto:michael.rihs@unibe.ch">michael.rihs@unibe.ch</a>.</p>"
