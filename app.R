@@ -13,7 +13,8 @@ packages <- c("shiny",
           "rclipboard",
           "sortable",
           "svglite",
-          "shiny.i18n")
+          "shiny.i18n",
+          "shinyWidgets")
 
 # For each Package
 for (pkg in packages) {
@@ -234,7 +235,56 @@ ui <- fluidPage(
     background-color: #e0e0e0;
     color: black;
     background-image: none;
-    }    
+    }  
+    
+    /* Body Space for footer */
+    body { padding-bottom: 56px; }
+
+    /* Fixed footer */
+    footer.app-footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background: #ffffff;
+      border-top: 1px solid #ddd;
+      padding: 6px 12px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    /* Language switcher */
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .lang-btn {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity .15s ease, transform .05s ease;
+      user-select: none;
+    }
+    .lang-btn:hover { opacity: 0.85; }
+    .lang-btn.active {
+      opacity: 1;
+      outline: 2px solid #bbb;
+      border-radius: 50%;
+    }
+    
+    /* Language-Icons */
+    .lang-icon { width: 20px; height: 20px; vertical-align: middle; }
+    
+    /* Picker-Button in Footer */
+    .app-footer .bootstrap-select > .dropdown-toggle {
+      padding: 2px 8px;
+      background: #fff;
+      border: 1px solid #ddd;
+    }
   "))
   ),
   
@@ -283,17 +333,6 @@ ui <- fluidPage(
            actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i>'), class = "custom-btn"),
            actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i>'), class = "custom-btn"),
            actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i>'), class = "custom-btn"),
-    ),
-    # Set a column
-    column(
-      1, align = "left", style = "margin-top: 15px;min-width: 120px;",
-      # Add Input to select Language
-      selectInput(
-        inputId = "language",
-        label   = i18n$t("ui.language"),
-        choices = setNames(c("en","de"), c(tr("lang.en"), tr("lang.de"))),
-        selected = "en"
-      )
     )
   ),
   
@@ -3556,7 +3595,7 @@ server <- function(input, output, session) {
   ############### 7.1 Data Panel ###############
   output$file_input_ui <- renderUI({
     # Get the selected language
-    i18n$set_translation_language(input$language)
+    i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
     
     # Add Button for File Input
     fileInput(
@@ -3579,7 +3618,7 @@ server <- function(input, output, session) {
   ############### 7.2 Download Panel ###############
   output$download_ui <- renderUI({
     # Get the selected language
-    i18n$set_translation_language(input$language)
+    i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
     
     fluidRow(
       # Create a column
@@ -3899,10 +3938,11 @@ server <- function(input, output, session) {
   ############### 10. Set Footer ###############
   output$app_footer <- renderUI({
     # Get the selected language
-    i18n$set_translation_language(input$language)
+    i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
     
     # Set Footer
     tags$footer(
+      class = "app-footer",
       # Add Hyperlink
       tags$a(
         # Set link
@@ -3911,15 +3951,20 @@ server <- function(input, output, session) {
         # Open in new window
         target = "_blank"
       ),
-      # Set style
-      align = "left",
-      style = "
-      bottom:11.5px;
-      width:100%;
-      height:20px;
-      padding: 0px;
-      z-index: 100;
-    "
+      shinyWidgets::pickerInput(
+        inputId  = "language",
+        label    = NULL,                  # kein Textlabel, nur Icons
+        choices  = c("en","de"),          # Werte bleiben "en"/"de"
+        selected = if (!is.null(input$language)) input$language else "en",
+        width    = "70px",
+        choicesOpt = list(
+          content = c(
+            '<img src="en.svg" class="lang-icon" alt="EN" />',
+            '<img src="de.svg" class="lang-icon" alt="DE" />'
+          )
+        ),
+        options = list(dropupAuto = FALSE)
+      )
     )
   })
   
@@ -3943,7 +3988,7 @@ server <- function(input, output, session) {
   ############### 11.1 Update Language ###############
   observeEvent(input$language, {
     req(input$language)
-    i18n$set_translation_language(input$language)
+    i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
     
     
     
@@ -3967,11 +4012,17 @@ server <- function(input, output, session) {
     
     
     ############### 11.2 Update Language Selection ###############
-    updateSelectInput(
+    shinyWidgets::updatePickerInput(
       session, "language",
-      label   = tr("ui.language"),
-      choices = setNames(c("en","de"), c(tr("lang.en"), tr("lang.de"))),
-      selected = input$language
+      label    = NULL,
+      choices  = c("en","de"),
+      selected = input$language,
+      choicesOpt = list(
+        content = c(
+          '<img src="en.svg" class="lang-icon" alt="EN" />',
+          '<img src="de.svg" class="lang-icon" alt="DE" />'
+        )
+      )
     )
     
     
