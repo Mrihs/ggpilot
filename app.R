@@ -1,6 +1,6 @@
 #################### 1. Preparation ####################
 ############### 1.1 Packages ###############
-# Create a list of required Packages
+# Create list of required Packages
 packages <- c("shiny",
           "ggplot2",
           "readxl",
@@ -17,7 +17,7 @@ packages <- c("shiny",
 
 # For each Package
 for (pkg in packages) {
-  # Install package if not installed yed
+  # Install package if not installed yet
   if (!require(pkg, character.only = TRUE)) install.packages(pkg)
   # Load package
   library(pkg, character.only = TRUE)
@@ -32,10 +32,10 @@ for (pkg in packages) {
 
 
 
-############### 1.2 Load Translator ###############
-# Create Translator
+############### 1.2 Create Translator ###############
+# Create translator
 i18n <- Translator$new(translation_csvs_path = "i18n", translation_csv_config = "www/i18n.config.yaml")
-# Set Default language
+# Set default language
 i18n$set_translation_language("en")
 
 
@@ -1351,24 +1351,21 @@ server <- function(input, output, session) {
   
   
   ########## 3.2.3 Update UI for plot options ##########
-  # Create reactive variables for barplot options
-  show_barplot_options   <- reactive(identical(activePlot(), "Bar"))
-  show_lineplot_options  <- reactive(identical(activePlot(), "Line"))
-  show_errorbar_options  <- reactive(activePlot() %in% c("Bar","Line"))
-  show_scatter_options   <- reactive(identical(activePlot(), "Scatter"))
+  # Create a list to check whether a plot-type is the active plot
+  plot_visibility_map <- list(
+    show_barplot_options   = reactive(identical(activePlot(), "Bar")),
+    show_linepolot_options = reactive(identical(activePlot(), "Line")),
+    show_errorbar_options  = reactive(activePlot() %in% c("Bar","Line")),
+    show_scatter_options   = reactive(identical(activePlot(), "Scatter"))
+  )
   
-  # Create function to update visibility of barplot options
-  show_plot_options <- function(name, rx){
-    # Update variable to control visibility of barplot options
-    output[[name]] <- reactive({ rx() })
-    outputOptions(output, name, suspendWhenHidden = FALSE)
-  }
+  # Apply for all plot-types
+  invisible(lapply(names(plot_visibility_map), function(id){
+    # Update variable to control visibility of respective plot
+    output[[id]] <- reactive(plot_visibility_map[[id]]());
+    outputOptions(output, id, suspendWhenHidden = FALSE) 
+    }))
 
-  # Show and hide plot options
-  show_plot_options("show_barplot_options",  show_barplot_options)
-  show_plot_options("show_linepolot_options",show_lineplot_options)
-  show_plot_options("show_errorbar_options", show_errorbar_options)
-  show_plot_options("show_scatter_options",  show_scatter_options)
   
   
   
@@ -2104,27 +2101,27 @@ server <- function(input, output, session) {
     ############### 4.8 Set Labs ###############
     # Define code-line for labs
     labs_code <- ""
-    
+
     if (!is.null(input$plot_title) && input$plot_title != "") {
       labs_code <- paste0(labs_code, sprintf("title = '%s'", input$plot_title))
     }
     if (!is.null(input$plot_subtitle) && input$plot_subtitle != "") {
       labs_code <- paste0(
-        labs_code, 
+        labs_code,
         if (labs_code != "") ", " else "",
         sprintf("subtitle = '%s'", input$plot_subtitle)
       )
     }
     if (!is.null(input$x_axis_title) && input$x_axis_title != "") {
       labs_code <- paste0(
-        labs_code, 
+        labs_code,
         if (labs_code != "") ", " else "",
         sprintf("x = '%s'", input$x_axis_title)
       )
     }
     if (!is.null(input$y_axis_title) && input$y_axis_title != "") {
       labs_code <- paste0(
-        labs_code, 
+        labs_code,
         if (labs_code != "") ", " else "",
         sprintf("y = '%s'", input$y_axis_title)
       )
@@ -2132,27 +2129,19 @@ server <- function(input, output, session) {
     if (!is.null(input$legend_title) && input$legend_title != "") {
         labs_code <- paste0(
           labs_code,
-          if (labs_code != "") 
-            ", " 
-          else 
+          if (labs_code != "")
+            ", "
+          else
             "",
-          if (input$color_palette_target == "Füllung") 
+          if (input$color_palette_target == "Füllung")
             sprintf("fill = '%s'", input$legend_title)
-          else if (input$color_palette_target == "Linien") 
+          else if (input$color_palette_target == "Linien")
             sprintf("color = '%s'", input$legend_title)
-          else if (input$color_palette_target == "Füllung und Linien") 
+          else if (input$color_palette_target == "Füllung und Linien")
             sprintf("fill = '%s', color = '%s'", input$legend_title, input$legend_title)
         )
-              
     }
-    
-    # if (!is.null(input$legend_title) && input$legend_title != "") {
-    #   labs_code <- paste0(
-    #     labs_code, 
-    #     if (labs_code != "") ", " else "",
-    #     sprintf("fill = '%s'", input$legend_title)
-    #   )
-    # }
+
     # Add labs_code when labs were assigned
     if (labs_code != "") {
       r_code <- paste0(r_code, sprintf(" +\n  labs(%s)", labs_code))
