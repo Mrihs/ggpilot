@@ -1,6 +1,6 @@
-#################### 1. Preparation ####################
-############### 1.1 Packages ###############
-# Create list of required Packages
+# 1. Preparation ####################
+## 1.1 Packages ####################
+# Create list of required packages
 packages <- c("shiny",
               "ggplot2",
               "readxl",
@@ -16,7 +16,7 @@ packages <- c("shiny",
               "shiny.i18n",
               "shinyWidgets")
 
-# For each Package
+# For each package
 for (pkg in packages) {
   # Install package if not installed yet
   if (!require(pkg, character.only = TRUE)) install.packages(pkg)
@@ -33,9 +33,10 @@ for (pkg in packages) {
 
 
 
-############### 1.2 Create Translator ###############
+## 1.2 Create Translator ####################
 # Create translator
-i18n <- Translator$new(translation_csvs_path = "i18n", translation_csv_config = "www/i18n.config.yaml")
+i18n <- Translator$new(translation_csvs_path = "i18n",
+                       translation_csv_config = "www/i18n.config.yaml")
 # Set default language
 i18n$set_translation_language("en")
 
@@ -48,16 +49,20 @@ i18n$set_translation_language("en")
 
 
 
-############### 1.3 Define Functions ###############
-########## 1.3.1 BSCollapse-Function is set using an arrow-down icon ##########
+
+## 1.3 Define Functions ####################
+### 1.3.1 BSCollapse-Function to Set Collapse-Elements with Icons ##########
 BSCollapseArrow <- function(text, id = NULL, icon_class = "glyphicon-menu-down") {
+  # Crreate HTML-elements
   HTML(sprintf(
     '<div class="panel-title-container">
        <i class="glyphicon %s"></i>
        <span %s>%s</span>
      </div>',
+    # Create icon
     icon_class,
     if (is.null(id)) "" else sprintf('id="%s"', id),
+    # Add text
     text
   ))
 }
@@ -66,14 +71,15 @@ BSCollapseArrow <- function(text, id = NULL, icon_class = "glyphicon-menu-down")
 
 
 
-########## 1.3.2 is_valid_colo-Function to validate color-inputs ##########
+### 1.3.2 is_valid_colo-Function to Validate Color-Inputs ####################
 is_valid_color <- function(color) {
-  # Empty colors are not invalid
+  # Ignore empty colors
   if (is.null(color) || color == "") return(FALSE)
   tryCatch({
-    # Check if valid color
+    # Check if color is valid
     col2rgb(color)
     TRUE
+    # Create error if not valid
   }, error = function(e) FALSE)
 }
 
@@ -81,7 +87,8 @@ is_valid_color <- function(color) {
 
 
 
-########## 1.3.3 tr-Function to Help Translate ##########
+### 1.3.3 tr-Function to Help Translate ####################
+# Normal tr-function
 tr <- function(key) {
   # Get the key from the translation filee
   x <- i18n$t(key)
@@ -89,12 +96,18 @@ tr <- function(key) {
   x <- paste(as.character(x), collapse = "")
   # Remove potential HTML-elements
   x <- gsub("<[^>]+>", "", x)
+  # Trim key-text
   trimws(x)
 }
 
+
+# HTML-specific tr-function
 tr_html <- function(key) {
+  # Get the key from the translation filee
   x <- i18n$t(key)
+  # Paste text
   x <- paste(as.character(x), collapse = "")
+  # Create text as HTML
   HTML(x)
 }
 
@@ -102,43 +115,67 @@ tr_html <- function(key) {
 
 
 
-########## 1.3.4 Functions to Serialise Dropdown-Localization ##########
+### 1.3.4 Functions to Serialise Dropdown-Localization ####################
+# Function to serialise translation of dropdowns for font
 font_choices <- function() setNames(
+  # Set default options
   c("Gemäss Theme","Sans Serife","Serife","Monospace"),
+  # Set keys for options-translation
   c(tr("options.font.theme"), tr("options.font.sans"), tr("options.font.serif"), tr("options.font.mono"))
 )
+# Function to serialise translation of dropdowns for face
 face_choices <- function() setNames(
+  # Set default options
   c("Gemäss Theme","Normal","Fett","Kursiv","Fett & Kursiv"),
+  # Set keys for options-translation
   c(tr("face.theme"), tr("face.plain"), tr("face.bold"), tr("face.italic"), tr("face.bolditalic"))
 )
+# Function to serialise translation of dropdowns for horicontal alignment
 align_h_choices <- function() setNames(
+  # Set default options
   c("Gemäss Theme","Linksbündig","Mittig","Rechtsbündig"),
+  # Set keys for options-translation
   c(tr("align.theme"), tr("align.left"), tr("align.center"), tr("align.right"))
 )
+# Function to serialise translation of dropdowns for vertical alignment
 align_v_choices <- function() setNames(
+  # Set default options
   c("Gemäss Theme","Unten","Mittig","Oben"),
+  # Set keys for options-translation
   c(tr("align.theme"), tr("align.bottom"), tr("align.center"), tr("align.top"))
 )
+# Function to serialise translation of dropdowns for linetype
 linetype_choices_all <- function() setNames(
+  # Set default options
   c("Gemäss Theme","Keine","Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
+  # Set keys for options-translation
   c(tr("options.linetype.theme"), tr("options.linetype.none"), tr("options.linetype.solid"),
     tr("options.linetype.dashed"), tr("options.linetype.dotted"),
     tr("options.linetype.pointdash"), tr("options.linetype.longdash"),
     tr("options.linetype.twodash"))
 )
+# Function to serialise translation of dropdowns for legend position
 legend_pos_choices <- function() setNames(
+  # Set default options
   c("Gemäss Theme","Keine","Rechts","Links","Oben","Unten","Im Plot"),
+  # Set keys for options-translation  
   c(tr("options.position.theme"), tr("options.position.none"), tr("options.position.right"),
     tr("options.position.left"), tr("options.position.top"),
     tr("options.position.bottom"), tr("options.position.inside"))
 )
+# Function to serialise translation of dropdowns for legend text position
 legend_text_pos_choices <- function() setNames(
+  # Set default options
   c("Gemäss Theme","Oben","Unten","Links","Rechts"),
+  # Set keys for options-translation  
   c(tr("options.position.theme"), tr("options.position.top"),
     tr("options.position.bottom"), tr("options.position.left"), tr("options.position.right"))
 )
+# Function to serialise translation of dropdowns for legend direction
 legend_dir_choices <- function() setNames(
+  # Set default options
   c("Gemäss Theme","Vertikal","Horizontal"),
+  # Set keys for options-translation
   c(tr("options.position.alignment.theme"), tr("options.position.alignment.vertical"),
     tr("options.position.alignment.horicontal"))
 )
@@ -147,11 +184,13 @@ legend_dir_choices <- function() setNames(
 
 
 
-########## 1.3.5 Functino to Localice Placeholder-Variables ##########
+### 1.3.5 Function to Localice Placeholder-Variables ####################
 localize_placeholder_variables <- function(x) {
+  # Replace placeholder_x with the associated key
   if (x == "Placeholder_X") return(tr("variables.placeholder_x"))
+  # Replace placeholder_y with the associated key
   if (x == "Placeholder_Y") return(tr("variables.placeholder_y"))
-  x
+  
 }
 
 
@@ -168,25 +207,27 @@ localize_placeholder_variables <- function(x) {
 
 
 
-#################### 2. UI ####################
+# 2. UI ####################
+# Create the UI
 ui <- tagList(
+  # Create a fluid page
   fluidPage(
-    ############### 2.1 General Settings ###############
-    ########## 2.1.1 Define Theme ##########
+    ## 2.1 General Settings ####################
+    ### 2.1.1 Define Theme ####################
     theme = shinytheme("cerulean"),
     
     
     
     
     
-    ########## 2.1.2 Use i18n ##########  
+    ### 2.1.2 Use i18n ####################
     usei18n(i18n),
     
     
     
     
     
-    ########## 2.1.3 Define custom CSS ##########
+    ### 2.1.3 Define custom CSS ####################
     tags$head(
       tags$style(HTML("
     
@@ -264,8 +305,8 @@ ui <- tagList(
     body { padding-bottom: 0; }
     
     body > .container-fluid {
-      min-height: 100svh;          /* volle Viewport-Höhe */
-      display: flex;              /* vertikales Flex-Layout */
+      min-height: 100svh;
+      display: flex;
       flex-direction: column;
     }
 
@@ -289,13 +330,13 @@ ui <- tagList(
       margin: 0 !important; 
     }
     .app-footer .bootstrap-select > .dropdown-toggle {
-      padding: 6px 12px;        /* gleiche vertikale Padding wie GitHub-Button */
-      height: 36px;             /* gleiche Höhe wie .github-btn */
+      padding: 6px 12px;
+      height: 36px;
       background: #fff;
       border: 1px solid #ddd;
-      display: inline-flex;     /* vertikal zentrieren */
-      align-items: center;      /* vertikal zentrieren */
-      line-height: 1;           /* vermeidet Verschiebung nach oben */
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
     }
     .app-footer .bootstrap-select .filter-option,
     .app-footer .bootstrap-select .filter-option-inner-inner {
@@ -350,7 +391,7 @@ ui <- tagList(
       box-shadow: 0 1px 3px rgba(0,0,0,.08);
     }
     .app-footer .github-btn .fa {
-      font-size: 18px;   /* Font Awesome Icon-Größe */
+      font-size: 18px;
       line-height: 1;
     }
     
@@ -456,8 +497,6 @@ ui <- tagList(
     }
     
     .top-nav .glyphicon { color: inherit; }
-
-        
   "))
     ),
     
@@ -470,65 +509,86 @@ ui <- tagList(
     
     
     
-    ############### 2.2 Set Title-Panel ###############
-    # Define a fluid Row
-    fluidRow(
-      class = "titlebar",
-      # Set a Column
-      column(2, style = "min-width: 350px;",
-             # Define logo and title
-             titlePanel(title = span(
-               # Add image
-               img(src = "logo.png", 
-                   height = 90, 
-                   style = "position: relative; top: -15px; margin-left: 15px;"
-               ), 
-               # Define HTML
-               HTML('<span style="font-size: 64px;; margin-left: 20px;">ggpilot</span>'),
-               style = "white-space: nowrap;" # kein Zeilenumbruch
-             ),
-             windowTitle = "ggpilot")),
-      # Set a Column
-      column(
-        9, align = "center",
-        style = "margin-top: 15px;",
-        # NAV-Leiste in der Titelleiste
-        tags$ul(
-          class = "nav nav-pills top-nav",
-          # Aktiv: 'data'
-          tags$li(class = "active",
-                  tags$a(href = "#", `data-tab` = "data",
-                         HTML('<span class="glyphicon glyphicon-folder-open"></span> <span id="nav_lbl_data">'),
-                         tr("nav.data"), HTML('</span>')
-                  )),
-          tags$li(tags$a(href = "#", `data-tab` = "plottype",
-                         HTML('<span class="glyphicon glyphicon-stats"></span> <span id="nav_lbl_plottype">'),
-                         tr("nav.plottype"), HTML('</span>')
-          )),
-          tags$li(tags$a(href = "#", `data-tab` = "variables",
-                         HTML('<span class="glyphicon glyphicon-tasks"></span> <span id="nav_lbl_variables">'),
-                         tr("nav.variables"), HTML('</span>')
-          )),
-          tags$li(tags$a(href = "#", `data-tab` = "plot_options",
-                         HTML('<span class="glyphicon glyphicon-wrench"></span> <span id="nav_lbl_plot_options">'),
-                         tr("nav.options"), HTML('</span>')
-          )),
-          tags$li(tags$a(href = "#", `data-tab` = "text",
-                         HTML('<span class="glyphicon glyphicon-font"></span> <span id="nav_lbl_text">'),
-                         tr("nav.text"), HTML('</span>')
-          )),
-          tags$li(tags$a(href = "#", `data-tab` = "layout",
-                         HTML('<span class="glyphicon glyphicon-adjust"></span> <span id="nav_lbl_layout">'),
-                         tr("nav.layout"), HTML('</span>')
-          )),
-          tags$li(tags$a(href = "#", `data-tab` = "download",
-                         HTML('<span class="glyphicon glyphicon-download"></span> <span id="nav_lbl_download">'),
-                         tr("nav.download"), HTML('</span>')
-          ))
-        ),
-        
-        # JS: Klicks in der Top-Navigation -> activeTab setzen + aktive Klasse umschalten
-        tags$script(HTML("
+    ## 2.2 Set Title-Panel ####################
+    # Define a fluid row
+    fluidRow(class = "titlebar",
+             # Set a column
+             column(2, style = "min-width: 350px;",
+                    # Define logo and title
+                    titlePanel(title = span(
+                      # Add image
+                      img(src = "logo.png", 
+                          # Set image height
+                          height = 90, 
+                          # Set image position
+                          style = "position: relative; top: -15px; margin-left: 15px;"
+                      ), 
+                      # Define HTML
+                      HTML('<span style="font-size: 64px;; margin-left: 20px;">ggpilot</span>'),
+                      style = "white-space: nowrap;" # kein Zeilenumbruch
+                    ),
+                    # Set window title
+                    windowTitle = "ggpilot")),
+             # Set a column
+             column(9, align = "center",
+                    # Set style of the column
+                    style = "margin-top: 15px;",
+                    # Create a navigation bar
+                    tags$ul(class = "nav nav-pills top-nav",
+                            # Create data-tab aand mark it as active tab
+                            tags$li(class = "active",
+                                    tags$a(href = "#", `data-tab` = "data",
+                                           # Crate HTML and add icon
+                                           HTML('<span class="glyphicon glyphicon-folder-open"></span> <span id="nav_lbl_data">'),
+                                           # Add localized text
+                                           tr("nav.data"), HTML('</span>')
+                                    )),
+                            # Create ploty-type tab
+                            tags$li(tags$a(href = "#", `data-tab` = "plottype",
+                                           # Crate HTML and add icon
+                                           HTML('<span class="glyphicon glyphicon-stats"></span> <span id="nav_lbl_plottype">'),
+                                           # Add localized text
+                                           tr("nav.plottype"), HTML('</span>')
+                            )),
+                            # Create variables tab
+                            tags$li(tags$a(href = "#", `data-tab` = "variables",
+                                           # Crate HTML and add icon
+                                           HTML('<span class="glyphicon glyphicon-tasks"></span> <span id="nav_lbl_variables">'),
+                                           # Add localized text
+                                           tr("nav.variables"), HTML('</span>')
+                            )),
+                            # Create plot options tab
+                            tags$li(tags$a(href = "#", `data-tab` = "plot_options",
+                                           # Crate HTML and add icon
+                                           HTML('<span class="glyphicon glyphicon-wrench"></span> <span id="nav_lbl_plot_options">'),
+                                           # Add localized text
+                                           tr("nav.options"), HTML('</span>')
+                            )),
+                            # Create text tab
+                            tags$li(tags$a(href = "#", `data-tab` = "text",
+                                           # Crate HTML and add icon
+                                           HTML('<span class="glyphicon glyphicon-font"></span> <span id="nav_lbl_text">'),
+                                           # Add localized text
+                                           tr("nav.text"), HTML('</span>')
+                            )),
+                            # Create layout tab
+                            tags$li(tags$a(href = "#", `data-tab` = "layout",
+                                           # Crate HTML and add icon
+                                           HTML('<span class="glyphicon glyphicon-adjust"></span> <span id="nav_lbl_layout">'),
+                                           # Add localized text
+                                           tr("nav.layout"), HTML('</span>')
+                            )),
+                            # Create download tab
+                            tags$li(tags$a(href = "#", `data-tab` = "download",
+                                           # Crate HTML and add icon
+                                           HTML('<span class="glyphicon glyphicon-download"></span> <span id="nav_lbl_download">'),
+                                           # Add localized text
+                                           tr("nav.download"), HTML('</span>')
+                            ))
+                    ),
+                    
+                    # Create javascript to change active tab on clicks
+                    tags$script(HTML("
                         $(function () {
                           $('.top-nav').on('click', 'a[data-tab]', function (e) {
                             e.preventDefault();
@@ -539,15 +599,13 @@ ui <- tagList(
                           });
                         });
                       "))
-      )
-      
+             )
     ),
     
-    # Define Hidden Inputs for the Active Tab
-    tags$div(
-      textInput("activeTab", label = NULL, value = "data"),
-      # Set the Input to be hidden
-      style = "display: none;"
+    # Define hidden input for the active tab
+    tags$div(textInput("activeTab", label = NULL, value = "data"),
+             # Hide the input
+             style = "display: none;"
     ),  
     
     
@@ -559,11 +617,10 @@ ui <- tagList(
     
     
     
-    ############### 2.3 Set Sidebar ###############
-    # Define Sidebar-Layout
+    ## 2.3 Set Sidebar ####################
+    # Define sidebar-layout
     sidebarLayout(
-      
-      # Define Panel in Sidebar with width of 4
+      # Define panel in sidebar with width of 4
       sidebarPanel(width = 4,
                    
                    
@@ -575,18 +632,22 @@ ui <- tagList(
                    
                    
                    
-                   ############### 2.4 Input Fields ###############
-                   # Define Conditional-Panel for when data tab is selected
+                   ## 2.4 Input Fields ####################
+                   # Define conditional panel for when data tab is selected
                    conditionalPanel(condition = "input.activeTab == 'data'",
-                                    ########## 2.4.1 UI to Select Data ########## 
-                                    # Add UI-Object for the Data Input page
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    ### 2.4.1 UI to Select Data ####################
+                                    # Add UI-object for the data input page
                                     tags$head(
-                                      tags$script(HTML("
-                                        Shiny.addCustomMessageHandler('setFileInputLang', function(x){
+                                      # Add custom javascript to translate the data-inputs' text
+                                      tags$script(HTML(
+                                        "Shiny.addCustomMessageHandler('setFileInputLang', function(x){
                                         var root = $('#file').closest('.shiny-input-container');
-                                  
                                         $('#file_label').text(x.label);
-                                  
                                         var btn = root.find('.btn-file');
                                         if (btn.length) {
                                           var lbl = btn.find('.btn-label');
@@ -604,11 +665,13 @@ ui <- tagList(
                                         root.find('input[type=\"text\"][readonly]').attr('placeholder', x.placeholder);
                                         root.find('input[type=\"file\"]').attr('aria-label', x.browse).attr('title', x.browse);
                                       });
-                                  "))
+                                        "))
                                     ),
-                                    
+                                    # Add a conditional panel for the data-tab
                                     conditionalPanel(condition = "input.activeTab == 'data'",
+                                                     # Set label for file-upload
                                                      tags$label(id = "file_label", class = "control-label", tr("data.select_dataset")),
+                                                     # Create file-input
                                                      fileInput(
                                                        "file",
                                                        label       = NULL,
@@ -616,33 +679,37 @@ ui <- tagList(
                                                        placeholder = tr("data.no_file"),
                                                        accept      = c(".csv", ".xlsx", ".rds", ".RData")
                                                      )
-                                    )                                  ),
+                                    )                                  
+                   ),
                    
                    
                    
                    
                    
-                   
-                   ########## 2.4.2 UI for Plot-Type ##########
-                   # Define HTML-Script for handling Plot-Types
+                   ### 2.4.2 UI for Plottype ####################
+                   # Define javascript to handle plottypes
                    tags$script(HTML("
                                   Shiny.addCustomMessageHandler('setActivePlot', function(btnId) {
                                   $('.plot-btn').removeClass('active-plot');
                                   $('#' + btnId).addClass('active-plot');
                                   });
-                                  ")),                 
+                                  ")),
                    
-                   # Define Conditional-Panel for when plottype tab is selected
+                   # Define conditional panel for when plottype tab is selected
                    conditionalPanel(condition = "input.activeTab == 'plottype'",
+                                    # Add button for bar-plot
                                     actionButton("plot_bar", 
                                                  label = HTML(sprintf('<img src="Icon_Bar.png" height="100px"> <br> %s', tr("plot.bar"))), 
                                                  class = "plot-btn"),
+                                    # Add button for line-plot
                                     actionButton("plot_line", 
                                                  label = HTML(sprintf('<img src="Icon_Line.png" height="100px"> <br> %s', tr("plot.line"))), 
                                                  class = "plot-btn"),
+                                    # Add button for box-plot
                                     actionButton("plot_box", 
                                                  label = HTML(sprintf('<img src="Icon_Box.png" height="100px"> <br> %s', tr("plot.box"))), 
                                                  class = "plot-btn"),
+                                    # Add button for scatter-plot
                                     actionButton("plot_scatter", 
                                                  label = HTML(sprintf('<img src="Icon_Scatter.png" height="100px"> <br> %s', tr("plot.scatter"))), 
                                                  class = "plot-btn")
@@ -652,7 +719,8 @@ ui <- tagList(
                    
                    
                    
-                   ########## 2.4.3 UI to Select Variables ##########
+                   ### 2.4.3 UI to Select Variables ####################
+                   # Define javascript to handle variables
                    tags$script(HTML("
                                    Shiny.addCustomMessageHandler('setText', function(x) {
                                    var el = document.getElementById(x.id);
@@ -660,19 +728,19 @@ ui <- tagList(
                                    });
                                   ")),
                    
-                   # Define Conditional-Panel for when Variables tab is selected
+                   # Define conditional-panel for when Variables tab is selected
                    conditionalPanel(condition = "input.activeTab == 'variables'",
                                     # Set title
                                     h3(span(id = "x_title", tr("variables.x_title"))),
-                                    # X-xis Variable
+                                    # Create dropdown for x-axis variable
                                     selectInput("x_var", NULL, choices = c(""), selected = ""),
-                                    # Create a conditionl-panel for when a variable is selected
+                                    # Create a conditional panel for when a variable is selected
                                     conditionalPanel(condition = "output.is_numeric_x == false",
-                                                     # Create a Layout for CollapsePanels
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("variables.reorder_levels"), id = "x_reorder_title"),
                                                                   # Placeholder for the ranking-UI
                                                                   uiOutput("x_factor_rank_list")
@@ -681,15 +749,15 @@ ui <- tagList(
                                     ),
                                     # Set title
                                     h3(span(id = "y_title", tr("variables.y_title"))),
-                                    # Y-Axis Variable
+                                    # Create dropdown for y-axis variable
                                     selectInput("y_var", NULL, choices = c(""), selected = ""),
-                                    # Create a conditionl-panel for when a variable is selected
+                                    # Create a conditional panel for when a variable is selected
                                     conditionalPanel(condition = "output.is_numeric_y == false",
-                                                     # Create a Layout for CollapsePanels
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("variables.reorder_levels"), id = "y_reorder_title"),
                                                                   # Placeholder for the ranking-UI
                                                                   uiOutput("y_factor_rank_list")
@@ -698,15 +766,15 @@ ui <- tagList(
                                     ),
                                     # Set title
                                     h3(span(id = "group_title", tr("variables.group_title"))),
-                                    # Grouping Variable
+                                    # Create dropdown for grouping variable
                                     selectInput("group_var", NULL, choices = c(""), selected = ""),
-                                    # Create a conditionl-panel for when a variable is selected
+                                    # Create a conditional panel for when a variable is selected
                                     conditionalPanel(condition =  "output.is_numeric_group == false",
-                                                     # Create a Layout for CollapsePanels
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("variables.reorder_levels"), id = "group_reorder_title"),
                                                                   # Placeholder for the ranking-UI
                                                                   uiOutput("group_factor_rank_list")
@@ -715,15 +783,15 @@ ui <- tagList(
                                     ),
                                     # Set title
                                     h3(span(id = "grid_col_title", tr("variables.grid_col_title"))),
-                                    # Facet Grid - Columns
+                                    # Create dropdown for facet grid column variable
                                     selectInput("grid_col_var", NULL, choices = c(""), selected = ""),
-                                    # Create a conditionl-panel for when a variable is selected
+                                    # Create a conditional panel for when a variable is selected
                                     conditionalPanel(condition =  "output.is_numeric_col == false",
-                                                     # Create a Layout for CollapsePanels
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_col_reorder_title"),
                                                                   # Placeholder for the ranking-UI
                                                                   uiOutput("grid_col_factor_rank_list")
@@ -732,15 +800,15 @@ ui <- tagList(
                                     ),
                                     # Set title
                                     h3(span(id = "grid_row_title", tr("variables.grid_row_title"))),
-                                    # Facet Grid - Rows
+                                    # Create dropdown for facet grid row variable
                                     selectInput("grid_row_var", NULL, choices = c(""), selected = ""),
-                                    # Create a conditionl-panel for when a variable is selected
+                                    # Create a conditional panel for when a variable is selected
                                     conditionalPanel(condition =  "output.is_numeric_row == false",
-                                                     # Create a Layout for CollapsePanels
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_row_reorder_title"),
                                                                   # Placeholder for the ranking-UI
                                                                   uiOutput("grid_row_factor_rank_list")
@@ -753,19 +821,19 @@ ui <- tagList(
                    
                    
                    
-                   ########## 2.4.4 UI for Plot Options ##########
-                   # Define Conditional-Panel for when Plot-Options tab is selected
+                   ### 2.4.4 UI for Plot Options ####################
+                   # Define conditional-panel for when plot options tab is selected
                    conditionalPanel(condition = "input.activeTab == 'plot_options'",
-                                    # Create a Layout for CollapsePanels
+                                    # Create a layout for collapse panels
                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                               # Create a Collapse-Panel for Theme-Settings
+                                               # Create a collapse panel
                                                bsCollapsePanel(
-                                                 # Define Title of Collapse-Panel
+                                                 # Define title of the collapse panel
                                                  title = BSCollapseArrow(tr("options.theme.title"), 
                                                                          id = "opt_theme_title"),
-                                                 # Define CSS Settings
+                                                 # Set CSS class
                                                  div(class = ".collapse_panel-settings",
-                                                     # Create Input-Options for themes
+                                                     # Create dropdown for thmes
                                                      selectInput(inputId = "plot_theme", label = "", 
                                                                  choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", 
                                                                              "Minimal", "Void", "Calc", "the Economist", 
@@ -777,17 +845,18 @@ ui <- tagList(
                                                  )
                                                )
                                     ),
+                                    # Define conditional-panel for when grouping options are available
                                     conditionalPanel(condition = "output.show_grouping_options",
-                                                     # Create a Layout for CollapsePanels
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel for Color-Palette-Settings
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("options.palette.title"), 
                                                                                           id = "opt_palette_title"),
-                                                                  # Define CSS Settings
+                                                                  # Set CSS class
                                                                   div(class = ".collapse_panel-settings",
-                                                                      # Dropdown with options for color-palette
+                                                                      # Create dropdown for color palettes
                                                                       selectInput(inputId = "Color_Palette", 
                                                                                   label = tr("options.palette.select"), 
                                                                                   choices = c("Gemäss Theme", "Eigene Farbpalette erstellen", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
@@ -804,30 +873,32 @@ ui <- tagList(
                                                                                   selected = "Gemäss Theme"),
                                                                       # Set UI for individual color palette
                                                                       conditionalPanel(condition = "input.Color_Palette =='Eigene Farbpalette erstellen'",
-                                                                                       # Add Button
+                                                                                       # Creat button to add new color
                                                                                        actionButton("add", tr("options.custom.colorpalette.add")),
+                                                                                       # Creat button to remove color
                                                                                        actionButton("remove_last", tr("options.custom.colorpalette.remove")),
                                                                                        tags$div(id = "input_container"),
-                                                                                       # Create CSS for inavlid colors
+                                                                                       # Set CSS for inavlid colors
                                                                                        tags$style(HTML("
-                                                                      .invalid { background-color: #ffcccc !important; }
-                                                                      .error-message { color: red; font-size: 14px; margin-left: 10px; display: inline; }
-                                                                    ")),
+                                                                                       .invalid { background-color: #ffcccc !important; }
+                                                                                       .error-message { color: red; font-size: 14px; margin-left: 10px; display: inline; }
+                                                                                                       ")),
                                                                                        # JS to validate colors
                                                                                        tags$script(HTML("
-                                                                      Shiny.addCustomMessageHandler('validColor', function(data) {
-                                                                        var inputField = document.getElementById(data.id);
-                                                                        var errorText = document.getElementById(data.id + '_error');
-                                                                        if (data.valid) {
-                                                                          inputField.classList.remove('invalid');
-                                                                          if (errorText) errorText.style.display = 'none';
-                                                                        } else {
-                                                                          inputField.classList.add('invalid');
-                                                                          if (errorText) errorText.style.display = 'inline';
-                                                                        }
-                                                                      });
-                                                                    "))
+                                                                                       Shiny.addCustomMessageHandler('validColor', function(data) {
+                                                                                       var inputField = document.getElementById(data.id);
+                                                                                       var errorText = document.getElementById(data.id + '_error');
+                                                                                       if (data.valid) {
+                                                                                        inputField.classList.remove('invalid');
+                                                                                        if (errorText) errorText.style.display = 'none';
+                                                                                      } else {
+                                                                                        inputField.classList.add('invalid');
+                                                                                        if (errorText) errorText.style.display = 'inline';
+                                                                                      }
+                                                                                      });
+                                                                                                        "))
                                                                       ),
+                                                                      # Create dropdown for color palette target
                                                                       selectInput(inputId = "color_palette_target", 
                                                                                   label = tr("options.palette.apply_to"),
                                                                                   choices = setNames(c("Füllung", "Linien", "Füllung und Linien"),
@@ -837,121 +908,125 @@ ui <- tagList(
                                                                 )
                                                      )
                                     ),
-                                    # Create a Layout for CollapsePanels
+                                    # Create a layout for collapse panels
                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                               # Create a Collapse-Panel for Plot-Size
+                                               # Create a collapse panel
                                                bsCollapsePanel(
-                                                 # Define Title of Collapse-Panel
+                                                 # Define title of the collapse panel
                                                  title = BSCollapseArrow(tr("options.plotsize.title"), 
                                                                          id = "options_plotsize_title"),
-                                                 # Define CSS Settings
+                                                 # Set CSS class
                                                  div(class = ".collapse_panel-settings",
+                                                     # Create a column
                                                      column(6,
-                                                            # Define Plot-Width
+                                                            # Create Input to define plot width
                                                             numericInput(inputId = "plot_width_px", 
                                                                          label = tr("options.plotsize.width_px"),
-                                                                         value = 800, min = 100),
+                                                                         value = 800, min = 100)
                                                      ),
+                                                     # Create a column
                                                      column(6,
-                                                            # Define Plot-Height
+                                                            # Create Input to define plot height
                                                             numericInput(inputId = "plot_height_px", 
                                                                          label = tr("options.plotsize.height_px"),
-                                                                         value = 600, min = 100),
+                                                                         value = 600, min = 100)
                                                      )
                                                  )
                                                )
                                     ),
-                                    # Create a Layout for CollapsePanels
+                                    # Create a layout for collapse panels
                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                               # Create a Collapse-Panel for Axis-Range
+                                               # Create a collapse panel
                                                bsCollapsePanel(
-                                                 # Define Title of Collapse-Panel
+                                                 # Define title of the collapse panel
                                                  title = BSCollapseArrow(tr("options.range.title"), 
                                                                          id = "opt_range_title"),
-                                                 # Define CSS Settings
+                                                 # Set CSS class
                                                  div(class = ".collapse_panel-settings",
-                                                     # Set a HTML header for the Y-Axis Range Text
+                                                     # Set a HTML header for the x-axis range text
                                                      HTML(sprintf('<label class="control-label"><span id="opt_xaxis_lbl">%s</span></label>', tr("options.range.xaxis"))),
-                                                     # Define the min and max value next to each other
-                                                     div(
-                                                       # Define style
-                                                       style = "display: flex; justify-content: space-between; gap: 10px;",
-                                                       div(
-                                                         style = "flex: 1;",
-                                                         # Numeric Input field for the minimal X-Axis value
-                                                         div(style="flex:1;", 
-                                                             numericInput("x_axis_min", 
-                                                                          label = tr("options.range.min"), 
-                                                                          step = 0.1, value = "")),
-                                                       ),
-                                                       div(
-                                                         style = "flex: 1;",
-                                                         # Numeric Input field for the max X-Axis value
-                                                         div(style="flex:1;",
-                                                             numericInput("x_axis_max",
-                                                                          label = tr("options.range.max"),
-                                                                          step = 0.1, value = ""))
-                                                       )
+                                                     # Create container
+                                                     div(style = "display: flex; justify-content: space-between; gap: 10px;",
+                                                         # Create container
+                                                         div(style = "flex: 1;",
+                                                             # Create container
+                                                             div(style="flex:1;", 
+                                                                 # Create input to define x axis minimum
+                                                                 numericInput("x_axis_min", 
+                                                                              label = tr("options.range.min"), 
+                                                                              step = 0.1, value = ""))
+                                                         ),
+                                                         # Create container
+                                                         div(style = "flex: 1;",
+                                                             # Numeric Input field for the max X-Axis value
+                                                             div(style="flex:1;",
+                                                                 # Create input to define x axis maximum
+                                                                 numericInput("x_axis_max",
+                                                                              label = tr("options.range.max"),
+                                                                              step = 0.1, value = ""))
+                                                         )
                                                      ),
-                                                     # Set a HTML header for the X-Axis Range Text
+                                                     # Set a HTML header for the y-axis range text
                                                      HTML(sprintf('<label class="control-label"><span id="opt_yaxis_lbl">%s</span></label>', tr("options.range.yaxis"))),
-                                                     # Define the min and max value next to each other
-                                                     div(
-                                                       # Define style
-                                                       style = "display: flex; justify-content: space-between; gap: 10px;",
-                                                       div(
-                                                         style = "flex: 1;",
-                                                         # Numeric Input field for the minimal Y-Axis value
-                                                         div(style="flex:1;", 
-                                                             numericInput("y_axis_min", 
-                                                                          label = tr("options.range.min"), 
-                                                                          step = 0.1, value = "")),
-                                                       ),
-                                                       div(
-                                                         style = "flex: 1;",
-                                                         # Numeric Input field for the max Y-Axis value
-                                                         div(style="flex:1;", 
-                                                             numericInput("y_axis_max", 
-                                                                          label = tr("options.range.max"), 
-                                                                          step = 0.1, value = ""))
-                                                       )
+                                                     # Create container
+                                                     div(style = "display: flex; justify-content: space-between; gap: 10px;",
+                                                         # Create container
+                                                         div(style = "flex: 1;",
+                                                             # Create container
+                                                             div(style="flex:1;", 
+                                                                 # Create input to define y axis minimum
+                                                                 numericInput("y_axis_min", 
+                                                                              label = tr("options.range.min"), 
+                                                                              step = 0.1, value = "")),
+                                                         ),
+                                                         # Create container
+                                                         div(style = "flex: 1;",
+                                                             # Create container
+                                                             div(style="flex:1;", 
+                                                                 # Create input to define y axis maximum
+                                                                 numericInput("y_axis_max", 
+                                                                              label = tr("options.range.max"), 
+                                                                              step = 0.1, value = ""))
+                                                         )
                                                      )                                
                                                  ),
+                                                 # Create checkbox for exact axis ranges
                                                  checkboxInput("exact_axis_range", 
-                                                               label = tr("options.range.expand"), 
+                                                               label = tr("options.range.expand"),
                                                                value = TRUE)
                                                )
                                     ),
-                                    # Create a Layout for CollapsePanels
+                                    # Define conditional-panel for when grouping options are available
                                     conditionalPanel(condition = "output.show_grouping_options",
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel for Group-Settings
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(text = tr("options.grouping.space"), 
                                                                                           id = "options_grouping_space"),
-                                                                  # Define CSS Settings
+                                                                  # Create container
                                                                   div(class = ".collapse_panel-settings",
-                                                                      # Numeric Input for the position-dodge value
+                                                                      # Create input to define dodge value
                                                                       numericInput(inputId = "dodge_value", 
                                                                                    label = tr("options.dodge.value"), 
                                                                                    min = 0, max = 2, step = 0.1, value = "")
                                                                   )
                                                                 )
                                                      )
-                                                     
                                     ),
-                                    # Create a Layout for CollapsePanels
+                                    # Define conditional-panel for when barplot is selected
                                     conditionalPanel(condition = "output.show_barplot_options",
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel for Errorbar-Settings
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("options.barplot"), 
                                                                                           id = "options_barplot"),
-                                                                  # Define CSS Settings
+                                                                  # Create container
                                                                   div(class = ".collapse_panel-settings",
-                                                                      # Numeric Input for the width of the Errorbar
+                                                                      # Create input to define width of error bars
                                                                       numericInput(inputId = "barplot_width", 
                                                                                    tr("options.barplot.width"), 
                                                                                    min = 0, step = 0.1, value = "")
@@ -959,24 +1034,25 @@ ui <- tagList(
                                                                 )
                                                      )
                                     ),
-                                    # Create a Layout for CollapsePanels
+                                    # Define conditional-panel for when lineplot is selected
                                     conditionalPanel(condition = "output.show_linepolot_options",
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel for Lineplot-Settings
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("options.lineplot"), 
                                                                                           id = "options_lineplot"),
-                                                                  # Define CSS Settings
+                                                                  # Create container
                                                                   div(class = ".collapse_panel-settings",
-                                                                      # Select linetype
+                                                                      # Create dropdown to select linetype of line-plots
                                                                       selectInput(inputId = "lineplot_line_type", 
                                                                                   label = tr("options.linetype"), 
                                                                                   choices = setNames(c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
                                                                                                      c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
                                                                                                        tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
                                                                                   selected = "Solide"),                                                                    
-                                                                      # Numeric Input for the width of the Errorbar
+                                                                      # Create input to define linewidth of line-plots
                                                                       numericInput(inputId = "lineplot_width", 
                                                                                    label = tr("options.lineplot.width"), 
                                                                                    min = 0, step = 0.1, value = "")                                                                
@@ -984,17 +1060,18 @@ ui <- tagList(
                                                                 )
                                                      )
                                     ),
-                                    # Create a Layout for CollapsePanels
+                                    # Define conditional-panel for when errorbars are shown
                                     conditionalPanel(condition = "output.show_errorbar_options",
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel for Errorbar-Settings
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("options.errorbar"), 
                                                                                           id = "options_errorbars"),
-                                                                  # Define CSS Settings
+                                                                  # Create container
                                                                   div(class = ".collapse_panel-settings",
-                                                                      # Dropdown to select the type of Errorbar
+                                                                      # Create dropdown to select unit of error-bars
                                                                       selectInput(inputId = "error_type", 
                                                                                   label = tr("options.errorbar.unit"),
                                                                                   choices = setNames(c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler"),
@@ -1005,15 +1082,15 @@ ui <- tagList(
                                                                                                        tr("options.errorbar.se"))),
                                                                                   # choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), 
                                                                                   selected = "Standardabweichung"),
-                                                                      # Numeric Input for the width of the Errorbar
+                                                                      # Create numeric input for number of errorbar units
                                                                       numericInput(inputId = "error_mult", 
                                                                                    label = tr("options.errorbar.mult"), 
                                                                                    min = 1, step = 1, value = 1),
-                                                                      # Numeric Input for the width of the Errorbar
+                                                                      # Create numeric input for width of the errorar
                                                                       numericInput(inputId = "error_width", 
                                                                                    label = tr("options.errorbar.width"), 
                                                                                    min = 0, step = 0.1, value = ""),
-                                                                      # Numeric Input for the width of the Errorbar
+                                                                      # Create numeric input for linesize of the errorar
                                                                       numericInput(inputId = "error_size", 
                                                                                    label = tr("options.errorbar.size"), 
                                                                                    min = 0, step = 0.1, value = "")
@@ -1021,17 +1098,18 @@ ui <- tagList(
                                                                 )
                                                      )
                                     ),
-                                    # Create a Layout for CollapsePanels
+                                    # Define conditional-panel for when scatterplot is selected
                                     conditionalPanel(condition = "output.show_scatter_options",
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel for Scatterplot-Settings
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("options.scatterplot"), 
                                                                                           id = "options_scatterplot"),
-                                                                  # Define CSS Settings
+                                                                  # Create container
                                                                   div(class = ".collapse_panel-settings",
-                                                                      # Input to define the size of the Points
+                                                                      # Create numeric input to set size of points in scatterplot
                                                                       numericInput(inputId = "scatterpoint_size", 
                                                                                    label = "options.scatterpoint.size", 
                                                                                    min = 0, step = .1, value = ""),
@@ -1039,30 +1117,36 @@ ui <- tagList(
                                                                 )
                                                      )
                                     ),
-                                    # Create a Layout for CollapsePanels
+                                    # Define conditional-panel for when barplot is selected
                                     conditionalPanel(condition = "output.show_scatter_options",
+                                                     # Create a layout for collapse panels
                                                      bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                                # Create a Collapse-Panel for Scatterplot-Settings
+                                                                # Create a collapse panel
                                                                 bsCollapsePanel(
-                                                                  # Define Title of Collapse-Panel
+                                                                  # Define title of the collapse panel
                                                                   title = BSCollapseArrow(tr("options.regressionline"), 
                                                                                           id = "options_regressionline"),
                                                                   checkboxInput(inputId = "show_line",
                                                                                 label = tr("options.regressionline.show"),
                                                                                 value = FALSE),
+                                                                  # Define conditional-panel for when regresison line is shown
                                                                   conditionalPanel(condition = "input.show_line",
+                                                                                   # Create checkbox to mark if full regressionline should be shown
                                                                                    checkboxInput(inputId = "scater_line_full_range", 
                                                                                                  label = tr("options.regressionline.expand"), 
                                                                                                  value = FALSE),
+                                                                                   # Create dropdown to set line-type of regressionline
                                                                                    selectInput(inputId = "scater_line_type", 
                                                                                                label = tr("options.linetype"), 
                                                                                                choices = setNames(c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
                                                                                                                   c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
                                                                                                                     tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
                                                                                                selected = "Solide"),
+                                                                                   # Create numeric input to set linesize of regressionline
                                                                                    numericInput(inputId = "scater_line_size", 
                                                                                                 label = tr("options.linewidth"), 
                                                                                                 min = 0, max = 50, step = 0.1, value = NA),
+                                                                                   # Create checkbox to mark if regression line should show standard error
                                                                                    checkboxInput(inputId = "scater_line_show_se", 
                                                                                                  label = tr("options.regressionline.showse"), 
                                                                                                  value = TRUE)
@@ -1076,43 +1160,42 @@ ui <- tagList(
                    
                    
                    
-                   
-                   ########## 2.4.5 UI for Text ##########
-                   # Define Conditional-Panel for when text tab is selected
+                   ### 2.4.5 UI for Text ####################
+                   # Define conditional-panel for when text tab is selected
                    conditionalPanel(condition = "input.activeTab == 'text'",
-                                    # Text-Input for the Title
+                                    # Create text input to set the title
                                     textInput(inputId = "plot_title", 
                                               label = tr("text.title"), 
                                               value = "", 
                                               placeholder = tr("text.title_placeholder")),
-                                    # Text-Input for the Sub-Title
+                                    # Create text input to set the subtitle                                    
                                     textInput(inputId = "plot_subtitle", 
                                               label = tr("text.subtitle"), 
                                               value = "", 
                                               placeholder = tr("text.subtitle_placeholder")),
-                                    # Text-Input for the X-Axis-Title
-                                    textInput(inputId = "x_axis_title", 
+                                    # Create text input to set the x-axis title                                    
+                                    textInput(inputId = "plot_subtitle", 
                                               label = tr("text.x_axis"), 
                                               value = "", 
                                               placeholder = tr("text.x_axis_placeholder")),
-                                    # Text-Input for the Y-Axis-Title
+                                    # Create text input to set the y-axis title
                                     textInput(inputId = "y_axis_title", 
                                               label = tr("text.y_axis"), 
                                               value = "", 
                                               placeholder = tr("text.y_axis_placeholder")),
-                                    # Text-Input for the Legend-Title
+                                    # Create text input to set the legend title
                                     textInput(inputId = "legend_title", 
                                               label = tr("text.legend"), 
                                               value = "", 
                                               placeholder = tr("text.legend_placeholder"))
-                   ),
+                                    ),
                    
                    
                    
                    
                    
-                   ########## 2.4.6 UI for Layout ##########
-                   # Define Conditional-Panel for when layout tab is selected
+                   ### 2.4.6 UI for Layout ####################
+                   # Define conditional-panel for when layout tab is selected
                    conditionalPanel(condition = "input.activeTab == 'layout'",
                                     # Create a conditionalPanel
                                     conditionalPanel(condition = "output.show_title_options",
@@ -1449,26 +1532,34 @@ ui <- tagList(
                    
                    
                    
-                   ########## 2.4.7 Download ##########
-                   # Define Conditional-Panel for when Download tab is selected
+                   ### 2.4.7 Download ####################
+                   # Define conditional-panel for when download tab is selected
                    conditionalPanel(condition = "input.activeTab == 'download'",
+                                    # Create a fluid row
                                     fluidRow(
+                                      # Create a column
                                       column(6,
+                                             # Create title
                                              h3(span(id = "download_plot_hdr", tr("download.plot"))),
+                                             # Create a download button to download plot
                                              downloadButton("downloadPlot", label = span(id = "download_plot_btn", tr("download.download_plot"))),
+                                             # Create dropdown to select type of image file
                                              selectInput(
                                                "file_format",
                                                label   = span(id = "download_file_format_lbl", tr("download.file_format")),
                                                choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")
                                              )
                                       ),
+                                      # Create a column
                                       column(6,
+                                             # Create title
                                              h3(span(id = "download_code_hdr", tr("download.r_code"))),
+                                             # Create a download button to download r-code
                                              downloadButton("downloadCode", label = span(id = "download_code_btn", tr("download.download_code")))
+                                             )
                                       )
                                     )
-                   )
-      ),
+                   ),
       
       
       
@@ -1477,36 +1568,36 @@ ui <- tagList(
       
       
       
-      ############### 2.5 Main Panel ###############
-      ########## 2.5.1 Plot-Output ##########
-      # Define the Main-Panel
+      ## 2.5 Main Panel ####################
+      ### 2.5.1 Plot-Output ####################
+      # Create main panel
       mainPanel(
-        # Set the plot as output
+        # Set plot as dynamic uiOutput
         uiOutput("dynamic_plot"),
         
         
         
         
+        
         ########## 2.5.2 Code-Output ##########
-        # Add a column
+        # Create a column
         column(11,
-               # Add TextOutput for rcode
+               # Create text output for r-code
                verbatimTextOutput("rcode"),
         ),
-        # Acc a column
+        # Create a column
         column(1,
-               # Add setup to copy rcode
+               # Create setup for clipboard
                rclipboardSetup(),
                
-               # UI output for copy-to-clipboard button
+               # Create uiOutput for the clipboard button
                uiOutput("clip"),
         )
       )
     )
-    ),
-  # Create a UI-element for the footer
+  ),
+  # Create an uiOutput for the footer
   uiOutput("app_footer")
-  
 )
 
 
@@ -1528,14 +1619,14 @@ ui <- tagList(
 
 
 
-#################### 3. Server ####################
+# 3. Server ####################
 server <- function(input, output, session) {
   
   
   
   
   
-  ############### 3.1 Define reactive Values ###############
+  ## 3.1 Define reactive Values ####################
   # Create reactive Value for active Tab
   activeTab <- reactiveVal("data")
   # Create reactive Value for active Plot
@@ -1592,8 +1683,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.2 Update UI ###############
-  ########## 3.2.1 Observe buttons for active tab ##########
+  ### 3.2 Update UI ####################
+  ### 3.2.1 Observe buttons for active tab ####################
   # Make active tab accessible in the UI
   observeEvent(input$activeTab, {
     activeTab(input$activeTab)
@@ -1602,7 +1693,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.2.2 Observe buttons for plot-type ##########
+  ### 3.2.2 Observe buttons for plot-type ####################
   # Create a list of plot-types
   plot_map <- c(plot_bar="Bar", 
                 plot_box="Box", 
@@ -1624,7 +1715,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.2.3 Update UI for plot options ##########
+  ### 3.2.3 Update UI for plot options ####################
   # Create a list to check whether a plot-type is the active plot
   plot_visibility_map <- list(
     show_barplot_options   = reactive(identical(activePlot(), "Bar")),
@@ -1645,7 +1736,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.2.7 Update UI for grouping-variable options ##########
+  ### 3.2.4 Update UI for grouping-variable options ####################
   # Check whether grouping variable is defined
   observeEvent(input$group_var, {
     if(input$group_var == " "){
@@ -1661,7 +1752,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.2.8 Update UI for facet-variable options ##########
+  ### 3.2.5 Update UI for facet-variable options ####################
   # Check whether a facet variable is defined
   observeEvent(list(input$grid_col_var, input$grid_row_var), {
     if(input$grid_col_var == " " & input$grid_row_var == " "){
@@ -1677,7 +1768,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.2.9 Update UI for title options ##########
+  ### 3.2.6 Update UI for title options ####################
   # Check whether a title is defined
   observeEvent(list(input$plot_title, input$plot_subtitle), {
     if(input$plot_title == "" & input$plot_subtitle ==""){
@@ -1698,7 +1789,7 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.3 Read Data ###############
+  ## 3.3 Read Data ####################
   # Create a reactive data with the loaded data
   data <- reactive({
     if (is.null(input$file)) {
@@ -1745,8 +1836,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.4 Update Variables ###############
-  ########## 3.4.1 Define list of variables ##########
+  ## 3.4 Update Variables ####################
+  ### 3.4.1 Define list of variables ####################
   observeEvent(data(), {
     # Create a list of all variable-dropdowns
     variable_dropdowns <- c("x_var","y_var","group_var","grid_col_var","grid_row_var")
@@ -1766,7 +1857,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.4.2 Observe selected variables ##########
+  ### 3.4.2 Observe selected variables ####################
   observeEvent(list(input$x_var, input$y_var, input$group_var, input$grid_col_var, input$grid_row_var), {
     # Require additional variables
     req(data())  
@@ -1918,7 +2009,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.4.3 Check for changes in factor orders ##########
+  ### 3.4.3 Check for changes in factor orders ####################
   # For all variables
   for (i in c("x","y","group","grid_col","grid_row")) local({
     # Create factor_order_variable for current variable
@@ -1983,8 +2074,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 3.5 Update Manual Color Palette ###############
-  ########## 3.5.1 Add new Colors ##########
+  ## 3.5 Update Manual Color Palette ####################
+  ### 3.5.1 Add new Colors ####################
   # When "Add" is Pressed
   observeEvent(input$add, {
     # Increase counter of ID's
@@ -2030,7 +2121,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 3.5.2 Remove colors ##########
+  ### 3.5.2 Remove colors ####################
   # When "Remove" is Pressed
   observeEvent(input$remove_last, {
     # If there is at least one color defined
@@ -2067,8 +2158,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 4. Generate Basic R-Code ###############
-  ############### 4.1 Set reactive R-Code ###############
+  # 4. Generate Basic R-Code ####################
+  ## 4.1 Set reactive R-Code ####################
   # Define Code-Text
   r_code <- reactive({
     req(data())
@@ -2081,7 +2172,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.2 Set Variables Based on Input-Data ###############
+    ## 4.2 Set Variables Based on Input-Data ####################
     # X-Axis Variable
     x_var <- if (input$x_var == " ") "1" else input$x_var
     # Y-Axis Variable
@@ -2134,7 +2225,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.3 Define Code with X- and Y- Axis variable ###############
+    ## 4.3 Define Code with X- and Y- Axis variable ####################
     # Define Code Lines
     r_code <- sprintf("q <- ggplot(df, aes(x = %s, y = %s", x_var, y_var)
     
@@ -2146,7 +2237,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.4 Add Grouping Variable ###############
+    ## 4.4 Add Grouping Variable ####################
     # Define Grouping-variable if selected
     if (!is.null(group_var)) {
       if(input$color_palette_target == "Füllung"){
@@ -2171,8 +2262,8 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.5 Define Geoms ###############
-    ########## 4.5.1 Bar or Line-Geoms ##########
+    ## 4.5 Define Geoms ####################
+    ### 4.5.1 Bar or Line-Geoms ####################
     if (x_var != "1" && y_var != "1") {
       if (activePlot() == "Bar"|activePlot() == "Line"){
         if (activePlot() == "Bar"){
@@ -2214,7 +2305,7 @@ server <- function(input, output, session) {
         
         
         
-        ########## 4.5.2 Errorbar-Geoms ##########
+        ### 4.5.2 Errorbar-Geoms ####################
         if (input$error_type != "Keiner") {
           r_code <- paste0(r_code, sprintf(" +\n  stat_summary(fun.data = %s, geom = 'errorbar'",
                                            switch(
@@ -2246,7 +2337,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 4.5.3 Boxplot-Geoms ##########
+    ### 4.5.3 Boxplot-Geoms ####################
     if (x_var != "1" && y_var != "1") {
       if (activePlot() == "Box"){
         r_code <- paste0(r_code, " +\n  geom_boxplot(")
@@ -2264,7 +2355,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 4.5.4 Scatterplot-Geoms ##########
+    ### 4.5.4 Scatterplot-Geoms ####################
     if (x_var != "1" && y_var != "1") {
       if (activePlot() == "Scatter"){
         r_code <- paste0(r_code, " +\n  geom_point(")
@@ -2282,7 +2373,7 @@ server <- function(input, output, session) {
         
         
         
-        ########## 4.5.5 Regressionline-Geoms ##########
+        ### 4.5.5 Regressionline-Geoms ####################
         if(input$show_line==TRUE){
           r_code <- paste0(r_code, " +\n  geom_smooth(method = 'lm'")
           if(input$scater_line_show_se==FALSE){
@@ -2317,7 +2408,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.6 Define Facets ############### 
+    ## 4.6 Define Facets ####################
     # Add Facets if defined
     if (!is.null(grid_col_var) & !is.null(grid_row_var)) {
       r_code <- paste0(r_code, sprintf(" +\n  facet_grid(rows = vars(%s), cols = vars(%s))", grid_row_var, grid_col_var))
@@ -2335,7 +2426,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.7 Set Themes ###############
+    ## 4.7 Set Themes ####################
     # Add themes if theme is not gray
     if (theme_selected != "Gray") {
       r_code <- paste0(r_code, sprintf(" +\n  %s",
@@ -2377,7 +2468,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.8 Set Labs ###############
+    ## 4.8 Set Labs ####################
     # Define code-line for labs
     labs_code <- ""
     
@@ -2434,7 +2525,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.9 X and Y-Axis Range ###############
+    ## 4.9 X and Y-Axis Range ####################
     # Define empty Code for axis_code
     axis_code <- ""
     # Adjust X-Axis range
@@ -2475,7 +2566,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.10 Color-Palette - Fill ###############
+    ## 4.10 Color-Palette - Fill ####################
     if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Füllung" | input$color_palette_target == "Füllung und Linien")) {
       # If manual color palette should be created
       if (palette_selected == "Eigene Farbpalette erstellen") {
@@ -2570,7 +2661,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 4.11 Color-Palette - Color ###############
+    ## 4.11 Color-Palette - Color ####################
     if (input$Color_Palette != "Gemäss Theme" && (input$color_palette_target == "Linien" | input$color_palette_target == "Füllung und Linien")) {
       # If manual color palette should be created
       if (palette_selected == "Eigene Farbpalette erstellen") {
@@ -2678,8 +2769,8 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5. Generate Basic Theme-Code ###############
-    ############### 5.1 Generate Theme-Code ###############
+    # 5. Generate Basic Theme-Code ####################
+    ## 5.1 Generate Theme-Code ####################
     # Create Variable for Theme Code
     theme_code <- ""
     
@@ -2691,7 +2782,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.2 Title-Theme ###############
+    ## 5.2 Title-Theme ####################
     # Check if theme for title should be adjusted
     if (input$Title_Font != "Gemäss Theme" || input$Title_Face != "Gemäss Theme" ||
         input$Title_Color != "" || !is.na(input$Title_Size) || input$Title_Alignment != "Gemäss Theme") {
@@ -2734,7 +2825,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.3 Subtitle-Theme ###############
+    ## 5.3 Subtitle-Theme ####################
     # Check if theme for subtitle should be adjusted
     if (input$Subtitle_Font != "Gemäss Theme" || input$Subtitle_Face != "Gemäss Theme" ||
         input$Subtitle_Color != "" || !is.na(input$Subtitle_Size) || input$Subtitle_Alignment != "Gemäss Theme") {
@@ -2777,7 +2868,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.4 X-Axis Title Theme ###############
+    ## 5.4 X-Axis Title Theme ####################
     # Check if X-Axis Title Theme should be adjusted
     if (input$X_Axis_Title_Font != "Gemäss Theme" || input$X_Axis_Title_Face != "Gemäss Theme" ||
         input$X_Axis_Title_Color != "" || !is.na(input$X_Axis_Title_Size) || input$X_Axis_Title_Alignment != "Gemäss Theme") {
@@ -2820,7 +2911,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.5 Y-Axis TitleTheme ###############
+    ## 5.5 Y-Axis TitleTheme ####################
     # Check if Y-Axis Title theme should be adjusted
     if (input$Y_Axis_Title_Font != "Gemäss Theme" || input$Y_Axis_Title_Face != "Gemäss Theme" ||
         input$Y_Axis_Title_Color != "" || !is.na(input$Y_Axis_Title_Size) || input$Y_Axis_Title_Alignment != "Gemäss Theme") {
@@ -2863,7 +2954,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.6 X-Axis-Labels ###############
+    ## 5.6 X-Axis-Labels ####################
     # Check if theme for X-Axis-Labels should be adjusted
     if (input$Axis_X_Text_Font != "Gemäss Theme" || input$Axis_X_Text_Face != "Gemäss Theme" ||
         input$Axis_X_Text_Color != "" || !is.na(input$Axis_X_Text_Size) || input$Axis_X_Text_H_Alignment != "Gemäss Theme"
@@ -2913,7 +3004,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.7 Y-Axis-Labels Theme ###############
+    ## 5.7 Y-Axis-Labels Theme ####################
     # Check if theme for Y-Axis-Labels should be adjusted
     if (input$Axis_Y_Text_Font != "Gemäss Theme" || input$Axis_Y_Text_Face != "Gemäss Theme" ||
         input$Axis_Y_Text_Color != "" || !is.na(input$Axis_Y_Text_Size) || input$Axis_Y_Text_H_Alignment != "Gemäss Theme"
@@ -2963,7 +3054,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.8 X Axis Lines Theme ###############
+    ## 5.8 X Axis Lines Theme ####################
     # Check if theme should be adjusted for X Axis Lines
     if (input$Axis_X_Linetype != "Gemäss Theme" || !is.na(input$Axis_X_Size) || input$Axis_X_Color != "") {
       # Create new Line in Theme-Code if needed
@@ -3002,7 +3093,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.9 Y Axis Lines Theme ###############
+    ## 5.9 Y Axis Lines Theme ####################
     # Check if theme should be adjusted for Y Axis Lines
     if (input$Axis_Y_Linetype != "Gemäss Theme" || !is.na(input$Axis_Y_Size) || input$Axis_Y_Color != "") {
       # Create new Line in Theme-Code if needed
@@ -3041,7 +3132,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.10 X Axis Ticks Theme ###############
+    ## 5.10 X Axis Ticks Theme ####################
     # Check if theme should be adjusted for X Axis Ticks length
     if (!is.na(input$Axis_X_Ticks_Length)) {
       # Create new Line in Theme-Code if needed
@@ -3084,7 +3175,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.11 Y Axis Ticks Theme ###############
+    ## 5.11 Y Axis Ticks Theme ####################
     # Check if theme should be adjusted for Y Axis Ticks length
     if (!is.na(input$Axis_Y_Ticks_Length)) {
       if (theme_code!=""){
@@ -3127,7 +3218,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.12 Major Gridlines X Theme ###############
+    ## 5.12 Major Gridlines X Theme ####################
     # Check if theme should be adjusted
     if (input$Major_Grid_X_Linetype != "Gemäss Theme" || !is.na(input$Major_Grid_X_Size) || input$Major_Grid_X_Color != "") {
       # Create new Line in Theme-Code if needed
@@ -3168,7 +3259,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.13 Major Gridlines Y Theme ###############
+    ## 5.13 Major Gridlines Y Theme ####################
     # Check if theme should be adjusted
     if (input$Major_Grid_Y_Linetype != "Gemäss Theme" || !is.na(input$Major_Grid_Y_Size) || input$Major_Grid_Y_Color != "") {
       # Create new Line in Theme-Code if needed
@@ -3208,7 +3299,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.14 Minor Gridlines X Theme ###############
+    ## 5.14 Minor Gridlines X Theme ####################
     # Check if theme should be adjusted
     if (input$Minor_Grid_X_Linetype != "Gemäss Theme" || !is.na(input$Minor_Grid_X_Size) || input$Minor_Grid_X_Color != "") {
       # Create new Line in Theme-Code if needed
@@ -3248,7 +3339,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.15 Major Gridlines Y Theme ###############
+    ## 5.15 Major Gridlines Y Theme ####################
     # Check if theme should be adjusted
     if (input$Minor_Grid_Y_Linetype != "Gemäss Theme" || !is.na(input$Minor_Grid_Y_Size) || input$Minor_Grid_Y_Color != "") {
       # Create new Line in Theme-Code if needed
@@ -3288,7 +3379,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.16 Plot Background Theme ###############
+    ## 5.16 Plot Background Theme ####################
     # Check if theme should be adjusted
     if (input$Plot_Background_Color != "" || input$Plot_Background_Linetype != "Gemäss Theme" 
         || !is.na(input$Plot_Background_Size) || input$Plot_Background_Line_Color != "") {
@@ -3325,7 +3416,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.17 Panel Background Theme ###############
+    ## 5.17 Panel Background Theme ####################
     # Check if theme should be adjusted
     if (input$Panel_Background_Color != "" || input$Panel_Background_Linetype != "Gemäss Theme" 
         || !is.na(input$Panel_Background_Size) || input$Panel_Background_Line_Color != "") {
@@ -3362,7 +3453,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.18 Legend-Title Theme ###############
+    ## 5.18 Legend-Title Theme ####################
     # Check if theme should be adjusted
     if (input$Legend_Title_Font != "Gemäss Theme" || input$Legend_Title_Face != "Gemäss Theme" ||
         input$Legend_Title_Color != "" || !is.na(input$Legend_Title_Size) || input$Legend_Title_Alignment != "Gemäss Theme") {
@@ -3405,7 +3496,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.19 Legend-Text Theme ###############
+    ## 5.19 Legend-Text Theme ####################
     # Check if theme should be adjusted
     if (input$Legend_Text_Font != "Gemäss Theme" || input$Legend_Text_Face != "Gemäss Theme" ||
         input$Legend_Text_Color != "" || !is.na(input$Legend_Text_Size) || input$Legend_Text_Alignment != "Gemäss Theme") {
@@ -3448,7 +3539,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.20 Legend Background Theme ###############
+    ## 5.20 Legend Background Theme ####################
     # Check if theme should be adjusted
     if (input$Legend_Background_Color != "" || input$Legend_Background_Linetype != "Gemäss Theme" 
         || !is.na(input$Legend_Background_Size) || input$Legend_Background_Line_Color != "") {
@@ -3485,7 +3576,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.21 Legend Options Theme ###############
+    ## 5.21 Legend Options Theme ####################
     # Check if legend position should be adjusted
     if (input$Legend_Position != "Gemäss Theme"){
       if (theme_code!=""){
@@ -3613,7 +3704,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.22 Facet-Row Background Theme ###############
+    ## 5.22 Facet-Row Background Theme ####################
     # Check if theme should be adjusted
     if (input$Stripe_X_Color != "" || input$Stripe_X_Linetype != "Gemäss Theme" 
         || !is.na(input$Stripe_X_Size) || input$Stripe_X_Line_Color != "") {
@@ -3651,7 +3742,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.23 Facet-Column Background Theme ###############
+    ## 5.23 Facet-Column Background Theme ####################
     # Check if theme should be adjusted
     if (input$Stripe_Y_Color != "" || input$Stripe_Y_Linetype != "Gemäss Theme" 
         || !is.na(input$Stripe_Y_Size) || input$Stripe_Y_Line_Color != "") {
@@ -3689,7 +3780,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.24 Facet-Row Text Theme ###############
+    ## 5.24 Facet-Row Text Theme ####################
     # Check if theme should be adjusted
     if (input$Stripe_X_Font != "Gemäss Theme" || input$Stripe_X_Face != "Gemäss Theme" ||
         input$Stripe_X_Textcolor != "" || !is.na(input$Stripe_X_Textsize) || input$Stripe_X_Alignment != "Gemäss Theme") {
@@ -3732,7 +3823,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.25 Facet-Column Theme ###############
+    ## 5.25 Facet-Column Theme ####################
     # Check if theme should be adjusted
     if (input$Stripe_Y_Font != "Gemäss Theme" || input$Stripe_Y_Face != "Gemäss Theme" ||
         input$Stripe_Y_Textcolor != "" || !is.na(input$Stripe_Y_Textsize) || input$Stripe_Y_Alignment != "Gemäss Theme") {
@@ -3775,7 +3866,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 5.26 Append Theme-Code ###############
+    ## 5.26 Append Theme-Code ####################
     # Check if theme-code was created
     if (theme_code!=""){
       # set beginning of theme code
@@ -3805,7 +3896,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 6. Return R-Code ###############
+    # 6. Return R-Code ####################
     r_code
   }
   )  
@@ -3831,8 +3922,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 8. Set Output ###############
-  ############### 8.1 Generate Plot ###############
+  # 8. Set Output ####################
+  ## 8.1 Generate Plot ####################
   # Define Plot-Output
   output$dynamic_plot <- renderUI({
     
@@ -3876,8 +3967,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 8.2 Generate Code ###############
-  ########## 8.2.1 Set variables ##########
+  ## 8.2 Generate Code ####################
+  ### 8.2.1 Set variables ####################
   # Create reactive full code
   reactive_full_code <- reactive({
     
@@ -3891,7 +3982,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 8.2.2 Set Code for packages ##########
+    ### 8.2.2 Set Code for packages ####################
     # Define Code-Line for ggplot2
     full_code <- "library(ggplot2)"
     
@@ -3923,7 +4014,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 8.2.3 Set Code to adjust Factors ##########
+    ### 8.2.3 Set Code to adjust Factors ####################
     # Check if factor_code exists
     if (!is.null(factor_code()) && !identical(factor_code(), "")) {
       # Paste additional lines
@@ -3937,7 +4028,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 8.2.4 Add r_code ##########
+    ### 8.2.4 Add r_code ####################
     # Add empty lines in code
     full_code <- paste0(full_code, "\n\n", r_code())
     
@@ -3945,7 +4036,7 @@ server <- function(input, output, session) {
     
     
     
-    ########## 8.2.5 Prepare final code ##########
+    ### 8.2.5 Prepare final code ####################
     # Replace data() with data
     full_code <- gsub("data\\(\\)", "data", full_code)
     
@@ -3957,7 +4048,7 @@ server <- function(input, output, session) {
   
   
   
-  ########## 8.2.6 Print Code ##########
+  ### 8.2.6 Print Code ####################
   # Print the reactive r_code
   output$rcode <- renderText({
     reactive_full_code()
@@ -3984,8 +4075,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 9. Copy/Download ###############
-  ############### 9.1 Add Code to clipboad ###############
+  # 9. Copy/Download ####################
+  ## 9.1 Add Code to clipboad ####################
   # Add clipboard buttons
   output$clip <- renderUI({
     rclipButton(
@@ -4006,7 +4097,7 @@ server <- function(input, output, session) {
   
   
   
-  ############### 9.2 Download Plot ###############
+  ## 9.2 Download Plot ####################
   # Function to download Plot
   output$downloadPlot <- downloadHandler(
     filename = function() {
@@ -4069,7 +4160,7 @@ server <- function(input, output, session) {
   
   
   
-  ############### 9.3 Download Code ###############
+  ## 9.3 Download Code ####################
   # Function to download r-code
   output$downloadCode <- downloadHandler(
     filename = function() {
@@ -4105,8 +4196,8 @@ server <- function(input, output, session) {
   
   
   
-  ############### 10. Set Footer ###############
-  ############### 11.1 Footer UI ###############
+  # 10. Set Footer ####################
+  ## 10.1 Footer UI ####################
   output$app_footer <- renderUI({
     # Get the selected language
     i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
@@ -4162,7 +4253,7 @@ server <- function(input, output, session) {
   
   
   
-  ############### 11.2 Ino-Dialogue ###############
+  ## 10.2 Info-Dialogue ####################
   observeEvent(input$info_btn, {
     showModal(modalDialog(
       title = tags$span(class = "info-modal-title", tr("footer.info.title")),  
@@ -4189,8 +4280,8 @@ server <- function(input, output, session) {
   
   
   
-  #################### 11. Language Localization ####################
-  ############### 11.1 Update Language ###############
+  # 11. Language Localization ####################
+  ## 11.1 Update Language ####################
   observeEvent(input$language, {
     req(input$language)
     i18n$set_translation_language(if (!is.null(input$language)) input$language else "en")
@@ -4203,7 +4294,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.2 Define Helper-Functions for Dropdown-Options ###############
+    ## 11.2 Define Helper-Functions for Dropdown-Options ####################
     LINETYPES <- c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt")
     ERRTYPES  <- c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler")
     TARGETS   <- c("Füllung","Linien","Füllung und Linien")
@@ -4216,7 +4307,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.2 Update Language Selection ###############
+    ## 11.3 Update Language Selection ####################
     shinyWidgets::updatePickerInput(
       session, "language",
       label    = NULL,
@@ -4238,7 +4329,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.4 Update Navigation-Buttons ###############
+    ## 11.4 Update Navigation-Buttons ####################
     setTxt <- function(id, key) session$sendCustomMessage('setText', list(id = id, text = tr(key)))
     setTxt("nav_lbl_data",        "nav.data")
     setTxt("nav_lbl_plottype",    "nav.plottype")
@@ -4254,7 +4345,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.9 Update Data Sidebar ###############
+    ## 11.5 Update Data Sidebar ####################
     session$sendCustomMessage(
       "setFileInputLang",
       list(
@@ -4269,7 +4360,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.3 Update Buttons for Plot-Type ###############
+    ## 11.6 Update Buttons for Plot-Type ####################
     updateActionButton(session, "plot_bar",
                        label = HTML(sprintf('<img src="Icon_Bar.png" height="100px"> <br> %s', tr("plot.bar"))))
     updateActionButton(session, "plot_line",
@@ -4287,7 +4378,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.4 Update Variables Sidebar ###############
+    ## 11.7 Update Variables Sidebar ####################
     # Headers
     setTxt("x_title",        "variables.x_title")
     setTxt("y_title",        "variables.y_title")
@@ -4326,8 +4417,8 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.5 Update Options Sidebar ###############
-    ### Change UI-Text
+    ## 11.8 Update Options Sidebar ####################
+    ### 11.8.1 Change UI-Text ####################
     setTxt("opt_theme_title", "options.theme.title")
     setTxt("opt_palette_title", "options.palette.title")
     setTxt("options_plotsize_title", "options.plotsize.title")
@@ -4340,7 +4431,10 @@ server <- function(input, output, session) {
     setTxt("options_regressionline", "options.regressionline")
     
     
-    ### Change Options
+    
+    
+    
+    ### 11.8.2 Change Options ####################
     updateSelectInput(
       session, "Color_Palette",
       label    = tr("options.palette.select"),
@@ -4447,14 +4541,23 @@ server <- function(input, output, session) {
     session$sendCustomMessage('setText', list(id="opt_xaxis_lbl", text=tr("options.range.xaxis")))
     session$sendCustomMessage('setText', list(id="opt_yaxis_lbl", text=tr("options.range.yaxis")))
     
-    ### Change UI of Custom Color Palette
+    
+    
+    
+    
+    ### 11.8.3 Change UI of Custom Color Palette ####################
     # Change language of Buttons
     updateActionButton(session, "add",         
                        label = tr("options.custom.colorpalette.add"))
     updateActionButton(session, "remove_last", 
                        label = tr("options.custom.colorpalette.remove"))
     
-    # Localise Error Message
+    
+    
+    
+    
+    
+    ### 11.8.4 Create Error Message ####################
     if (manual_colors$count > 0) {
       for (i in seq_len(manual_colors$count)) {
         updateTextInput(
@@ -4477,7 +4580,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.6 Update Text Sidebar ###############
+    ## 11.9 Update Text Sidebar ####################
     # Title
     updateTextInput(session, "plot_title",
                     label = tr("text.title"),
@@ -4506,7 +4609,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.8 Update Layout Sidebar ###############
+    ## 11.10 Update Layout Sidebar ####################
     setTxt(id = "layout_collapse_header", key = "layout.collapse.header")
     setTxt(id = "layout_h3_title", key = "layout.h3.title")
     setTxt(id = "layout_h3_subtitle", key = "layout.h3.subtitle")
@@ -4650,7 +4753,7 @@ server <- function(input, output, session) {
     
     
     
-    ############### 11.9 Update Download Sidebar ###############
+    ## 11.11 Update Download Sidebar ####################
     setTxt("download_plot_hdr",        "download.plot")
     setTxt("download_code_hdr",        "download.r_code")
     setTxt("download_plot_btn",        "download.download_plot")
@@ -4679,5 +4782,5 @@ server <- function(input, output, session) {
 
 
 
-#################### 12. Run App ####################
+# 12. Run App ####################
 shinyApp(ui = ui, server = server)
