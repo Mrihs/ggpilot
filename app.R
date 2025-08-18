@@ -1665,7 +1665,10 @@ server <- function(input, output, session) {
     # Create a list of all variable-dropdowns
     variable_dropdowns <- c("x_var","y_var","group_var","grid_col_var","grid_row_var")
     # Create a list of all available variables
-    variable_options <- c("Keine Variable" = " ", names(data()))
+    variable_options <- setNames(
+      c(" ", names(data())),
+      c(tr("variables.none"), names(data()))
+    )
     
     # Add variables into each dropdown
     lapply(variable_dropdowns, function(id) updateSelectInput(session, id, choices = variable_options, selected = " "))
@@ -4222,6 +4225,21 @@ server <- function(input, output, session) {
     setTxt("group_reorder_title",    "variables.reorder_levels")
     setTxt("grid_col_reorder_title", "variables.reorder_levels")
     setTxt("grid_row_reorder_title", "variables.reorder_levels")
+    
+    # Create a list of all Variable-Dropdowns
+    variable_dropdowns <- c("x_var","y_var","group_var","grid_col_var","grid_row_var")
+    
+    # Set the variables names for all variable-dropdowns
+    variable_options <- setNames(
+      c(" ", names(data())),
+      c(tr("variables.none"), names(data()))
+    )
+    lapply(variable_dropdowns, function(id) {
+      updateSelectInput(session, id,
+                        choices  = variable_options,
+                        selected = input[[id]]
+      )
+    })
     
     
     
