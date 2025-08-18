@@ -199,6 +199,13 @@ ui <- tagList(
     .panel-body {
     background-color: #f5f5f5 !important;
     }
+    
+    .top-nav { margin-top: 12px; display: inline-block; }
+    .top-nav > li > a { padding: 8px 12px; font-size: 16px; }
+    .top-nav .glyphicon { margin-right: 6px; }
+    @media (max-width: 1200px) {
+      .top-nav > li > a { padding: 6px 8px; font-size: 14px; }
+    }
 
     /* Axis Settings */
     .collapse_panel-settings .col-sm-6 {
@@ -213,15 +220,9 @@ ui <- tagList(
     }
     
     /* Define Buttons */
-    .custom-btn {
-    font-size: 18px;
-    padding: 5px 15px;
-    margin: 20px 5px;
-    color: black;
-    border: 5px solid #bbb;
-    border-radius: 5px;
-    outline: none;
-    border-style: double;
+    .plot-btn:hover {
+      background-color: #222 !important;
+      color: #fff !important;
     }
     
     /* Define Buttons when Hovered */
@@ -230,10 +231,11 @@ ui <- tagList(
     }
 
     /* Define Buttons when Active */
-    .active-btn {
-    background-color: #e0e0e0;
-    color: black;
-    background-image: none;
+    .active-btn,
+    .active-plot {
+      background-color: #777 !important;  /* oder #808080 */
+      color: #fff !important;
+      background-image: none !important;
     }
 
     /* Define Button for Plots */
@@ -418,18 +420,43 @@ ui <- tagList(
     }
     
     .container-fluid > footer.app-footer{
-      /* unten andrücken wie gehabt */
       margin-top: auto;
       flex-shrink: 0;
     
-      /* Container-Padding neutralisieren, damit der Hintergrund bis zum Rand geht */
       margin-left: -15px;
       margin-right: -15px;
     
-      /* Innenabstand des Footers – kannst du anpassen */
       padding-left: 15px;
       padding-right: 15px;
     }
+        
+    .nav.top-nav > li > a {
+      background-color: #fff !important;
+      color: #000 !important;           
+      border: 2px solid #aaa !important;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    
+    .nav.top-nav > li.active > a,
+    .nav.top-nav > li.active > a:focus,
+    .nav.top-nav > li.active > a:hover {
+      background-color: #666 !important;
+      color: #fff !important;           
+      border-color: #666 !important;
+      box-shadow: none;
+      outline: none;
+    }
+    
+    .nav.top-nav > li:not(.active) > a:hover,
+    .nav.top-nav > li:not(.active) > a:focus {
+      background-color: #f2f2f2 !important;
+      color: #000 !important;              
+      border-color: #ccc !important;
+    }
+    
+    .top-nav .glyphicon { color: inherit; }
+
         
   "))
     ),
@@ -446,8 +473,9 @@ ui <- tagList(
     ############### 2.2 Set Title-Panel ###############
     # Define a fluid Row
     fluidRow(
+      class = "titlebar",
       # Set a Column
-      column(3, style = "min-width: 350px;",
+      column(2, style = "min-width: 350px;",
              # Define logo and title
              titlePanel(title = span(
                # Add image
@@ -461,25 +489,58 @@ ui <- tagList(
              ),
              windowTitle = "ggpilot")),
       # Set a Column
-      column(8, align = "center", 
-             style = "margin-top: 15px;",
-             tags$head(
-             ),
-             tags$script(HTML("
-            Shiny.addCustomMessageHandler('setActiveButton', function(btnId) {
-              $('.custom-btn').removeClass('active-btn');
-              $('#' + btnId).addClass('active-btn');
-            });
-         ")),
-             # Add action buttons in the title panel
-             actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i>'), class = "custom-btn"),
-             actionButton("btn_plottype", label = HTML('<i class="glyphicon glyphicon-stats"></i>'), class = "custom-btn"),
-             actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i>'), class = "custom-btn"),
-             actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i>'), class = "custom-btn"),
-             actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i>'), class = "custom-btn"),
-             actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i>'), class = "custom-btn"),
-             actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i>'), class = "custom-btn"),
+      column(
+        9, align = "center",
+        style = "margin-top: 15px;",
+        # NAV-Leiste in der Titelleiste
+        tags$ul(
+          class = "nav nav-pills top-nav",
+          # Aktiv: 'data'
+          tags$li(class = "active",
+                  tags$a(href = "#", `data-tab` = "data",
+                         HTML('<span class="glyphicon glyphicon-folder-open"></span> <span id="nav_lbl_data">'),
+                         tr("nav.data"), HTML('</span>')
+                  )),
+          tags$li(tags$a(href = "#", `data-tab` = "plottype",
+                         HTML('<span class="glyphicon glyphicon-stats"></span> <span id="nav_lbl_plottype">'),
+                         tr("nav.plottype"), HTML('</span>')
+          )),
+          tags$li(tags$a(href = "#", `data-tab` = "variables",
+                         HTML('<span class="glyphicon glyphicon-tasks"></span> <span id="nav_lbl_variables">'),
+                         tr("nav.variables"), HTML('</span>')
+          )),
+          tags$li(tags$a(href = "#", `data-tab` = "plot_options",
+                         HTML('<span class="glyphicon glyphicon-wrench"></span> <span id="nav_lbl_plot_options">'),
+                         tr("nav.options"), HTML('</span>')
+          )),
+          tags$li(tags$a(href = "#", `data-tab` = "text",
+                         HTML('<span class="glyphicon glyphicon-font"></span> <span id="nav_lbl_text">'),
+                         tr("nav.text"), HTML('</span>')
+          )),
+          tags$li(tags$a(href = "#", `data-tab` = "layout",
+                         HTML('<span class="glyphicon glyphicon-adjust"></span> <span id="nav_lbl_layout">'),
+                         tr("nav.layout"), HTML('</span>')
+          )),
+          tags$li(tags$a(href = "#", `data-tab` = "download",
+                         HTML('<span class="glyphicon glyphicon-download"></span> <span id="nav_lbl_download">'),
+                         tr("nav.download"), HTML('</span>')
+          ))
+        ),
+        
+        # JS: Klicks in der Top-Navigation -> activeTab setzen + aktive Klasse umschalten
+        tags$script(HTML("
+                        $(function () {
+                          $('.top-nav').on('click', 'a[data-tab]', function (e) {
+                            e.preventDefault();
+                            var tab = $(this).data('tab');
+                            Shiny.setInputValue('activeTab', tab, {priority: 'event'});
+                            $('.top-nav li').removeClass('active');
+                            $(this).closest('li').addClass('active');
+                          });
+                        });
+                      "))
       )
+      
     ),
     
     # Define Hidden Inputs for the Active Tab
@@ -1533,31 +1594,9 @@ server <- function(input, output, session) {
   
   ############### 3.2 Update UI ###############
   ########## 3.2.1 Observe buttons for active tab ##########
-  # Create a list of tabs
-  tab_map <- c(
-    btn_data        = "data",
-    btn_plottype    = "plottype",
-    btn_variables   = "variables",
-    btn_plot_options= "plot_options",
-    btn_text        = "text",
-    btn_layout      = "layout",
-    btn_download    = "download"
-  )
-  
-  # Apply for all tabs
-  invisible(lapply(names(tab_map), function(id){
-    # Observe tabs
-    observeEvent(input[[id]], {
-      # Set selected tab to current tab
-      activeTab(tab_map[[id]])
-      # Set Button to active tab
-      session$sendCustomMessage("setActiveButton", id)
-    })
-  }))
-  
   # Make active tab accessible in the UI
-  observe({
-    updateTextInput(session, "activeTab", value = activeTab())
+  observeEvent(input$activeTab, {
+    activeTab(input$activeTab)
   })
   
   
@@ -4200,21 +4239,14 @@ server <- function(input, output, session) {
     
     
     ############### 11.4 Update Navigation-Buttons ###############
-    updateActionButton(session, "btn_data",
-                       label = tr("nav.data"))
-    updateActionButton(session, "btn_plottype",
-                       label = tr("nav.plottype"))
-    updateActionButton(session, "btn_variables",
-                       label = tr("nav.variables"))
-    updateActionButton(session, "btn_plot_options",
-                       label = tr("nav.options"))
-    updateActionButton(session, "btn_text",
-                       label = tr("nav.text"))
-    updateActionButton(session, "btn_layout",
-                       label = tr("nav.layout"))
-    updateActionButton(session, "btn_download",
-                       label = tr("nav.download"))
-    
+    setTxt <- function(id, key) session$sendCustomMessage('setText', list(id = id, text = tr(key)))
+    setTxt("nav_lbl_data",        "nav.data")
+    setTxt("nav_lbl_plottype",    "nav.plottype")
+    setTxt("nav_lbl_variables",   "nav.variables")
+    setTxt("nav_lbl_plot_options","nav.options")
+    setTxt("nav_lbl_text",        "nav.text")
+    setTxt("nav_lbl_layout",      "nav.layout")
+    setTxt("nav_lbl_download",    "nav.download")
     
     
     
@@ -4256,11 +4288,6 @@ server <- function(input, output, session) {
     
     
     ############### 11.4 Update Variables Sidebar ###############
-    # Create Helper function to change text
-    setTxt <- function(id, key) {
-      session$sendCustomMessage('setText', list(id = id, text = tr(key)))
-    }
-    
     # Headers
     setTxt("x_title",        "variables.x_title")
     setTxt("y_title",        "variables.y_title")
