@@ -2,19 +2,19 @@
 ############### 1.1 Packages ###############
 # Create list of required Packages
 packages <- c("shiny",
-          "ggplot2",
-          "readxl",
-          "dplyr",
-          "shinythemes",
-          "shinyBS",
-          "Hmisc",
-          "ggsci",
-          "ggthemes",
-          "rclipboard",
-          "sortable",
-          "svglite",
-          "shiny.i18n",
-          "shinyWidgets")
+              "ggplot2",
+              "readxl",
+              "dplyr",
+              "shinythemes",
+              "shinyBS",
+              "Hmisc",
+              "ggsci",
+              "ggthemes",
+              "rclipboard",
+              "sortable",
+              "svglite",
+              "shiny.i18n",
+              "shinyWidgets")
 
 # For each Package
 for (pkg in packages) {
@@ -142,6 +142,17 @@ legend_dir_choices <- function() setNames(
   c(tr("options.position.alignment.theme"), tr("options.position.alignment.vertical"),
     tr("options.position.alignment.horicontal"))
 )
+
+
+
+
+
+########## 1.3.5 Functino to Localice Placeholder-Variables ##########
+localize_placeholder_variables <- function(x) {
+  if (x == "Placeholder_X") return(tr("variables.placeholder_x"))
+  if (x == "Placeholder_Y") return(tr("variables.placeholder_y"))
+  x
+}
 
 
 
@@ -418,12 +429,12 @@ ui <- fluidPage(
              img(src = "logo.png", 
                  height = 90, 
                  style = "position: relative; top: -15px; margin-left: 15px;"
-                 ), 
+             ), 
              # Define HTML
              HTML('<span style="font-size: 64px;; margin-left: 20px;">ggpilot</span>'),
              style = "white-space: nowrap;" # kein Zeilenumbruch
-             ),
-             windowTitle = "ggpilot")),
+           ),
+           windowTitle = "ggpilot")),
     # Set a Column
     column(8, align = "center", 
            style = "margin-top: 15px;",
@@ -511,7 +522,7 @@ ui <- fluidPage(
                                                      accept      = c(".csv", ".xlsx", ".rds", ".RData")
                                                    )
                                   )                                  ),
-                                  
+                 
                  
                  
                  
@@ -540,7 +551,7 @@ ui <- fluidPage(
                                   actionButton("plot_scatter", 
                                                label = HTML(sprintf('<img src="Icon_Scatter.png" height="100px"> <br> %s', tr("plot.scatter"))), 
                                                class = "plot-btn")
-                                  ),
+                 ),
                  
                  
                  
@@ -553,7 +564,7 @@ ui <- fluidPage(
                                    if (el) { el.textContent = x.text; }
                                    });
                                   ")),
-
+                 
                  # Define Conditional-Panel for when Variables tab is selected
                  conditionalPanel(condition = "input.activeTab == 'variables'",
                                   # Set title
@@ -874,7 +885,7 @@ ui <- fluidPage(
                                                                     numericInput(inputId = "lineplot_width", 
                                                                                  label = tr("options.lineplot.width"), 
                                                                                  min = 0, step = 0.1, value = "")                                                                
-                                                                    )
+                                                                )
                                                               )
                                                    )
                                   ),
@@ -1035,8 +1046,8 @@ ui <- fluidPage(
                                                                     )
                                                                 )
                                                               )
-                                                              )
-                                             ),
+                                                   )
+                                  ),
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
@@ -1177,17 +1188,17 @@ ui <- fluidPage(
                                                           selectInput(inputId = "Minor_Grid_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Minor_Grid_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Minor_Grid_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                          ),
+                                                   ),
                                                    # Create a column
                                                    column(6,
                                                           h3(span(id = "layout_h3_yaxis_minor_grid", tr("layout.h3.yaxis"))),
                                                           selectInput(inputId = "Minor_Grid_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
                                                           numericInput(inputId = "Minor_Grid_Y_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
                                                           textInput(inputId = "Minor_Grid_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                          )
                                                    )
                                                )
-                                             ),
+                                             )
+                                  ),
                                   # Create a Layout for CollapsePanels
                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
                                              bsCollapsePanel(
@@ -1334,8 +1345,8 @@ ui <- fluidPage(
                                                                     )
                                                                 )
                                                               )
-
-                                             )
+                                                              
+                                                   )
                                   )
                  ),
                  
@@ -1552,8 +1563,8 @@ server <- function(input, output, session) {
     # Update variable to control visibility of respective plot
     output[[id]] <- reactive(plot_visibility_map[[id]]());
     outputOptions(output, id, suspendWhenHidden = FALSE) 
-    }))
-
+  }))
+  
   
   
   
@@ -1586,11 +1597,11 @@ server <- function(input, output, session) {
   # Update variable to control visibility of facet-variable options
   output$show_facet_options <- reactive({ show_facet_options() })
   outputOptions(output, "show_facet_options", suspendWhenHidden = FALSE)
-
   
   
-
-    
+  
+  
+  
   ########## 3.2.9 Update UI for title options ##########
   # Check whether a title is defined
   observeEvent(list(input$plot_title, input$plot_subtitle), {
@@ -1650,7 +1661,7 @@ server <- function(input, output, session) {
       )
     }
   })
-
+  
   
   
   
@@ -1665,9 +1676,11 @@ server <- function(input, output, session) {
     # Create a list of all variable-dropdowns
     variable_dropdowns <- c("x_var","y_var","group_var","grid_col_var","grid_row_var")
     # Create a list of all available variables
+    cols <- names(data())
+    labels <- vapply(cols, localize_placeholder_variables, character(1))
     variable_options <- setNames(
-      c(" ", names(data())),
-      c(tr("variables.none"), names(data()))
+      c(" ", cols),
+      c(tr("variables.none"), labels)
     )
     
     # Add variables into each dropdown
@@ -1828,7 +1841,7 @@ server <- function(input, output, session) {
   
   
   
-
+  
   
   ########## 3.4.3 Check for changes in factor orders ##########
   # For all variables
@@ -1913,7 +1926,7 @@ server <- function(input, output, session) {
         textInput(paste0("vector_", new_id),
                   label = sprintf("%s %d", tr("label.color"), new_id),
                   placeholder = tr("options.custom.colorpalette.placeholder")
-                  ),
+        ),
         tags$span(
           id = paste0("vector_", new_id, "_error"),
           class = "error-message", 
@@ -2097,7 +2110,7 @@ server <- function(input, output, session) {
           # r_code <- paste0(r_code, " +\n  stat_summary(fun = mean, geom = 'line'")
           if (!is.null(group_var)) {
             r_code <- paste0(r_code, sprintf(" +\n  stat_summary(aes(group = %s, color = %s), fun = mean, geom = 'line'", group_var, group_var))
-          # Close first line of Plot-relevant Code if no Grouping Variable is selected
+            # Close first line of Plot-relevant Code if no Grouping Variable is selected
           }
           if (is.null(group_var)) {
             r_code <- paste0(r_code, sprintf(" +\n  stat_summary(fun = mean, geom = 'line', group = 1"))
@@ -2205,14 +2218,14 @@ server <- function(input, output, session) {
           }
           if (input$scater_line_type != "Solide") {
             r_code <- paste0(r_code, sprintf(", linetype = '%s'",
-                                                               switch(input$scater_line_type,
-                                                                      "Solide" = "solid",
-                                                                      "Gestrichelt" = "dashed",
-                                                                      "Gepunkted" = "dotted",
-                                                                      "Punktgestrichelt" = "dotdash",
-                                                                      "Langgestrichen" = "longdash",
-                                                                      "Doppelt gestrichelt" = "twodash"
-                                                               )))}
+                                             switch(input$scater_line_type,
+                                                    "Solide" = "solid",
+                                                    "Gestrichelt" = "dashed",
+                                                    "Gepunkted" = "dotted",
+                                                    "Punktgestrichelt" = "dotdash",
+                                                    "Langgestrichen" = "longdash",
+                                                    "Doppelt gestrichelt" = "twodash"
+                                             )))}
           if(input$scater_line_full_range){
             r_code <- paste0(r_code, ", fullrange = TRUE")
           }
@@ -2292,7 +2305,7 @@ server <- function(input, output, session) {
     ############### 4.8 Set Labs ###############
     # Define code-line for labs
     labs_code <- ""
-
+    
     if (!is.null(input$plot_title) && input$plot_title != "") {
       labs_code <- paste0(labs_code, sprintf("title = '%s'", input$plot_title))
     }
@@ -2318,21 +2331,21 @@ server <- function(input, output, session) {
       )
     }
     if (!is.null(input$legend_title) && input$legend_title != "") {
-        labs_code <- paste0(
-          labs_code,
-          if (labs_code != "")
-            ", "
-          else
-            "",
-          if (input$color_palette_target == "Füllung")
-            sprintf("fill = '%s'", input$legend_title)
-          else if (input$color_palette_target == "Linien")
-            sprintf("color = '%s'", input$legend_title)
-          else if (input$color_palette_target == "Füllung und Linien")
-            sprintf("fill = '%s', color = '%s'", input$legend_title, input$legend_title)
-        )
+      labs_code <- paste0(
+        labs_code,
+        if (labs_code != "")
+          ", "
+        else
+          "",
+        if (input$color_palette_target == "Füllung")
+          sprintf("fill = '%s'", input$legend_title)
+        else if (input$color_palette_target == "Linien")
+          sprintf("color = '%s'", input$legend_title)
+        else if (input$color_palette_target == "Füllung und Linien")
+          sprintf("fill = '%s', color = '%s'", input$legend_title, input$legend_title)
+      )
     }
-
+    
     # Add labs_code when labs were assigned
     if (labs_code != "") {
       r_code <- paste0(r_code, sprintf(" +\n  labs(%s)", labs_code))
@@ -2468,10 +2481,10 @@ server <- function(input, output, session) {
                                                 "stata" = "scale_fill_stata()",
                                                 "tableau" = "scale_fill_tableau()",
                                                 "wsj" = "scale_fill_wsj()"
-                                                )
                                          )
-                         )
-        }
+        )
+        )
+      }
     }
     
     
@@ -2563,10 +2576,10 @@ server <- function(input, output, session) {
                                                 "stata" = "scale_color_stata()",
                                                 "tableau" = "scale_color_tableau()",
                                                 "wsj" = "scale_color_wsj()"
-                                                )
                                          )
-                         )
-        }
+        )
+        )
+      }
     }    
     
     
@@ -3374,14 +3387,14 @@ server <- function(input, output, session) {
       theme_code <- paste0(theme_code,
                            if (input$Legend_Background_Color != "") sprintf("fill = '%s', ", input$Legend_Background_Color) else "",
                            if (input$Legend_Background_Linetype != "Gemäss Theme") sprintf("linetype = '%s', ",
-                                                                                         switch(input$Legend_Background_Linetype,
-                                                                                                "Solide" = "solid", 
-                                                                                                "Gestrichelt" = "dashed", 
-                                                                                                "Gepunkted" = "dotted", 
-                                                                                                "Punktgestrichelt" = "dotdash", 
-                                                                                                "Langgestrichen" = "longdash", 
-                                                                                                "Doppelt gestrichelt" = "twodash"
-                                                                                         )) else "",
+                                                                                           switch(input$Legend_Background_Linetype,
+                                                                                                  "Solide" = "solid", 
+                                                                                                  "Gestrichelt" = "dashed", 
+                                                                                                  "Gepunkted" = "dotted", 
+                                                                                                  "Punktgestrichelt" = "dotdash", 
+                                                                                                  "Langgestrichen" = "longdash", 
+                                                                                                  "Doppelt gestrichelt" = "twodash"
+                                                                                           )) else "",
                            if (!is.na(input$Legend_Background_Size)) sprintf("linewidth = %.1f, ", input$Legend_Background_Size) else "",
                            if (input$Legend_Background_Line_Color != "") sprintf("colour = '%s', ", input$Legend_Background_Line_Color) else "")
       # Remove trailing comma and close the element-function
@@ -3747,7 +3760,7 @@ server <- function(input, output, session) {
   ############### 8.1 Generate Plot ###############
   # Define Plot-Output
   output$dynamic_plot <- renderUI({
-
+    
     #Set Plot-Output
     plotOutput(
       "plot",
@@ -3952,7 +3965,7 @@ server <- function(input, output, session) {
         svglite::svglite(file, width = width_inch, height = height_inch)
         on.exit(grDevices::dev.off(), add = TRUE)
         print(q)
-      # If Plot should be downloaded as JPEG or PNG image
+        # If Plot should be downloaded as JPEG or PNG image
       } else {
         # Save Plot
         ggsave(
@@ -4182,7 +4195,7 @@ server <- function(input, output, session) {
         placeholder= tr("data.no_file")
       )
     )
-
+    
     
     
     
@@ -4197,7 +4210,7 @@ server <- function(input, output, session) {
                        label = HTML(sprintf('<img src="Icon_Box.png" height="100px"> <br> %s', tr("plot.box"))))
     updateActionButton(session, "plot_scatter",
                        label = HTML(sprintf('<img src="Icon_Scatter.png" height="100px"> <br> %s', tr("plot.scatter"))))
-        
+    
     
     
     
@@ -4230,15 +4243,16 @@ server <- function(input, output, session) {
     variable_dropdowns <- c("x_var","y_var","group_var","grid_col_var","grid_row_var")
     
     # Set the variables names for all variable-dropdowns
+    cols <- names(data())
+    labels <- vapply(cols, localize_placeholder_variables, character(1))
     variable_options <- setNames(
-      c(" ", names(data())),
-      c(tr("variables.none"), names(data()))
+      c(" ", cols),
+      c(tr("variables.none"), labels)
     )
     lapply(variable_dropdowns, function(id) {
       updateSelectInput(session, id,
                         choices  = variable_options,
-                        selected = input[[id]]
-      )
+                        selected = input[[id]])
     })
     
     
@@ -4369,7 +4383,7 @@ server <- function(input, output, session) {
     
     session$sendCustomMessage('setText', list(id="opt_xaxis_lbl", text=tr("options.range.xaxis")))
     session$sendCustomMessage('setText', list(id="opt_yaxis_lbl", text=tr("options.range.yaxis")))
-
+    
     ### Change UI of Custom Color Palette
     # Change language of Buttons
     updateActionButton(session, "add",         
@@ -4393,7 +4407,7 @@ server <- function(input, output, session) {
       }
     }
     
-
+    
     
     
     

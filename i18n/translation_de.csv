@@ -32,6 +32,8 @@ variables.grid_col_title,Facet Variable (Columns),Variable für Spalten-Facettie
 variables.grid_row_title,Facet Variable (Rows),Variable für Zeilen-Facettierung
 variables.reorder_levels,Reorder Levels,Reihenfolge der Stufen anpassen
 variables.none,No Variable,Keine Variable
+variables.placeholder_x,Empty Variable (no Values), Leere Variable (ohne Werte)
+variables.placeholder_y,Empty Variable (no Values), Leere Variable (ohne Werte)
 
 options.theme.title,Theme,Theme
 options.palette.title,Color Palette,Farb-Palette
