@@ -169,25 +169,26 @@ localize_placeholder_variables <- function(x) {
 
 
 #################### 2. UI ####################
-ui <- fluidPage(
-  ############### 2.1 General Settings ###############
-  ########## 2.1.1 Define Theme ##########
-  theme = shinytheme("cerulean"),
-  
-  
-  
-  
-  
-  ########## 2.1.2 Use i18n ##########  
-  usei18n(i18n),
-  
-  
-  
-  
-  
-  ########## 2.1.3 Define custom CSS ##########
-  tags$head(
-    tags$style(HTML("
+ui <- tagList(
+  fluidPage(
+    ############### 2.1 General Settings ###############
+    ########## 2.1.1 Define Theme ##########
+    theme = shinytheme("cerulean"),
+    
+    
+    
+    
+    
+    ########## 2.1.2 Use i18n ##########  
+    usei18n(i18n),
+    
+    
+    
+    
+    
+    ########## 2.1.3 Define custom CSS ##########
+    tags$head(
+      tags$style(HTML("
     
     /* Border of Panels */
     .panel{
@@ -254,15 +255,26 @@ ui <- fluidPage(
     background-image: none;
     }  
     
+    html, body { height: 100%; }
+
+    
     /* Body Space for footer */
-    body { padding-bottom: 0px; }
+    body { padding-bottom: 0; }
+    
+    body > .container-fluid {
+      min-height: 100svh;          /* volle Viewport-Höhe */
+      display: flex;              /* vertikales Flex-Layout */
+      flex-direction: column;
+    }
 
     /* Fixed footer */
     footer.app-footer {
       position: static;
-      left: 0;
-      bottom: 0;
       width: 100%;
+      margin-top: auto;
+      flex-shrink: 0;
+      
+      /* dein bisheriges Styling darf bleiben */
       background: #ffffff;
       border-top: 1px solid #ddd;
       padding: 6px 12px;
@@ -270,7 +282,6 @@ ui <- fluidPage(
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 48px;
     }
     .app-footer .bootstrap-select { 
       margin: 0 !important; 
@@ -405,321 +416,344 @@ ui <- fluidPage(
       line-height: 1.2;
       font-weight: 600;
     }
+    
+    .container-fluid > footer.app-footer{
+      /* unten andrücken wie gehabt */
+      margin-top: auto;
+      flex-shrink: 0;
+    
+      /* Container-Padding neutralisieren, damit der Hintergrund bis zum Rand geht */
+      margin-left: -15px;
+      margin-right: -15px;
+    
+      /* Innenabstand des Footers – kannst du anpassen */
+      padding-left: 15px;
+      padding-right: 15px;
+    }
         
   "))
-  ),
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  ############### 2.2 Set Title-Panel ###############
-  # Define a fluid Row
-  fluidRow(
-    # Set a Column
-    column(3, style = "min-width: 350px;",
-           # Define logo and title
-           titlePanel(title = span(
-             # Add image
-             img(src = "logo.png", 
-                 height = 90, 
-                 style = "position: relative; top: -15px; margin-left: 15px;"
-             ), 
-             # Define HTML
-             HTML('<span style="font-size: 64px;; margin-left: 20px;">ggpilot</span>'),
-             style = "white-space: nowrap;" # kein Zeilenumbruch
-           ),
-           windowTitle = "ggpilot")),
-    # Set a Column
-    column(8, align = "center", 
-           style = "margin-top: 15px;",
-           tags$head(
-           ),
-           tags$script(HTML("
+    ),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 2.2 Set Title-Panel ###############
+    # Define a fluid Row
+    fluidRow(
+      # Set a Column
+      column(3, style = "min-width: 350px;",
+             # Define logo and title
+             titlePanel(title = span(
+               # Add image
+               img(src = "logo.png", 
+                   height = 90, 
+                   style = "position: relative; top: -15px; margin-left: 15px;"
+               ), 
+               # Define HTML
+               HTML('<span style="font-size: 64px;; margin-left: 20px;">ggpilot</span>'),
+               style = "white-space: nowrap;" # kein Zeilenumbruch
+             ),
+             windowTitle = "ggpilot")),
+      # Set a Column
+      column(8, align = "center", 
+             style = "margin-top: 15px;",
+             tags$head(
+             ),
+             tags$script(HTML("
             Shiny.addCustomMessageHandler('setActiveButton', function(btnId) {
               $('.custom-btn').removeClass('active-btn');
               $('#' + btnId).addClass('active-btn');
             });
          ")),
-           # Add action buttons in the title panel
-           actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i>'), class = "custom-btn"),
-           actionButton("btn_plottype", label = HTML('<i class="glyphicon glyphicon-stats"></i>'), class = "custom-btn"),
-           actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i>'), class = "custom-btn"),
-           actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i>'), class = "custom-btn"),
-           actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i>'), class = "custom-btn"),
-           actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i>'), class = "custom-btn"),
-           actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i>'), class = "custom-btn"),
-    )
-  ),
-  
-  # Define Hidden Inputs for the Active Tab
-  tags$div(
-    textInput("activeTab", label = NULL, value = "data"),
-    # Set the Input to be hidden
-    style = "display: none;"
-  ),  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  ############### 2.3 Set Sidebar ###############
-  # Define Sidebar-Layout
-  sidebarLayout(
+             # Add action buttons in the title panel
+             actionButton("btn_data", label = HTML('<i class="glyphicon glyphicon-folder-open"></i>'), class = "custom-btn"),
+             actionButton("btn_plottype", label = HTML('<i class="glyphicon glyphicon-stats"></i>'), class = "custom-btn"),
+             actionButton("btn_variables", label = HTML('<i class="glyphicon glyphicon-tasks"></i>'), class = "custom-btn"),
+             actionButton("btn_plot_options", label = HTML('<i class="glyphicon glyphicon-wrench"></i>'), class = "custom-btn"),
+             actionButton("btn_text", label = HTML('<i class="glyphicon glyphicon-font"></i>'), class = "custom-btn"),
+             actionButton("btn_layout", label = HTML('<i class="glyphicon glyphicon-adjust"></i>'), class = "custom-btn"),
+             actionButton("btn_download", label = HTML('<i class="glyphicon glyphicon-download"></i>'), class = "custom-btn"),
+      )
+    ),
     
-    # Define Panel in Sidebar with width of 4
-    sidebarPanel(width = 4,
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 ############### 2.4 Input Fields ###############
-                 # Define Conditional-Panel for when data tab is selected
-                 conditionalPanel(condition = "input.activeTab == 'data'",
-                                  ########## 2.4.1 UI to Select Data ########## 
-                                  # Add UI-Object for the Data Input page
-                                  tags$head(
-                                    tags$script(HTML("
-                                    Shiny.addCustomMessageHandler('setFileInputLang', function(x){
-                                      var root = $('#file').closest('.shiny-input-container');
-                                      // Label über dem Feld
-                                      $('#file_label').text(x.label);
-                                      // Button-Text (robusteste Variante: Textknoten im Button ersetzen)
-                                      var btn = root.find('label.btn');
-                                      if(btn.length){
-                                        var tn = btn.contents().filter(function(){return this.nodeType === 3;}).first();
-                                        if(tn.length){ tn[0].nodeValue = ' ' + x.browse + ' '; }
-                                      }
-                                      // Placeholder (readonly Textfeld)
-                                      root.find('input[type=\"text\"][readonly]').attr('placeholder', x.placeholder);
-                                    });
-                                  "))
-                                  ),
+    # Define Hidden Inputs for the Active Tab
+    tags$div(
+      textInput("activeTab", label = NULL, value = "data"),
+      # Set the Input to be hidden
+      style = "display: none;"
+    ),  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ############### 2.3 Set Sidebar ###############
+    # Define Sidebar-Layout
+    sidebarLayout(
+      
+      # Define Panel in Sidebar with width of 4
+      sidebarPanel(width = 4,
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   ############### 2.4 Input Fields ###############
+                   # Define Conditional-Panel for when data tab is selected
+                   conditionalPanel(condition = "input.activeTab == 'data'",
+                                    ########## 2.4.1 UI to Select Data ########## 
+                                    # Add UI-Object for the Data Input page
+                                    tags$head(
+                                      tags$script(HTML("
+                                        Shiny.addCustomMessageHandler('setFileInputLang', function(x){
+                                        var root = $('#file').closest('.shiny-input-container');
                                   
-                                  conditionalPanel(condition = "input.activeTab == 'data'",
-                                                   tags$label(id = "file_label", class = "control-label", tr("data.select_dataset")),
-                                                   fileInput(
-                                                     "file",
-                                                     label       = NULL,                                 # Label kommt als separater <label> drüber
-                                                     buttonLabel = tr("data.browse"),                    # initiale Sprache
-                                                     placeholder = tr("data.no_file"),                   # initiale Sprache
-                                                     accept      = c(".csv", ".xlsx", ".rds", ".RData")
-                                                   )
-                                  )                                  ),
-                 
-                 
-                 
-                 
-                 
-                 
-                 ########## 2.4.2 UI for Plot-Type ##########
-                 # Define HTML-Script for handling Plot-Types
-                 tags$script(HTML("
+                                        $('#file_label').text(x.label);
+                                  
+                                        var btn = root.find('.btn-file');
+                                        if (btn.length) {
+                                          var lbl = btn.find('.btn-label');
+                                          if (lbl.length) {
+                                            lbl.text(x.browse);
+                                          } else {
+                                            var tn = btn.contents().filter(function(){ return this.nodeType === 3; }).first();
+                                            if (tn.length) {
+                                              tn[0].nodeValue = ' ' + x.browse + ' ';
+                                            } else {
+                                              btn.prepend(document.createTextNode(x.browse + ' '));
+                                            }
+                                          }
+                                        }
+                                        root.find('input[type=\"text\"][readonly]').attr('placeholder', x.placeholder);
+                                        root.find('input[type=\"file\"]').attr('aria-label', x.browse).attr('title', x.browse);
+                                      });
+                                  "))
+                                    ),
+                                    
+                                    conditionalPanel(condition = "input.activeTab == 'data'",
+                                                     tags$label(id = "file_label", class = "control-label", tr("data.select_dataset")),
+                                                     fileInput(
+                                                       "file",
+                                                       label       = NULL,
+                                                       buttonLabel = tr("data.browse"),
+                                                       placeholder = tr("data.no_file"),
+                                                       accept      = c(".csv", ".xlsx", ".rds", ".RData")
+                                                     )
+                                    )                                  ),
+                   
+                   
+                   
+                   
+                   
+                   
+                   ########## 2.4.2 UI for Plot-Type ##########
+                   # Define HTML-Script for handling Plot-Types
+                   tags$script(HTML("
                                   Shiny.addCustomMessageHandler('setActivePlot', function(btnId) {
                                   $('.plot-btn').removeClass('active-plot');
                                   $('#' + btnId).addClass('active-plot');
                                   });
                                   ")),                 
-                 
-                 # Define Conditional-Panel for when plottype tab is selected
-                 conditionalPanel(condition = "input.activeTab == 'plottype'",
-                                  actionButton("plot_bar", 
-                                               label = HTML(sprintf('<img src="Icon_Bar.png" height="100px"> <br> %s', tr("plot.bar"))), 
-                                               class = "plot-btn"),
-                                  actionButton("plot_line", 
-                                               label = HTML(sprintf('<img src="Icon_Line.png" height="100px"> <br> %s', tr("plot.line"))), 
-                                               class = "plot-btn"),
-                                  actionButton("plot_box", 
-                                               label = HTML(sprintf('<img src="Icon_Box.png" height="100px"> <br> %s', tr("plot.box"))), 
-                                               class = "plot-btn"),
-                                  actionButton("plot_scatter", 
-                                               label = HTML(sprintf('<img src="Icon_Scatter.png" height="100px"> <br> %s', tr("plot.scatter"))), 
-                                               class = "plot-btn")
-                 ),
-                 
-                 
-                 
-                 
-                 
-                 ########## 2.4.3 UI to Select Variables ##########
-                 tags$script(HTML("
+                   
+                   # Define Conditional-Panel for when plottype tab is selected
+                   conditionalPanel(condition = "input.activeTab == 'plottype'",
+                                    actionButton("plot_bar", 
+                                                 label = HTML(sprintf('<img src="Icon_Bar.png" height="100px"> <br> %s', tr("plot.bar"))), 
+                                                 class = "plot-btn"),
+                                    actionButton("plot_line", 
+                                                 label = HTML(sprintf('<img src="Icon_Line.png" height="100px"> <br> %s', tr("plot.line"))), 
+                                                 class = "plot-btn"),
+                                    actionButton("plot_box", 
+                                                 label = HTML(sprintf('<img src="Icon_Box.png" height="100px"> <br> %s', tr("plot.box"))), 
+                                                 class = "plot-btn"),
+                                    actionButton("plot_scatter", 
+                                                 label = HTML(sprintf('<img src="Icon_Scatter.png" height="100px"> <br> %s', tr("plot.scatter"))), 
+                                                 class = "plot-btn")
+                   ),
+                   
+                   
+                   
+                   
+                   
+                   ########## 2.4.3 UI to Select Variables ##########
+                   tags$script(HTML("
                                    Shiny.addCustomMessageHandler('setText', function(x) {
                                    var el = document.getElementById(x.id);
                                    if (el) { el.textContent = x.text; }
                                    });
                                   ")),
-                 
-                 # Define Conditional-Panel for when Variables tab is selected
-                 conditionalPanel(condition = "input.activeTab == 'variables'",
-                                  # Set title
-                                  h3(span(id = "x_title", tr("variables.x_title"))),
-                                  # X-xis Variable
-                                  selectInput("x_var", NULL, choices = c(""), selected = ""),
-                                  # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition = "output.is_numeric_x == false",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "x_reorder_title"),
-                                                                # Placeholder for the ranking-UI
-                                                                uiOutput("x_factor_rank_list")
-                                                              )
-                                                   )
-                                  ),
-                                  # Set title
-                                  h3(span(id = "y_title", tr("variables.y_title"))),
-                                  # Y-Axis Variable
-                                  selectInput("y_var", NULL, choices = c(""), selected = ""),
-                                  # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition = "output.is_numeric_y == false",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "y_reorder_title"),
-                                                                # Placeholder for the ranking-UI
-                                                                uiOutput("y_factor_rank_list")
-                                                              )
-                                                   )
-                                  ),
-                                  # Set title
-                                  h3(span(id = "group_title", tr("variables.group_title"))),
-                                  # Grouping Variable
-                                  selectInput("group_var", NULL, choices = c(""), selected = ""),
-                                  # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition =  "output.is_numeric_group == false",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "group_reorder_title"),
-                                                                # Placeholder for the ranking-UI
-                                                                uiOutput("group_factor_rank_list")
-                                                              )
-                                                   )
-                                  ),
-                                  # Set title
-                                  h3(span(id = "grid_col_title", tr("variables.grid_col_title"))),
-                                  # Facet Grid - Columns
-                                  selectInput("grid_col_var", NULL, choices = c(""), selected = ""),
-                                  # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition =  "output.is_numeric_col == false",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_col_reorder_title"),
-                                                                # Placeholder for the ranking-UI
-                                                                uiOutput("grid_col_factor_rank_list")
-                                                              )
-                                                   )
-                                  ),
-                                  # Set title
-                                  h3(span(id = "grid_row_title", tr("variables.grid_row_title"))),
-                                  # Facet Grid - Rows
-                                  selectInput("grid_row_var", NULL, choices = c(""), selected = ""),
-                                  # Create a conditionl-panel for when a variable is selected
-                                  conditionalPanel(condition =  "output.is_numeric_row == false",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_row_reorder_title"),
-                                                                # Placeholder for the ranking-UI
-                                                                uiOutput("grid_row_factor_rank_list")
-                                                              )
-                                                   )
-                                  )
-                 ),
-                 
-                 
-                 
-                 
-                 
-                 ########## 2.4.4 UI for Plot Options ##########
-                 # Define Conditional-Panel for when Plot-Options tab is selected
-                 conditionalPanel(condition = "input.activeTab == 'plot_options'",
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             # Create a Collapse-Panel for Theme-Settings
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow(tr("options.theme.title"), 
-                                                                       id = "opt_theme_title"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   # Create Input-Options for themes
-                                                   selectInput(inputId = "plot_theme", label = "", 
-                                                               choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", 
-                                                                           "Minimal", "Void", "Calc", "the Economist", 
-                                                                           "the Economist White", "Excel", "Few", "FiveThirtyEight", 
-                                                                           "Google Docs", "Highcharts JS", "Inversed Gray", 
-                                                                           "Solarized", "Solarized 2", "Solid", "Stata", "Tufte", 
-                                                                           "Wall Street Journal"),
-                                                               selected = "Gray")
+                   
+                   # Define Conditional-Panel for when Variables tab is selected
+                   conditionalPanel(condition = "input.activeTab == 'variables'",
+                                    # Set title
+                                    h3(span(id = "x_title", tr("variables.x_title"))),
+                                    # X-xis Variable
+                                    selectInput("x_var", NULL, choices = c(""), selected = ""),
+                                    # Create a conditionl-panel for when a variable is selected
+                                    conditionalPanel(condition = "output.is_numeric_x == false",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("variables.reorder_levels"), id = "x_reorder_title"),
+                                                                  # Placeholder for the ranking-UI
+                                                                  uiOutput("x_factor_rank_list")
+                                                                )
+                                                     )
+                                    ),
+                                    # Set title
+                                    h3(span(id = "y_title", tr("variables.y_title"))),
+                                    # Y-Axis Variable
+                                    selectInput("y_var", NULL, choices = c(""), selected = ""),
+                                    # Create a conditionl-panel for when a variable is selected
+                                    conditionalPanel(condition = "output.is_numeric_y == false",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("variables.reorder_levels"), id = "y_reorder_title"),
+                                                                  # Placeholder for the ranking-UI
+                                                                  uiOutput("y_factor_rank_list")
+                                                                )
+                                                     )
+                                    ),
+                                    # Set title
+                                    h3(span(id = "group_title", tr("variables.group_title"))),
+                                    # Grouping Variable
+                                    selectInput("group_var", NULL, choices = c(""), selected = ""),
+                                    # Create a conditionl-panel for when a variable is selected
+                                    conditionalPanel(condition =  "output.is_numeric_group == false",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("variables.reorder_levels"), id = "group_reorder_title"),
+                                                                  # Placeholder for the ranking-UI
+                                                                  uiOutput("group_factor_rank_list")
+                                                                )
+                                                     )
+                                    ),
+                                    # Set title
+                                    h3(span(id = "grid_col_title", tr("variables.grid_col_title"))),
+                                    # Facet Grid - Columns
+                                    selectInput("grid_col_var", NULL, choices = c(""), selected = ""),
+                                    # Create a conditionl-panel for when a variable is selected
+                                    conditionalPanel(condition =  "output.is_numeric_col == false",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_col_reorder_title"),
+                                                                  # Placeholder for the ranking-UI
+                                                                  uiOutput("grid_col_factor_rank_list")
+                                                                )
+                                                     )
+                                    ),
+                                    # Set title
+                                    h3(span(id = "grid_row_title", tr("variables.grid_row_title"))),
+                                    # Facet Grid - Rows
+                                    selectInput("grid_row_var", NULL, choices = c(""), selected = ""),
+                                    # Create a conditionl-panel for when a variable is selected
+                                    conditionalPanel(condition =  "output.is_numeric_row == false",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("variables.reorder_levels"), id = "grid_row_reorder_title"),
+                                                                  # Placeholder for the ranking-UI
+                                                                  uiOutput("grid_row_factor_rank_list")
+                                                                )
+                                                     )
+                                    )
+                   ),
+                   
+                   
+                   
+                   
+                   
+                   ########## 2.4.4 UI for Plot Options ##########
+                   # Define Conditional-Panel for when Plot-Options tab is selected
+                   conditionalPanel(condition = "input.activeTab == 'plot_options'",
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               # Create a Collapse-Panel for Theme-Settings
+                                               bsCollapsePanel(
+                                                 # Define Title of Collapse-Panel
+                                                 title = BSCollapseArrow(tr("options.theme.title"), 
+                                                                         id = "opt_theme_title"),
+                                                 # Define CSS Settings
+                                                 div(class = ".collapse_panel-settings",
+                                                     # Create Input-Options for themes
+                                                     selectInput(inputId = "plot_theme", label = "", 
+                                                                 choices = c("Bw", "Classic", "Gray", "Linedraw", "Light", "Dark", 
+                                                                             "Minimal", "Void", "Calc", "the Economist", 
+                                                                             "the Economist White", "Excel", "Few", "FiveThirtyEight", 
+                                                                             "Google Docs", "Highcharts JS", "Inversed Gray", 
+                                                                             "Solarized", "Solarized 2", "Solid", "Stata", "Tufte", 
+                                                                             "Wall Street Journal"),
+                                                                 selected = "Gray")
+                                                 )
                                                )
-                                             )
-                                  ),
-                                  conditionalPanel(condition = "output.show_grouping_options",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Color-Palette-Settings
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("options.palette.title"), 
-                                                                                        id = "opt_palette_title"),
-                                                                # Define CSS Settings
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Dropdown with options for color-palette
-                                                                    selectInput(inputId = "Color_Palette", 
-                                                                                label = tr("options.palette.select"), 
-                                                                                choices = c("Gemäss Theme", "Eigene Farbpalette erstellen", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
-                                                                                            "viridis - cividis", "viridis - mako", "viridis - rocket", "viridis - turbo",
-                                                                                            "Accent", "Blues", "Greens", "Greys", "Oranges", "Paired", "Pastel1", 
-                                                                                            "Pastel2", "Purples", "Reds", "Set1", "Set2", "Set3", "Spectral", 
-                                                                                            "grey", "hue", "ordinal", "aas", "bmj", "cosmic", "d3", "flatui", 
-                                                                                            "frontiers", "futurama", "igv", "jama", "lancet", "locuszoom", 
-                                                                                            "material", "nejm", "npg", "observable", "rickandmorty", "simpsons", "startrek", 
-                                                                                            "tron", "uchicago", "ucscgb", "jco", "calc", "canva", "colorblind", 
-                                                                                            "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
-                                                                                            "hc", "pander", "ptol", "solarized", 
-                                                                                            "stata", "tableau", "wsj"),
-                                                                                selected = "Gemäss Theme"),
-                                                                    # Set UI for individual color palette
-                                                                    conditionalPanel(condition = "input.Color_Palette =='Eigene Farbpalette erstellen'",
-                                                                                     # Add Button
-                                                                                     actionButton("add", tr("options.custom.colorpalette.add")),
-                                                                                     actionButton("remove_last", tr("options.custom.colorpalette.remove")),
-                                                                                     tags$div(id = "input_container"),
-                                                                                     # Create CSS for inavlid colors
-                                                                                     tags$style(HTML("
+                                    ),
+                                    conditionalPanel(condition = "output.show_grouping_options",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel for Color-Palette-Settings
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("options.palette.title"), 
+                                                                                          id = "opt_palette_title"),
+                                                                  # Define CSS Settings
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Dropdown with options for color-palette
+                                                                      selectInput(inputId = "Color_Palette", 
+                                                                                  label = tr("options.palette.select"), 
+                                                                                  choices = c("Gemäss Theme", "Eigene Farbpalette erstellen", "viridis", "viridis - magma", "viridis - plasma", "viridis - inferno",
+                                                                                              "viridis - cividis", "viridis - mako", "viridis - rocket", "viridis - turbo",
+                                                                                              "Accent", "Blues", "Greens", "Greys", "Oranges", "Paired", "Pastel1", 
+                                                                                              "Pastel2", "Purples", "Reds", "Set1", "Set2", "Set3", "Spectral", 
+                                                                                              "grey", "hue", "ordinal", "aas", "bmj", "cosmic", "d3", "flatui", 
+                                                                                              "frontiers", "futurama", "igv", "jama", "lancet", "locuszoom", 
+                                                                                              "material", "nejm", "npg", "observable", "rickandmorty", "simpsons", "startrek", 
+                                                                                              "tron", "uchicago", "ucscgb", "jco", "calc", "canva", "colorblind", 
+                                                                                              "economist", "excel", "excel_new", "few", "fivethirtyeight", "gdocs", 
+                                                                                              "hc", "pander", "ptol", "solarized", 
+                                                                                              "stata", "tableau", "wsj"),
+                                                                                  selected = "Gemäss Theme"),
+                                                                      # Set UI for individual color palette
+                                                                      conditionalPanel(condition = "input.Color_Palette =='Eigene Farbpalette erstellen'",
+                                                                                       # Add Button
+                                                                                       actionButton("add", tr("options.custom.colorpalette.add")),
+                                                                                       actionButton("remove_last", tr("options.custom.colorpalette.remove")),
+                                                                                       tags$div(id = "input_container"),
+                                                                                       # Create CSS for inavlid colors
+                                                                                       tags$style(HTML("
                                                                       .invalid { background-color: #ffcccc !important; }
                                                                       .error-message { color: red; font-size: 14px; margin-left: 10px; display: inline; }
                                                                     ")),
-                                                                                     # JS to validate colors
-                                                                                     tags$script(HTML("
+                                                                                       # JS to validate colors
+                                                                                       tags$script(HTML("
                                                                       Shiny.addCustomMessageHandler('validColor', function(data) {
                                                                         var inputField = document.getElementById(data.id);
                                                                         var errorText = document.getElementById(data.id + '_error');
@@ -732,684 +766,686 @@ ui <- fluidPage(
                                                                         }
                                                                       });
                                                                     "))
-                                                                    ),
-                                                                    selectInput(inputId = "color_palette_target", 
-                                                                                label = tr("options.palette.apply_to"),
-                                                                                choices = setNames(c("Füllung", "Linien", "Füllung und Linien"),
-                                                                                                   c(tr("options.palette.target.fill"),tr("options.palette.target.line"),tr("options.palette.target.both"))),
-                                                                                selected = "Füllung")
+                                                                      ),
+                                                                      selectInput(inputId = "color_palette_target", 
+                                                                                  label = tr("options.palette.apply_to"),
+                                                                                  choices = setNames(c("Füllung", "Linien", "Füllung und Linien"),
+                                                                                                     c(tr("options.palette.target.fill"),tr("options.palette.target.line"),tr("options.palette.target.both"))),
+                                                                                  selected = "Füllung")
+                                                                  )
                                                                 )
-                                                              )
-                                                   )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             # Create a Collapse-Panel for Plot-Size
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow(tr("options.plotsize.title"), 
-                                                                       id = "options_plotsize_title"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   column(6,
-                                                          # Define Plot-Width
-                                                          numericInput(inputId = "plot_width_px", 
-                                                                       label = tr("options.plotsize.width_px"),
-                                                                       value = 800, min = 100),
-                                                   ),
-                                                   column(6,
-                                                          # Define Plot-Height
-                                                          numericInput(inputId = "plot_height_px", 
-                                                                       label = tr("options.plotsize.height_px"),
-                                                                       value = 600, min = 100),
-                                                   )
-                                               )
-                                             )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             # Create a Collapse-Panel for Axis-Range
-                                             bsCollapsePanel(
-                                               # Define Title of Collapse-Panel
-                                               title = BSCollapseArrow(tr("options.range.title"), 
-                                                                       id = "opt_range_title"),
-                                               # Define CSS Settings
-                                               div(class = ".collapse_panel-settings",
-                                                   # Set a HTML header for the Y-Axis Range Text
-                                                   HTML(sprintf('<label class="control-label"><span id="opt_xaxis_lbl">%s</span></label>', tr("options.range.xaxis"))),
-                                                   # Define the min and max value next to each other
-                                                   div(
-                                                     # Define style
-                                                     style = "display: flex; justify-content: space-between; gap: 10px;",
-                                                     div(
-                                                       style = "flex: 1;",
-                                                       # Numeric Input field for the minimal X-Axis value
-                                                       div(style="flex:1;", 
-                                                           numericInput("x_axis_min", 
-                                                                        label = tr("options.range.min"), 
-                                                                        step = 0.1, value = "")),
-                                                     ),
-                                                     div(
-                                                       style = "flex: 1;",
-                                                       # Numeric Input field for the max X-Axis value
-                                                       div(style="flex:1;",
-                                                           numericInput("x_axis_max",
-                                                                        label = tr("options.range.max"),
-                                                                        step = 0.1, value = ""))
                                                      )
-                                                   ),
-                                                   # Set a HTML header for the X-Axis Range Text
-                                                   HTML(sprintf('<label class="control-label"><span id="opt_yaxis_lbl">%s</span></label>', tr("options.range.yaxis"))),
-                                                   # Define the min and max value next to each other
-                                                   div(
-                                                     # Define style
-                                                     style = "display: flex; justify-content: space-between; gap: 10px;",
-                                                     div(
-                                                       style = "flex: 1;",
-                                                       # Numeric Input field for the minimal Y-Axis value
-                                                       div(style="flex:1;", 
-                                                           numericInput("y_axis_min", 
-                                                                        label = tr("options.range.min"), 
-                                                                        step = 0.1, value = "")),
-                                                     ),
-                                                     div(
-                                                       style = "flex: 1;",
-                                                       # Numeric Input field for the max Y-Axis value
-                                                       div(style="flex:1;", 
-                                                           numericInput("y_axis_max", 
-                                                                        label = tr("options.range.max"), 
-                                                                        step = 0.1, value = ""))
-                                                     )
-                                                   )                                
-                                               ),
-                                               checkboxInput("exact_axis_range", 
-                                                             label = tr("options.range.expand"), 
-                                                             value = TRUE)
-                                             )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  conditionalPanel(condition = "output.show_grouping_options",
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Group-Settings
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(text = tr("options.grouping.space"), 
-                                                                                        id = "options_grouping_space"),
-                                                                # Define CSS Settings
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Numeric Input for the position-dodge value
-                                                                    numericInput(inputId = "dodge_value", 
-                                                                                 label = tr("options.dodge.value"), 
-                                                                                 min = 0, max = 2, step = 0.1, value = "")
-                                                                )
-                                                              )
-                                                   )
-                                                   
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  conditionalPanel(condition = "output.show_barplot_options",
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Errorbar-Settings
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("options.barplot"), 
-                                                                                        id = "options_barplot"),
-                                                                # Define CSS Settings
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "barplot_width", 
-                                                                                 tr("options.barplot.width"), 
-                                                                                 min = 0, step = 0.1, value = "")
-                                                                )
-                                                              )
-                                                   )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  conditionalPanel(condition = "output.show_linepolot_options",
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Lineplot-Settings
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("options.lineplot"), 
-                                                                                        id = "options_lineplot"),
-                                                                # Define CSS Settings
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Select linetype
-                                                                    selectInput(inputId = "lineplot_line_type", 
-                                                                                label = tr("options.linetype"), 
-                                                                                choices = setNames(c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
-                                                                                                   c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
-                                                                                                     tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
-                                                                                selected = "Solide"),                                                                    
-                                                                    # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "lineplot_width", 
-                                                                                 label = tr("options.lineplot.width"), 
-                                                                                 min = 0, step = 0.1, value = "")                                                                
-                                                                )
-                                                              )
-                                                   )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  conditionalPanel(condition = "output.show_errorbar_options",
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Errorbar-Settings
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("options.errorbar"), 
-                                                                                        id = "options_errorbars"),
-                                                                # Define CSS Settings
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Dropdown to select the type of Errorbar
-                                                                    selectInput(inputId = "error_type", 
-                                                                                label = tr("options.errorbar.unit"),
-                                                                                choices = setNames(c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler"),
-                                                                                                   # Tranlsate the options
-                                                                                                   c(tr("options.errorbar.none"),
-                                                                                                     tr("options.errorbar.sd"),
-                                                                                                     tr("options.errorbar.ci"),
-                                                                                                     tr("options.errorbar.se"))),
-                                                                                # choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), 
-                                                                                selected = "Standardabweichung"),
-                                                                    # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "error_mult", 
-                                                                                 label = tr("options.errorbar.mult"), 
-                                                                                 min = 1, step = 1, value = 1),
-                                                                    # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "error_width", 
-                                                                                 label = tr("options.errorbar.width"), 
-                                                                                 min = 0, step = 0.1, value = ""),
-                                                                    # Numeric Input for the width of the Errorbar
-                                                                    numericInput(inputId = "error_size", 
-                                                                                 label = tr("options.errorbar.size"), 
-                                                                                 min = 0, step = 0.1, value = "")
-                                                                )
-                                                              )
-                                                   )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  conditionalPanel(condition = "output.show_scatter_options",
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Scatterplot-Settings
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("options.scatterplot"), 
-                                                                                        id = "options_scatterplot"),
-                                                                # Define CSS Settings
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Input to define the size of the Points
-                                                                    numericInput(inputId = "scatterpoint_size", 
-                                                                                 label = "options.scatterpoint.size", 
-                                                                                 min = 0, step = .1, value = ""),
-                                                                )
-                                                              )
-                                                   )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  conditionalPanel(condition = "output.show_scatter_options",
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              # Create a Collapse-Panel for Scatterplot-Settings
-                                                              bsCollapsePanel(
-                                                                # Define Title of Collapse-Panel
-                                                                title = BSCollapseArrow(tr("options.regressionline"), 
-                                                                                        id = "options_regressionline"),
-                                                                checkboxInput(inputId = "show_line",
-                                                                              label = tr("options.regressionline.show"),
-                                                                              value = FALSE),
-                                                                conditionalPanel(condition = "input.show_line",
-                                                                                 checkboxInput(inputId = "scater_line_full_range", 
-                                                                                               label = tr("options.regressionline.expand"), 
-                                                                                               value = FALSE),
-                                                                                 selectInput(inputId = "scater_line_type", 
-                                                                                             label = tr("options.linetype"), 
-                                                                                             choices = setNames(c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
-                                                                                                                c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
-                                                                                                                  tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
-                                                                                             selected = "Solide"),
-                                                                                 numericInput(inputId = "scater_line_size", 
-                                                                                              label = tr("options.linewidth"), 
-                                                                                              min = 0, max = 50, step = 0.1, value = NA),
-                                                                                 checkboxInput(inputId = "scater_line_show_se", 
-                                                                                               label = tr("options.regressionline.showse"), 
-                                                                                               value = TRUE)
-                                                                )
-                                                              )
-                                                   )
-                                  )
-                 ),
-                 
-                 
-                 
-                 
-                 
-                 
-                 ########## 2.4.5 UI for Text ##########
-                 # Define Conditional-Panel for when text tab is selected
-                 conditionalPanel(condition = "input.activeTab == 'text'",
-                                  # Text-Input for the Title
-                                  textInput(inputId = "plot_title", 
-                                            label = tr("text.title"), 
-                                            value = "", 
-                                            placeholder = tr("text.title_placeholder")),
-                                  # Text-Input for the Sub-Title
-                                  textInput(inputId = "plot_subtitle", 
-                                            label = tr("text.subtitle"), 
-                                            value = "", 
-                                            placeholder = tr("text.subtitle_placeholder")),
-                                  # Text-Input for the X-Axis-Title
-                                  textInput(inputId = "x_axis_title", 
-                                            label = tr("text.x_axis"), 
-                                            value = "", 
-                                            placeholder = tr("text.x_axis_placeholder")),
-                                  # Text-Input for the Y-Axis-Title
-                                  textInput(inputId = "y_axis_title", 
-                                            label = tr("text.y_axis"), 
-                                            value = "", 
-                                            placeholder = tr("text.y_axis_placeholder")),
-                                  # Text-Input for the Legend-Title
-                                  textInput(inputId = "legend_title", 
-                                            label = tr("text.legend"), 
-                                            value = "", 
-                                            placeholder = tr("text.legend_placeholder"))
-                 ),
-                 
-                 
-                 
-                 
-                 
-                 ########## 2.4.6 UI for Layout ##########
-                 # Define Conditional-Panel for when layout tab is selected
-                 conditionalPanel(condition = "input.activeTab == 'layout'",
-                                  # Create a conditionalPanel
-                                  conditionalPanel(condition = "output.show_title_options",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              bsCollapsePanel(
-                                                                title = BSCollapseArrow(tr("layout.collapse.header"), id = "layout_collapse_header"),
-                                                                div(class = ".collapse_panel-settings",
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_title", tr("layout.h3.title"))),
-                                                                           # Layout-Options for the Title
-                                                                           selectInput(inputId = "Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
-                                                                           numericInput(inputId = "Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                                    ),
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_subtitle", tr("layout.h3.subtitle"))),
-                                                                           # Layout-Options for the Subtitle
-                                                                           selectInput(inputId = "Subtitle_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Subtitle_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Subtitle_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
-                                                                           numericInput(inputId = "Subtitle_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Subtitle_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                                    )
-                                                                )
-                                                              )
-                                                   )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow(tr("layout.collapse.axis.title"), id = "layout_collapse_axis_title"),
-                                               # title = BSCollapseArrow("Achsen-Überschrift"),
-                                               div(class = ".collapse_panel-settings", 
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_title_xaxis", tr("layout.h3.xaxis"))),
-                                                          # Text-Input for the X-Axis-Title
-                                                          selectInput(inputId = "X_Axis_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "X_Axis_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "X_Axis_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
-                                                          numericInput(inputId = "X_Axis_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "X_Axis_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                   ),
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_title_yaxis", tr("layout.h3.yaxis"))),
-                                                          # Text-Input for the Y-Axis-Title
-                                                          selectInput(inputId = "Y_Axis_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Y_Axis_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Y_Axis_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
-                                                          numericInput(inputId = "Y_Axis_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
-                                                          selectInput(inputId = "Y_Axis_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                   )
-                                               )
-                                             )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow(tr("layout.collapse.axis.text"), id = "layout_collapse_axis_text"),
-                                               div(class = ".collapse_panel-settings",
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_xaxis_text", tr("layout.h3.xaxis"))),
-                                                          # Text-Input for the X-Axis Label
-                                                          selectInput(inputId = "Axis_X_Text_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Axis_X_Text_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Axis_X_Text_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
-                                                          numericInput(inputId = "Axis_X_Text_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Axis_X_Text_Rotation", label = tr("label.rotation"), min = 0, max = 360, step = 1, value = NA),
-                                                          selectInput(inputId = "Axis_X_Text_H_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Axis_X_Text_V_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                   ),
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_yaxis_text", tr("layout.h3.yaxis"))),
-                                                          # Text-Input for the Y-Axis Label
-                                                          selectInput(inputId = "Axis_Y_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Axis_Y_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
-                                                          textInput(inputId = "Axis_Y_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                          numericInput(inputId = "Axis_Y_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                          numericInput(inputId = "Axis_Y_Text_Rotation", label = tr("label.rotation"), min = 0, max = 360, step = 1, value = NA),
-                                                          selectInput(inputId = "Axis_Y_Text_H_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme"),
-                                                          selectInput(inputId = "Axis_Y_Text_V_Alignment", label = tr("label.align.v"), choices = align_v_choices(), selected = "Gemäss Theme")
-                                                   )
-                                               )
-                                             )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow(tr("layout.collapse.axis.lines"), id = "layout_collapse_axis_lines"),
-                                               div(class = ".collapse_panel-settings",
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_xaxis_lines", tr("layout.h3.xaxis"))),
-                                                          selectInput(inputId = "Axis_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Axis_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                   ),
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_yaxis_lines", tr("layout.h3.yaxis"))),
-                                                          selectInput(inputId = "Axis_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Axis_Y_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                   )
-                                               )
-                                             )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow(tr("layout.collapse.axis.ticks"), id = "layout_collapse_axis_ticks"),
-                                               div(class = ".collapse_panel-settings",
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_xaxis_ticks", tr("layout.h3.xaxis"))),
-                                                          selectInput(inputId = "Axis_X_Ticks_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Axis_X_Ticks_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_X_Ticks_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color")),
-                                                          numericInput(inputId = "Axis_X_Ticks_Length", label = tr("options.linelength"), min = 0, max = 50, step = 0.1, value = NA)
-                                                   ),
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_yaxis_ticks", tr("layout.h3.yaxis"))),
-                                                          selectInput(inputId = "Axis_Y_Ticks_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Axis_Y_Ticks_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Axis_Y_Ticks_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color")),
-                                                          numericInput(inputId = "Axis_Y_Ticks_Length", label = tr("options.linelength"), min = 0, max = 50, step = 0.1, value = NA)
-                                                   )
-                                               )
-                                             )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow(tr("layout.collapse.major.grid"), id = "layout_collapse_major_grid"),
-                                               div(class = ".collapse_panel-settings",
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_xaxis_major_grid", tr("layout.h3.xaxis"))),
-                                                          selectInput(inputId = "Major_Grid_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Major_Grid_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Major_Grid_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                   ),
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_yaxis_major_grid", tr("layout.h3.yaxis"))),
-                                                          selectInput(inputId = "Major_Grid_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Major_Grid_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Major_Grid_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                   )
-                                               )
-                                             )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow(tr("layout.collapse.minor.grid"), id = "layout_collapse_minor_grid"),
-                                               div(class = ".collapse_panel-settings",
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_xaxis_minor_grid", tr("layout.h3.xaxis"))),
-                                                          selectInput(inputId = "Minor_Grid_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Minor_Grid_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Minor_Grid_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                   ),
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_yaxis_minor_grid", tr("layout.h3.yaxis"))),
-                                                          selectInput(inputId = "Minor_Grid_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Minor_Grid_Y_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Minor_Grid_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                   )
-                                               )
-                                             )
-                                  ),
-                                  # Create a Layout for CollapsePanels
-                                  bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                             bsCollapsePanel(
-                                               title = BSCollapseArrow(tr("layout.collapse.background"), id = "layout_collapse_background"),
-                                               div(class = ".collapse_panel-settings",
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_plot", tr("layout.h3.plot"))),
-                                                          textInput(inputId = "Plot_Background_Color", label = tr("options.background.color"),   value = "", placeholder = tr("placeholder.color")),
-                                                          selectInput(inputId = "Plot_Background_Linetype", label = tr("options.linetype"),  choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Plot_Background_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Plot_Background_Line_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                   ),
-                                                   # Create a column
-                                                   column(6,
-                                                          h3(span(id = "layout_h3_panel", tr("layout.h3.panel"))),
-                                                          textInput(inputId = "Panel_Background_Color", label = tr("options.background.color"),   value = "", placeholder = tr("placeholder.color")),
-                                                          selectInput(inputId = "Panel_Background_Linetype", label = tr("options.linetype"),  choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                          numericInput(inputId = "Panel_Background_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
-                                                          textInput(inputId = "Panel_Background_Line_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
-                                                   )
-                                               )
-                                             )
-                                  ),
-                                  # Create a conditional panel for group-variable settings
-                                  conditionalPanel(condition = "output.show_grouping_options",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              bsCollapsePanel(
-                                                                title = BSCollapseArrow(tr("layout.collapse.legend"), id = "layout_collapse_legend"),
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Crate a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_legend_title", tr("layout.h3.legend.title"))),
-                                                                           # Text-Input for the Legend-Title
-                                                                           selectInput(inputId = "Legend_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Legend_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
-                                                                           numericInput(inputId = "Legend_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Legend_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                                    ),
-                                                                    # Create a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_items", tr("layout.h3.items"))),
-                                                                           # Text-Input for the X-Axis-Title
-                                                                           selectInput(inputId = "Legend_Text_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Text_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Legend_Text_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
-                                                                           numericInput(inputId = "Legend_Text_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Legend_Text_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                                    )
-                                                                )
-                                                              )
-                                                   ),
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              bsCollapsePanel(
-                                                                title = BSCollapseArrow(tr("layout.collapse.legend.background"), id = "layout_collapse_legend_background"),
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Create a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_legend_box", tr("layout.h3.legend.box"))),
-                                                                           textInput(inputId = "Legend_Background_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
-                                                                           selectInput(inputId = "Legend_Background_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                                           numericInput(inputId = "Legend_Background_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
-                                                                           textInput(inputId = "Legend_Background_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
-                                                                    )
-                                                                )
-                                                              )
-                                                   ),
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              bsCollapsePanel(
-                                                                title = BSCollapseArrow(tr("layout.collapse.legend.options"), id = "layout_collapse_legend_options"),
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Create a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_arrangement", tr("layout.h3.arrangement"))),
-                                                                           selectInput(inputId = "Legend_Position", label = tr("layout.legend.position"), choices = legend_pos_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Title_Position", label = tr("layout.legend.title.position"), choices = legend_text_pos_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Text_Position", label = tr("layout.legend.text.position"), choices = legend_text_pos_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Legend_Text_Direction", label = tr("layout.legend.direction"),choices = legend_dir_choices(), selected = "Gemäss Theme")
-                                                                    ),
-                                                                    # Create a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_sizes", tr("layout.h3.sizes"))),
-                                                                           numericInput(inputId = "Legend_Key_Width", label = tr("layout.legend.key.width"), min = 0, max = 50, step = 0.1, value = NA),
-                                                                           numericInput(inputId = "Legend_Key_Height", label = tr("layout.legend.key.height"), min = 0, max = 50, step = 0.1, value = NA),
-                                                                           numericInput(inputId = "Legend_Key_Spacing", label = tr("layout.legend.key.spaicng"), min = 0, max = 50, step = 0.1, value = NA),
-                                                                           numericInput(inputId = "Legend_Box_Spacing", label = tr("layout.legend.box.spacing"), min = 0, max = 50, step = 0.1, value = NA)
-                                                                    )
-                                                                )
-                                                              )
-                                                   )
-                                  ),
-                                  # Create a conditional panel for facet-settings
-                                  conditionalPanel(condition = "output.show_facet_options",
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              bsCollapsePanel(
-                                                                title = BSCollapseArrow(tr("layout.collapse.facets.background"), id = "layout_collapse_facets_background"),
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Create a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_columns_facets", tr("layout.h3.columns"))),
-                                                                           textInput(inputId = "Stripe_X_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
-                                                                           selectInput(inputId = "Stripe_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                                           numericInput(inputId = "Stripe_X_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
-                                                                           textInput(inputId = "Stripe_X_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
-                                                                    ),
-                                                                    # Create a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_rows_facets", tr("layout.h3.rows"))),
-                                                                           textInput(inputId = "Stripe_Y_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
-                                                                           selectInput(inputId = "Stripe_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
-                                                                           numericInput(inputId = "Stripe_Y_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
-                                                                           textInput(inputId = "Stripe_Y_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
-                                                                    )
-                                                                )
-                                                              )
-                                                   ),
-                                                   # Create a Layout for CollapsePanels
-                                                   bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
-                                                              bsCollapsePanel(
-                                                                title = BSCollapseArrow(tr("layout.collapse.facets.text"), id = "layout_collapse_facets_text"),
-                                                                div(class = ".collapse_panel-settings",
-                                                                    # Create a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_columns_facets_text", tr("layout.h3.columns"))),
-                                                                           selectInput(inputId = "Stripe_X_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Stripe_X_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Stripe_X_Textcolor", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
-                                                                           numericInput(inputId = "Stripe_X_Textsize", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Stripe_X_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                                    ),
-                                                                    # Create a column
-                                                                    column(6,
-                                                                           h3(span(id = "layout_h3_rows_facets_text", tr("layout.h3.rows"))),
-                                                                           selectInput(inputId = "Stripe_Y_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
-                                                                           selectInput(inputId = "Stripe_Y_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
-                                                                           textInput(inputId = "Stripe_Y_Textcolor", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
-                                                                           numericInput(inputId = "Stripe_Y_Textsize", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
-                                                                           selectInput(inputId = "Stripe_Y_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
-                                                                    )
-                                                                )
-                                                              )
-                                                              
-                                                   )
-                                  )
-                 ),
-                 
-                 
-                 
-                 
-                 
-                 ########## 2.4.7 Download ##########
-                 # Define Conditional-Panel for when Download tab is selected
-                 conditionalPanel(condition = "input.activeTab == 'download'",
-                                  fluidRow(
-                                    column(6,
-                                           h3(span(id = "download_plot_hdr", tr("download.plot"))),
-                                           downloadButton("downloadPlot", label = span(id = "download_plot_btn", tr("download.download_plot"))),
-                                           selectInput(
-                                             "file_format",
-                                             label   = span(id = "download_file_format_lbl", tr("download.file_format")),
-                                             choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")
-                                           )
                                     ),
-                                    column(6,
-                                           h3(span(id = "download_code_hdr", tr("download.r_code"))),
-                                           downloadButton("downloadCode", label = span(id = "download_code_btn", tr("download.download_code")))
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               # Create a Collapse-Panel for Plot-Size
+                                               bsCollapsePanel(
+                                                 # Define Title of Collapse-Panel
+                                                 title = BSCollapseArrow(tr("options.plotsize.title"), 
+                                                                         id = "options_plotsize_title"),
+                                                 # Define CSS Settings
+                                                 div(class = ".collapse_panel-settings",
+                                                     column(6,
+                                                            # Define Plot-Width
+                                                            numericInput(inputId = "plot_width_px", 
+                                                                         label = tr("options.plotsize.width_px"),
+                                                                         value = 800, min = 100),
+                                                     ),
+                                                     column(6,
+                                                            # Define Plot-Height
+                                                            numericInput(inputId = "plot_height_px", 
+                                                                         label = tr("options.plotsize.height_px"),
+                                                                         value = 600, min = 100),
+                                                     )
+                                                 )
+                                               )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               # Create a Collapse-Panel for Axis-Range
+                                               bsCollapsePanel(
+                                                 # Define Title of Collapse-Panel
+                                                 title = BSCollapseArrow(tr("options.range.title"), 
+                                                                         id = "opt_range_title"),
+                                                 # Define CSS Settings
+                                                 div(class = ".collapse_panel-settings",
+                                                     # Set a HTML header for the Y-Axis Range Text
+                                                     HTML(sprintf('<label class="control-label"><span id="opt_xaxis_lbl">%s</span></label>', tr("options.range.xaxis"))),
+                                                     # Define the min and max value next to each other
+                                                     div(
+                                                       # Define style
+                                                       style = "display: flex; justify-content: space-between; gap: 10px;",
+                                                       div(
+                                                         style = "flex: 1;",
+                                                         # Numeric Input field for the minimal X-Axis value
+                                                         div(style="flex:1;", 
+                                                             numericInput("x_axis_min", 
+                                                                          label = tr("options.range.min"), 
+                                                                          step = 0.1, value = "")),
+                                                       ),
+                                                       div(
+                                                         style = "flex: 1;",
+                                                         # Numeric Input field for the max X-Axis value
+                                                         div(style="flex:1;",
+                                                             numericInput("x_axis_max",
+                                                                          label = tr("options.range.max"),
+                                                                          step = 0.1, value = ""))
+                                                       )
+                                                     ),
+                                                     # Set a HTML header for the X-Axis Range Text
+                                                     HTML(sprintf('<label class="control-label"><span id="opt_yaxis_lbl">%s</span></label>', tr("options.range.yaxis"))),
+                                                     # Define the min and max value next to each other
+                                                     div(
+                                                       # Define style
+                                                       style = "display: flex; justify-content: space-between; gap: 10px;",
+                                                       div(
+                                                         style = "flex: 1;",
+                                                         # Numeric Input field for the minimal Y-Axis value
+                                                         div(style="flex:1;", 
+                                                             numericInput("y_axis_min", 
+                                                                          label = tr("options.range.min"), 
+                                                                          step = 0.1, value = "")),
+                                                       ),
+                                                       div(
+                                                         style = "flex: 1;",
+                                                         # Numeric Input field for the max Y-Axis value
+                                                         div(style="flex:1;", 
+                                                             numericInput("y_axis_max", 
+                                                                          label = tr("options.range.max"), 
+                                                                          step = 0.1, value = ""))
+                                                       )
+                                                     )                                
+                                                 ),
+                                                 checkboxInput("exact_axis_range", 
+                                                               label = tr("options.range.expand"), 
+                                                               value = TRUE)
+                                               )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    conditionalPanel(condition = "output.show_grouping_options",
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel for Group-Settings
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(text = tr("options.grouping.space"), 
+                                                                                          id = "options_grouping_space"),
+                                                                  # Define CSS Settings
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Numeric Input for the position-dodge value
+                                                                      numericInput(inputId = "dodge_value", 
+                                                                                   label = tr("options.dodge.value"), 
+                                                                                   min = 0, max = 2, step = 0.1, value = "")
+                                                                  )
+                                                                )
+                                                     )
+                                                     
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    conditionalPanel(condition = "output.show_barplot_options",
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel for Errorbar-Settings
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("options.barplot"), 
+                                                                                          id = "options_barplot"),
+                                                                  # Define CSS Settings
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Numeric Input for the width of the Errorbar
+                                                                      numericInput(inputId = "barplot_width", 
+                                                                                   tr("options.barplot.width"), 
+                                                                                   min = 0, step = 0.1, value = "")
+                                                                  )
+                                                                )
+                                                     )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    conditionalPanel(condition = "output.show_linepolot_options",
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel for Lineplot-Settings
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("options.lineplot"), 
+                                                                                          id = "options_lineplot"),
+                                                                  # Define CSS Settings
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Select linetype
+                                                                      selectInput(inputId = "lineplot_line_type", 
+                                                                                  label = tr("options.linetype"), 
+                                                                                  choices = setNames(c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
+                                                                                                     c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
+                                                                                                       tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
+                                                                                  selected = "Solide"),                                                                    
+                                                                      # Numeric Input for the width of the Errorbar
+                                                                      numericInput(inputId = "lineplot_width", 
+                                                                                   label = tr("options.lineplot.width"), 
+                                                                                   min = 0, step = 0.1, value = "")                                                                
+                                                                  )
+                                                                )
+                                                     )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    conditionalPanel(condition = "output.show_errorbar_options",
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel for Errorbar-Settings
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("options.errorbar"), 
+                                                                                          id = "options_errorbars"),
+                                                                  # Define CSS Settings
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Dropdown to select the type of Errorbar
+                                                                      selectInput(inputId = "error_type", 
+                                                                                  label = tr("options.errorbar.unit"),
+                                                                                  choices = setNames(c("Keiner","Standardabweichung","Konfidenzintervall","Standardfehler"),
+                                                                                                     # Tranlsate the options
+                                                                                                     c(tr("options.errorbar.none"),
+                                                                                                       tr("options.errorbar.sd"),
+                                                                                                       tr("options.errorbar.ci"),
+                                                                                                       tr("options.errorbar.se"))),
+                                                                                  # choices = c("Keiner", "Standardabweichung", "Konfidenzintervall", "Standardfehler"), 
+                                                                                  selected = "Standardabweichung"),
+                                                                      # Numeric Input for the width of the Errorbar
+                                                                      numericInput(inputId = "error_mult", 
+                                                                                   label = tr("options.errorbar.mult"), 
+                                                                                   min = 1, step = 1, value = 1),
+                                                                      # Numeric Input for the width of the Errorbar
+                                                                      numericInput(inputId = "error_width", 
+                                                                                   label = tr("options.errorbar.width"), 
+                                                                                   min = 0, step = 0.1, value = ""),
+                                                                      # Numeric Input for the width of the Errorbar
+                                                                      numericInput(inputId = "error_size", 
+                                                                                   label = tr("options.errorbar.size"), 
+                                                                                   min = 0, step = 0.1, value = "")
+                                                                  )
+                                                                )
+                                                     )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    conditionalPanel(condition = "output.show_scatter_options",
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel for Scatterplot-Settings
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("options.scatterplot"), 
+                                                                                          id = "options_scatterplot"),
+                                                                  # Define CSS Settings
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Input to define the size of the Points
+                                                                      numericInput(inputId = "scatterpoint_size", 
+                                                                                   label = "options.scatterpoint.size", 
+                                                                                   min = 0, step = .1, value = ""),
+                                                                  )
+                                                                )
+                                                     )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    conditionalPanel(condition = "output.show_scatter_options",
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                # Create a Collapse-Panel for Scatterplot-Settings
+                                                                bsCollapsePanel(
+                                                                  # Define Title of Collapse-Panel
+                                                                  title = BSCollapseArrow(tr("options.regressionline"), 
+                                                                                          id = "options_regressionline"),
+                                                                  checkboxInput(inputId = "show_line",
+                                                                                label = tr("options.regressionline.show"),
+                                                                                value = FALSE),
+                                                                  conditionalPanel(condition = "input.show_line",
+                                                                                   checkboxInput(inputId = "scater_line_full_range", 
+                                                                                                 label = tr("options.regressionline.expand"), 
+                                                                                                 value = FALSE),
+                                                                                   selectInput(inputId = "scater_line_type", 
+                                                                                               label = tr("options.linetype"), 
+                                                                                               choices = setNames(c("Solide","Gestrichelt","Gepunkted","Punktgestrichelt","Langgestrichen","Doppelt gestrichelt"),
+                                                                                                                  c(tr("options.linetype.solid"), tr("options.linetype.dashed"), tr("options.linetype.dotted"),
+                                                                                                                    tr("options.linetype.pointdash"), tr("options.linetype.longdash"), tr("options.linetype.twodash"))),
+                                                                                               selected = "Solide"),
+                                                                                   numericInput(inputId = "scater_line_size", 
+                                                                                                label = tr("options.linewidth"), 
+                                                                                                min = 0, max = 50, step = 0.1, value = NA),
+                                                                                   checkboxInput(inputId = "scater_line_show_se", 
+                                                                                                 label = tr("options.regressionline.showse"), 
+                                                                                                 value = TRUE)
+                                                                  )
+                                                                )
+                                                     )
                                     )
-                                  )
-                 )
-    ),
-    
-    
-    
-    
-    
-    
-    
-    
-    ############### 2.5 Main Panel ###############
-    ########## 2.5.1 Plot-Output ##########
-    # Define the Main-Panel
-    mainPanel(
-      # Set the plot as output
-      uiOutput("dynamic_plot"),
-      
-      
-      
-      
-      ########## 2.5.2 Code-Output ##########
-      # Add a column
-      column(11,
-             # Add TextOutput for rcode
-             verbatimTextOutput("rcode"),
+                   ),
+                   
+                   
+                   
+                   
+                   
+                   
+                   ########## 2.4.5 UI for Text ##########
+                   # Define Conditional-Panel for when text tab is selected
+                   conditionalPanel(condition = "input.activeTab == 'text'",
+                                    # Text-Input for the Title
+                                    textInput(inputId = "plot_title", 
+                                              label = tr("text.title"), 
+                                              value = "", 
+                                              placeholder = tr("text.title_placeholder")),
+                                    # Text-Input for the Sub-Title
+                                    textInput(inputId = "plot_subtitle", 
+                                              label = tr("text.subtitle"), 
+                                              value = "", 
+                                              placeholder = tr("text.subtitle_placeholder")),
+                                    # Text-Input for the X-Axis-Title
+                                    textInput(inputId = "x_axis_title", 
+                                              label = tr("text.x_axis"), 
+                                              value = "", 
+                                              placeholder = tr("text.x_axis_placeholder")),
+                                    # Text-Input for the Y-Axis-Title
+                                    textInput(inputId = "y_axis_title", 
+                                              label = tr("text.y_axis"), 
+                                              value = "", 
+                                              placeholder = tr("text.y_axis_placeholder")),
+                                    # Text-Input for the Legend-Title
+                                    textInput(inputId = "legend_title", 
+                                              label = tr("text.legend"), 
+                                              value = "", 
+                                              placeholder = tr("text.legend_placeholder"))
+                   ),
+                   
+                   
+                   
+                   
+                   
+                   ########## 2.4.6 UI for Layout ##########
+                   # Define Conditional-Panel for when layout tab is selected
+                   conditionalPanel(condition = "input.activeTab == 'layout'",
+                                    # Create a conditionalPanel
+                                    conditionalPanel(condition = "output.show_title_options",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                bsCollapsePanel(
+                                                                  title = BSCollapseArrow(tr("layout.collapse.header"), id = "layout_collapse_header"),
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_title", tr("layout.h3.title"))),
+                                                                             # Layout-Options for the Title
+                                                                             selectInput(inputId = "Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                             textInput(inputId = "Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                             numericInput(inputId = "Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                             selectInput(inputId = "Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                                      ),
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_subtitle", tr("layout.h3.subtitle"))),
+                                                                             # Layout-Options for the Subtitle
+                                                                             selectInput(inputId = "Subtitle_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Subtitle_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                             textInput(inputId = "Subtitle_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                             numericInput(inputId = "Subtitle_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                             selectInput(inputId = "Subtitle_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                                      )
+                                                                  )
+                                                                )
+                                                     )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               bsCollapsePanel(
+                                                 title = BSCollapseArrow(tr("layout.collapse.axis.title"), id = "layout_collapse_axis_title"),
+                                                 # title = BSCollapseArrow("Achsen-Überschrift"),
+                                                 div(class = ".collapse_panel-settings", 
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_title_xaxis", tr("layout.h3.xaxis"))),
+                                                            # Text-Input for the X-Axis-Title
+                                                            selectInput(inputId = "X_Axis_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                            selectInput(inputId = "X_Axis_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                            textInput(inputId = "X_Axis_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                            numericInput(inputId = "X_Axis_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                            selectInput(inputId = "X_Axis_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                     ),
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_title_yaxis", tr("layout.h3.yaxis"))),
+                                                            # Text-Input for the Y-Axis-Title
+                                                            selectInput(inputId = "Y_Axis_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                            selectInput(inputId = "Y_Axis_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                            textInput(inputId = "Y_Axis_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                            numericInput(inputId = "Y_Axis_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                            selectInput(inputId = "Y_Axis_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                     )
+                                                 )
+                                               )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               bsCollapsePanel(
+                                                 title = BSCollapseArrow(tr("layout.collapse.axis.text"), id = "layout_collapse_axis_text"),
+                                                 div(class = ".collapse_panel-settings",
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_xaxis_text", tr("layout.h3.xaxis"))),
+                                                            # Text-Input for the X-Axis Label
+                                                            selectInput(inputId = "Axis_X_Text_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                            selectInput(inputId = "Axis_X_Text_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                            textInput(inputId = "Axis_X_Text_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                            numericInput(inputId = "Axis_X_Text_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                            numericInput(inputId = "Axis_X_Text_Rotation", label = tr("label.rotation"), min = 0, max = 360, step = 1, value = NA),
+                                                            selectInput(inputId = "Axis_X_Text_H_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme"),
+                                                            selectInput(inputId = "Axis_X_Text_V_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                     ),
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_yaxis_text", tr("layout.h3.yaxis"))),
+                                                            # Text-Input for the Y-Axis Label
+                                                            selectInput(inputId = "Axis_Y_Text_Font", label = "Schriftart", choices = c("Gemäss Theme", "Sans Serife", "Serife", "Monospace"), selected = "Gemäss Theme"),
+                                                            selectInput(inputId = "Axis_Y_Text_Face", label = "Formatierung", choices = c("Gemäss Theme", "Normal", "Fett", "Kursiv", "Fett & Kursiv"), selected = "Gemäss Theme"),
+                                                            textInput(inputId = "Axis_Y_Text_Color", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                            numericInput(inputId = "Axis_Y_Text_Size", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                            numericInput(inputId = "Axis_Y_Text_Rotation", label = tr("label.rotation"), min = 0, max = 360, step = 1, value = NA),
+                                                            selectInput(inputId = "Axis_Y_Text_H_Alignment", label = tr("label.align.h"), choices = align_h_choices(), selected = "Gemäss Theme"),
+                                                            selectInput(inputId = "Axis_Y_Text_V_Alignment", label = tr("label.align.v"), choices = align_v_choices(), selected = "Gemäss Theme")
+                                                     )
+                                                 )
+                                               )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               bsCollapsePanel(
+                                                 title = BSCollapseArrow(tr("layout.collapse.axis.lines"), id = "layout_collapse_axis_lines"),
+                                                 div(class = ".collapse_panel-settings",
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_xaxis_lines", tr("layout.h3.xaxis"))),
+                                                            selectInput(inputId = "Axis_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Axis_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Axis_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                     ),
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_yaxis_lines", tr("layout.h3.yaxis"))),
+                                                            selectInput(inputId = "Axis_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Axis_Y_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Axis_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                     )
+                                                 )
+                                               )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               bsCollapsePanel(
+                                                 title = BSCollapseArrow(tr("layout.collapse.axis.ticks"), id = "layout_collapse_axis_ticks"),
+                                                 div(class = ".collapse_panel-settings",
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_xaxis_ticks", tr("layout.h3.xaxis"))),
+                                                            selectInput(inputId = "Axis_X_Ticks_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Axis_X_Ticks_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Axis_X_Ticks_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color")),
+                                                            numericInput(inputId = "Axis_X_Ticks_Length", label = tr("options.linelength"), min = 0, max = 50, step = 0.1, value = NA)
+                                                     ),
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_yaxis_ticks", tr("layout.h3.yaxis"))),
+                                                            selectInput(inputId = "Axis_Y_Ticks_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Axis_Y_Ticks_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Axis_Y_Ticks_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color")),
+                                                            numericInput(inputId = "Axis_Y_Ticks_Length", label = tr("options.linelength"), min = 0, max = 50, step = 0.1, value = NA)
+                                                     )
+                                                 )
+                                               )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               bsCollapsePanel(
+                                                 title = BSCollapseArrow(tr("layout.collapse.major.grid"), id = "layout_collapse_major_grid"),
+                                                 div(class = ".collapse_panel-settings",
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_xaxis_major_grid", tr("layout.h3.xaxis"))),
+                                                            selectInput(inputId = "Major_Grid_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Major_Grid_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Major_Grid_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                     ),
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_yaxis_major_grid", tr("layout.h3.yaxis"))),
+                                                            selectInput(inputId = "Major_Grid_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Major_Grid_Y_Size", label = "Linien-Grösse", min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Major_Grid_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                     )
+                                                 )
+                                               )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               bsCollapsePanel(
+                                                 title = BSCollapseArrow(tr("layout.collapse.minor.grid"), id = "layout_collapse_minor_grid"),
+                                                 div(class = ".collapse_panel-settings",
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_xaxis_minor_grid", tr("layout.h3.xaxis"))),
+                                                            selectInput(inputId = "Minor_Grid_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Minor_Grid_X_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Minor_Grid_X_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                     ),
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_yaxis_minor_grid", tr("layout.h3.yaxis"))),
+                                                            selectInput(inputId = "Minor_Grid_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Minor_Grid_Y_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Minor_Grid_Y_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                     )
+                                                 )
+                                               )
+                                    ),
+                                    # Create a Layout for CollapsePanels
+                                    bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                               bsCollapsePanel(
+                                                 title = BSCollapseArrow(tr("layout.collapse.background"), id = "layout_collapse_background"),
+                                                 div(class = ".collapse_panel-settings",
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_plot", tr("layout.h3.plot"))),
+                                                            textInput(inputId = "Plot_Background_Color", label = tr("options.background.color"),   value = "", placeholder = tr("placeholder.color")),
+                                                            selectInput(inputId = "Plot_Background_Linetype", label = tr("options.linetype"),  choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Plot_Background_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Plot_Background_Line_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                     ),
+                                                     # Create a column
+                                                     column(6,
+                                                            h3(span(id = "layout_h3_panel", tr("layout.h3.panel"))),
+                                                            textInput(inputId = "Panel_Background_Color", label = tr("options.background.color"),   value = "", placeholder = tr("placeholder.color")),
+                                                            selectInput(inputId = "Panel_Background_Linetype", label = tr("options.linetype"),  choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                            numericInput(inputId = "Panel_Background_Size", label = tr("options.linewidth"), min = 0, max = 50, step = 0.1, value = NA),
+                                                            textInput(inputId = "Panel_Background_Line_Color", label = tr("options.linecolor"), value = "", placeholder = tr("placeholder.color"))
+                                                     )
+                                                 )
+                                               )
+                                    ),
+                                    # Create a conditional panel for group-variable settings
+                                    conditionalPanel(condition = "output.show_grouping_options",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                bsCollapsePanel(
+                                                                  title = BSCollapseArrow(tr("layout.collapse.legend"), id = "layout_collapse_legend"),
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Crate a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_legend_title", tr("layout.h3.legend.title"))),
+                                                                             # Text-Input for the Legend-Title
+                                                                             selectInput(inputId = "Legend_Title_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Legend_Title_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                             textInput(inputId = "Legend_Title_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                             numericInput(inputId = "Legend_Title_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                             selectInput(inputId = "Legend_Title_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                                      ),
+                                                                      # Create a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_items", tr("layout.h3.items"))),
+                                                                             # Text-Input for the X-Axis-Title
+                                                                             selectInput(inputId = "Legend_Text_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Legend_Text_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                             textInput(inputId = "Legend_Text_Color", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                             numericInput(inputId = "Legend_Text_Size", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                             selectInput(inputId = "Legend_Text_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                                      )
+                                                                  )
+                                                                )
+                                                     ),
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                bsCollapsePanel(
+                                                                  title = BSCollapseArrow(tr("layout.collapse.legend.background"), id = "layout_collapse_legend_background"),
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Create a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_legend_box", tr("layout.h3.legend.box"))),
+                                                                             textInput(inputId = "Legend_Background_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
+                                                                             selectInput(inputId = "Legend_Background_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                                             numericInput(inputId = "Legend_Background_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
+                                                                             textInput(inputId = "Legend_Background_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
+                                                                      )
+                                                                  )
+                                                                )
+                                                     ),
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                bsCollapsePanel(
+                                                                  title = BSCollapseArrow(tr("layout.collapse.legend.options"), id = "layout_collapse_legend_options"),
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Create a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_arrangement", tr("layout.h3.arrangement"))),
+                                                                             selectInput(inputId = "Legend_Position", label = tr("layout.legend.position"), choices = legend_pos_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Legend_Title_Position", label = tr("layout.legend.title.position"), choices = legend_text_pos_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Legend_Text_Position", label = tr("layout.legend.text.position"), choices = legend_text_pos_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Legend_Text_Direction", label = tr("layout.legend.direction"),choices = legend_dir_choices(), selected = "Gemäss Theme")
+                                                                      ),
+                                                                      # Create a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_sizes", tr("layout.h3.sizes"))),
+                                                                             numericInput(inputId = "Legend_Key_Width", label = tr("layout.legend.key.width"), min = 0, max = 50, step = 0.1, value = NA),
+                                                                             numericInput(inputId = "Legend_Key_Height", label = tr("layout.legend.key.height"), min = 0, max = 50, step = 0.1, value = NA),
+                                                                             numericInput(inputId = "Legend_Key_Spacing", label = tr("layout.legend.key.spaicng"), min = 0, max = 50, step = 0.1, value = NA),
+                                                                             numericInput(inputId = "Legend_Box_Spacing", label = tr("layout.legend.box.spacing"), min = 0, max = 50, step = 0.1, value = NA)
+                                                                      )
+                                                                  )
+                                                                )
+                                                     )
+                                    ),
+                                    # Create a conditional panel for facet-settings
+                                    conditionalPanel(condition = "output.show_facet_options",
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                bsCollapsePanel(
+                                                                  title = BSCollapseArrow(tr("layout.collapse.facets.background"), id = "layout_collapse_facets_background"),
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Create a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_columns_facets", tr("layout.h3.columns"))),
+                                                                             textInput(inputId = "Stripe_X_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
+                                                                             selectInput(inputId = "Stripe_X_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                                             numericInput(inputId = "Stripe_X_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
+                                                                             textInput(inputId = "Stripe_X_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
+                                                                      ),
+                                                                      # Create a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_rows_facets", tr("layout.h3.rows"))),
+                                                                             textInput(inputId = "Stripe_Y_Color", label = tr("options.background.color"),  value = "", placeholder = tr("placeholder.color")),
+                                                                             selectInput(inputId = "Stripe_Y_Linetype", label = tr("options.linetype"), choices = linetype_choices_all(), selected = "Gemäss Theme"),
+                                                                             numericInput(inputId = "Stripe_Y_Size", label = tr("options.linewidth"),min = 0, max = 50, step = 0.1, value = NA),
+                                                                             textInput(inputId = "Stripe_Y_Line_Color", label = tr("options.linecolor"),value = "", placeholder = tr("placeholder.color"))
+                                                                      )
+                                                                  )
+                                                                )
+                                                     ),
+                                                     # Create a Layout for CollapsePanels
+                                                     bsCollapse(id = "collapseExample", multiple = FALSE, open = NULL,
+                                                                bsCollapsePanel(
+                                                                  title = BSCollapseArrow(tr("layout.collapse.facets.text"), id = "layout_collapse_facets_text"),
+                                                                  div(class = ".collapse_panel-settings",
+                                                                      # Create a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_columns_facets_text", tr("layout.h3.columns"))),
+                                                                             selectInput(inputId = "Stripe_X_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Stripe_X_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                             textInput(inputId = "Stripe_X_Textcolor", label = tr("label.color"), value = "", placeholder = tr("placeholder.color")),
+                                                                             numericInput(inputId = "Stripe_X_Textsize", label = tr("label.size"), min = 0, max = 96, step = 0.1, value = NA),
+                                                                             selectInput(inputId = "Stripe_X_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                                      ),
+                                                                      # Create a column
+                                                                      column(6,
+                                                                             h3(span(id = "layout_h3_rows_facets_text", tr("layout.h3.rows"))),
+                                                                             selectInput(inputId = "Stripe_Y_Font", label = tr("label.font"), choices = font_choices(), selected = "Gemäss Theme"),
+                                                                             selectInput(inputId = "Stripe_Y_Face", label = tr("label.face"), choices = face_choices(), selected = "Gemäss Theme"),
+                                                                             textInput(inputId = "Stripe_Y_Textcolor", label = "Farbe", value = "", placeholder = "Farbe eingeben zum Anpassen"),
+                                                                             numericInput(inputId = "Stripe_Y_Textsize", label = "Grösse", min = 0, max = 96, step = 0.1, value = NA),
+                                                                             selectInput(inputId = "Stripe_Y_Alignment", label = tr("label.align"), choices = align_h_choices(), selected = "Gemäss Theme")
+                                                                      )
+                                                                  )
+                                                                )
+                                                                
+                                                     )
+                                    )
+                   ),
+                   
+                   
+                   
+                   
+                   
+                   ########## 2.4.7 Download ##########
+                   # Define Conditional-Panel for when Download tab is selected
+                   conditionalPanel(condition = "input.activeTab == 'download'",
+                                    fluidRow(
+                                      column(6,
+                                             h3(span(id = "download_plot_hdr", tr("download.plot"))),
+                                             downloadButton("downloadPlot", label = span(id = "download_plot_btn", tr("download.download_plot"))),
+                                             selectInput(
+                                               "file_format",
+                                               label   = span(id = "download_file_format_lbl", tr("download.file_format")),
+                                               choices = c("PNG" = "png", "JPEG" = "jpeg", "SVG" = "svg")
+                                             )
+                                      ),
+                                      column(6,
+                                             h3(span(id = "download_code_hdr", tr("download.r_code"))),
+                                             downloadButton("downloadCode", label = span(id = "download_code_btn", tr("download.download_code")))
+                                      )
+                                    )
+                   )
       ),
-      # Acc a column
-      column(1,
-             # Add setup to copy rcode
-             rclipboardSetup(),
-             
-             # UI output for copy-to-clipboard button
-             uiOutput("clip"),
+      
+      
+      
+      
+      
+      
+      
+      
+      ############### 2.5 Main Panel ###############
+      ########## 2.5.1 Plot-Output ##########
+      # Define the Main-Panel
+      mainPanel(
+        # Set the plot as output
+        uiOutput("dynamic_plot"),
+        
+        
+        
+        
+        ########## 2.5.2 Code-Output ##########
+        # Add a column
+        column(11,
+               # Add TextOutput for rcode
+               verbatimTextOutput("rcode"),
+        ),
+        # Acc a column
+        column(1,
+               # Add setup to copy rcode
+               rclipboardSetup(),
+               
+               # UI output for copy-to-clipboard button
+               uiOutput("clip"),
+        )
       )
     )
-  ),
+    ),
   # Create a UI-element for the footer
   uiOutput("app_footer")
+  
 )
 
 
